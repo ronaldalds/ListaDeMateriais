@@ -1,0 +1,3 @@
+
+class poste:
+    pass
