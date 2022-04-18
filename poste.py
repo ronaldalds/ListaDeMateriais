@@ -24,7 +24,8 @@ class Poste:
         self.__value = '{http://www.opengis.net/kml/2.2}value'
         self.__point = '{http://www.opengis.net/kml/2.2}Point'
         self.__coordinates = '{http://www.opengis.net/kml/2.2}coordinates'
-        self.__numero_poste = 1
+
+
     def __busca(self, item):
         self.__numero_poste = 1
         self.__dados = {}
