@@ -21,19 +21,13 @@ ocupacao = {}
 for i in root.iter('{http://www.opengis.net/kml/2.2}Folder'):
     if 'Poste' in i.findtext('{http://www.opengis.net/kml/2.2}name'):
         for t in i.iter('{http://www.opengis.net/kml/2.2}Placemark'):
-            for d in t.iter('{http://www.opengis.net/kml/2.2}Data'):
-                valor_poste = d.findtext('{http://www.opengis.net/kml/2.2}value')
-                nome_tipo = str(d.findtext('{http://www.opengis.net/kml/2.2}displayName'))
+            for coord in t.iter('{http://www.opengis.net/kml/2.2}Point'):
 
-                if "09" in str(d.findtext('{http://www.opengis.net/kml/2.2}displayName')):
-                    tipo_poste[numero_poste] = d.findtext('{http://www.opengis.net/kml/2.2}value')
-                    break
-                else:
-                    tipo_poste[numero_poste] = "========================"
-
+                print(numero_poste,coord.findtext('{http://www.opengis.net/kml/2.2}coordinates'))
+            #     break
             numero_poste += 1
 
-print(tipo_poste)
+# print(tipo_poste)
 
 # arquivo = Poste('Coreaú.kml')
 #

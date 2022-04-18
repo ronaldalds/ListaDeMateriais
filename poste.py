@@ -1,6 +1,5 @@
 import xml.etree.ElementTree as Et
 
-
 class Poste:
     def __init__(self, arquivo):
         doc = Et.parse(arquivo)
@@ -16,6 +15,7 @@ class Poste:
         self.__tipo_equipamento = {}
         self.__codigo_poste = {}
         self.__ocupacao = {}
+        self.__foto = {}
         self.__pasta = '{http://www.opengis.net/kml/2.2}Folder'
         self.__name = '{http://www.opengis.net/kml/2.2}name'
         self.__placemark = '{http://www.opengis.net/kml/2.2}Placemark'
@@ -23,77 +23,89 @@ class Poste:
         self.__displayName = '{http://www.opengis.net/kml/2.2}displayName'
         self.__value = '{http://www.opengis.net/kml/2.2}value'
         self.__point = '{http://www.opengis.net/kml/2.2}Point'
-        self.__coordinates = '{http://www.opengis.net/kml/2.2}Coordinates'
+        self.__coordinates = '{http://www.opengis.net/kml/2.2}coordinates'
         self.__numero_poste = 1
-
-
+    def __busca(self, item):
+        self.__numero_poste = 1
+        self.__dados = {}
         for root in self.__root.iter(self.__pasta):
             if 'Poste' in root.findtext(self.__name):
                 for poste in root.iter(self.__placemark):
-                    for coord in root.iter(self.__point):
-                        self.__coordenada_poste[self.__numero_poste] = coord.findtext(self.__coordinates)
                     for data in poste.iter(self.__data):
-                        if "00" in str(data.findtext(self.__displayName)):
-                            self.__tipo_poste[self.__numero_poste] = data.findtext(self.__value)
+                        if item in str(data.findtext(self.__displayName)):
+                            self.__dados[self.__numero_poste] = data.findtext(self.__value)
                             break
                         else:
-                            self.__tipo_poste[self.__numero_poste] = ""
-
-                        if "01" in str(data.findtext(self.__displayName)):
-                            self.__altura_poste[self.__numero_poste] = data.findtext(self.__value)
-                            break
-                        else:
-                            self.__altura_poste[self.__numero_poste] = ""
-
-                        if "02" in str(data.findtext(self.__displayName)):
-                            self.__esforco_poste[self.__numero_poste] = data.findtext(self.__value)
-                            break
-                        else:
-                            self.__esforco_poste[self.__numero_poste] = ""
-
-                        if "03" in str(data.findtext(self.__displayName)):
-                            self.__rede_eletrica[self.__numero_poste] = data.findtext(self.__value)
-                            break
-                        else:
-                            self.__rede_eletrica[self.__numero_poste] = ""
-
-                        if "04" in str(data.findtext(self.__displayName)):
-                            self.__quantidade_casa[self.__numero_poste] = data.findtext(self.__value)
-                            break
-                        else:
-                            self.__quantidade_casa[self.__numero_poste] = ""
-
-                        if "05" in str(data.findtext(self.__displayName)):
-                            self.__quantidade_comercio[self.__numero_poste] = data.findtext(self.__value)
-                            break
-                        else:
-                            self.__quantidade_comercio[self.__numero_poste] = ""
-
-                        if "06" in str(data.findtext(self.__displayName)):
-                            self.__quantidade_apartamento[self.__numero_poste] = data.findtext(self.__value)
-                            break
-                        else:
-                            self.__quantidade_apartamento[self.__numero_poste] = ""
-
-                        if "07" in str(data.findtext(self.__displayName)):
-                            self.__tipo_equipamento[self.__numero_poste] = data.findtext(self.__value)
-                            break
-                        else:
-                            self.__tipo_equipamento[self.__numero_poste] = ""
-
-                        if "08" in str(data.findtext(self.__displayName)):
-                            self.__codigo_poste[self.__numero_poste] = data.findtext(self.__value)
-                            break
-                        else:
-                            self.__codigo_poste[self.__numero_poste] = ""
-
-                        if "09" in str(data.findtext(self.__displayName)):
-                            self.__ocupacao[self.__numero_poste] = data.findtext(self.__value)
-                            break
-                        else:
-                            self.__ocupacao[self.__numero_poste] = ""
+                            self.__dados[self.__numero_poste] = ""
                     self.__numero_poste += 1
+        return self.__dados
+    @property
+    def coordenada(self):
+        self.__numero_poste = 1
+        self.__dados = {}
+        for root in self.__root.iter(self.__pasta):
+            if 'Poste' in root.findtext(self.__name):
+                for poste in root.iter(self.__placemark):
+                    for coord in poste.iter(self.__point):
+                        self.__dados[self.__numero_poste] = coord.findtext(self.__coordinates).split(',')
+                    self.__numero_poste += 1
+        return self.__dados
 
+    @property
+    def tipo_poste(self):
+        self.__tipo_poste = self.__busca("00")#chamada no arquivo do google earth no ExtendedData 00.tipo
+        return self.__tipo_poste
+
+    @property
+    def altura_poste(self):
+        self.__altura_poste = self.__busca("01")#chamada no arquivo do google earth no ExtendedData 01.altura
+        return self.__altura_poste
+
+    @property
+    def esforco_poste(self):
+        self.__esforco_poste = self.__busca("02")#chamada no arquivo do google earth no ExtendedData 02.esforco
+        return self.__esforco_poste
+
+    @property
+    def rede_eletrica(self):
+        self.__rede_eletrica = self.__busca("03")#chamada no arquivo do google earth no ExtendedData 03.rede
+        return self.__rede_eletrica
+
+    @property
+    def quantidade_casa(self):
+        self.__quantidade_casa = self.__busca("04")#chamada no arquivo do google earth no ExtendedData 04.casa
+        return self.__quantidade_casa
+
+    @property
+    def quantidade_comercio(self):
+        self.__quantidade_comercio = self.__busca("05")#chamada no arquivo do google earth no ExtendedData 05.comercio
+        return self.__quantidade_comercio
+
+    @property
+    def quantidade_apartamento(self):
+        self.__quantidade_apartamento = self.__busca("06")#chamada no arquivo do google earth no ExtendedData 06.predio
+        return self.__quantidade_apartamento
+
+    @property
+    def tipo_equipamento(self):
+        self.__tipo_equipamento = self.__busca("07")#chamada no arquivo do google earth no ExtendedData 07.equipamento
+        return self.__tipo_equipamento
+
+    @property
+    def codigo_poste(self):
+        self.__codigo_poste = self.__busca("08")#chamada no arquivo do google earth no ExtendedData 08.codigo
+        return self.__codigo_poste
+
+    @property
+    def ocupacao(self):
+        self.__ocupacao = self.__busca("09")#chamada no arquivo do google earth no ExtendedData 09.ocupante
+        return self.__ocupacao
+
+    @property
+    def foto(self):
+        self.__foto = self.__busca("10")# verificar função de busca para busca fotos do mapeamento
+        return self.__foto
 
 arquivo = Poste('Coreaú.kml')
-print(arquivo._Poste__tipo_poste)
+
+print(arquivo.altura_poste)
