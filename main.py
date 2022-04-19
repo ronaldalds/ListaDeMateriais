@@ -5,32 +5,28 @@ doc = Et.parse('Coreaú.kml')
 root = doc.getroot()
 numero_poste = 1
 
-tipo_poste = {}
-latitude = {}
-longitude = {}
-altura_poste = {}
-esforco_poste = {}
-rede_eletrica = {}
-quantidade_casa = {}
-quantidade_comercio = {}
-quantidade_apartamento = {}
-tipo_equipamento = {}
-codigo_poste = {}
-ocupacao = {}
+percuso = []
+comprimento = 0.0
+tipo_alca = ""
+tipo_laco = ""
+quantidade_de_fibra_no_cabo = 0
+vao_suportado = 0
+peso_do_cabo = 0.0
+diametro_externo = 0.0
+pressao_do_vento = 0.0
+pasta = '{http://www.opengis.net/kml/2.2}Folder'
+name = '{http://www.opengis.net/kml/2.2}name'
+placemark = '{http://www.opengis.net/kml/2.2}Placemark'
+data = '{http://www.opengis.net/kml/2.2}Data'
+displayName = '{http://www.opengis.net/kml/2.2}displayName'
+value = '{http://www.opengis.net/kml/2.2}value'
+point = '{http://www.opengis.net/kml/2.2}Point'
+coordinates = '{http://www.opengis.net/kml/2.2}coordinates'
+lineString = '{http://www.opengis.net/kml/2.2}LineString'
 
-for i in root.iter('{http://www.opengis.net/kml/2.2}Folder'):
-    if 'Poste' in i.findtext('{http://www.opengis.net/kml/2.2}name'):
-        for t in i.iter('{http://www.opengis.net/kml/2.2}Placemark'):
-            for coord in t.iter('{http://www.opengis.net/kml/2.2}Point'):
-
-                print(numero_poste,coord.findtext('{http://www.opengis.net/kml/2.2}coordinates'))
-            #     break
-            numero_poste += 1
-
-# print(tipo_poste)
-
-# arquivo = Poste('Coreaú.kml')
-#
-#
-# print(arquivo.extracao_tipo_poste)
-# print(arquivo.extracao_coordenada_poste)
+for i in root.iter(placemark):
+    for t in i.iter(lineString):
+        print(i.findtext(name),t.findtext(coordinates).strip())
+    # for t in i.iter(lineString):
+    #     print(i.findtext(name))
+    #     break
