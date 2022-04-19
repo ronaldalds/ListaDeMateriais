@@ -1,32 +1,22 @@
-# from poste import Poste
-import xml.etree.ElementTree as Et
+from projeto import Projeto
+from cabo import Cabo
+from poste import Poste
+from math import sqrt
+arquivo = Poste('Coreaú.kml')
+arquivo2 = Cabo('Coreaú.kml')
+coord_poste = arquivo.coordanada_poste
+coord_cabo = arquivo2.percuso
+# dis = arquivo2.distancia(coord_poste[1],coord_cabo[1][0])
+# print(len(teste))
+# print(teste[313][0])
+a = 2
+print(coord_poste[1],coord_cabo[a][0])
+x = coord_poste[1]
+y = coord_cabo[a][0]
 
-doc = Et.parse('Coreaú.kml')
-root = doc.getroot()
-numero_poste = 1
+cat1 = ((float(x[0])) - (float(y[0]))) * 1852 * 60
+cat2 = ((float(x[1])) - (float(y[1]))) * 1852 * 60
 
-percuso = []
-comprimento = 0.0
-tipo_alca = ""
-tipo_laco = ""
-quantidade_de_fibra_no_cabo = 0
-vao_suportado = 0
-peso_do_cabo = 0.0
-diametro_externo = 0.0
-pressao_do_vento = 0.0
-pasta = '{http://www.opengis.net/kml/2.2}Folder'
-name = '{http://www.opengis.net/kml/2.2}name'
-placemark = '{http://www.opengis.net/kml/2.2}Placemark'
-data = '{http://www.opengis.net/kml/2.2}Data'
-displayName = '{http://www.opengis.net/kml/2.2}displayName'
-value = '{http://www.opengis.net/kml/2.2}value'
-point = '{http://www.opengis.net/kml/2.2}Point'
-coordinates = '{http://www.opengis.net/kml/2.2}coordinates'
-lineString = '{http://www.opengis.net/kml/2.2}LineString'
+h = sqrt((cat1 * cat1) + (cat2 * cat2))
 
-for i in root.iter(placemark):
-    for t in i.iter(lineString):
-        print(i.findtext(name),t.findtext(coordinates).strip())
-    # for t in i.iter(lineString):
-    #     print(i.findtext(name))
-    #     break
+print(h)

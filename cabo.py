@@ -1,9 +1,8 @@
-import xml.etree.ElementTree as Et
-
-class Cabo:
+from projeto import Projeto
+from math import sqrt
+class Cabo(Projeto):
     def __init__(self,arquivo):
-        doc = Et.parse(arquivo)
-        self.__root = doc.getroot()
+        super().__init__(arquivo)
         self.__percuso = {}
         self.__nome_cabo = {}
         self.__comprimento = {}
@@ -14,44 +13,24 @@ class Cabo:
         self.__quantidade_de_fibra_no_cabo = {}
         self.__vao_suportado = {}
         self.__peso_do_cabo = {}
-        self.diametro_externo = {}
-        self.pressao_do_vento = {}
-        self.__folder = '{http://www.opengis.net/kml/2.2}Folder'
-        self.__name = '{http://www.opengis.net/kml/2.2}name'
-        self.__placemark = '{http://www.opengis.net/kml/2.2}Placemark'
-        self.__data = '{http://www.opengis.net/kml/2.2}Data'
-        self.__displayName = '{http://www.opengis.net/kml/2.2}displayName'
-        self.__value = '{http://www.opengis.net/kml/2.2}value'
-        self.__point = '{http://www.opengis.net/kml/2.2}Point'
-        self.__coordinates = '{http://www.opengis.net/kml/2.2}coordinates'
-        self.__lineString = '{http://www.opengis.net/kml/2.2}LineString'
+        self.__diametro_externo = {}
+        self.__pressao_do_vento = {}
 
+    @property
+    def distancia(self,x,y):#x=['-40.65200273', '-3.5530714', '0'] y=['-40.64269', '-3.55596', '0']
+        cat1 = ((float(x[0])) - (float(y[0]))) * 1852 * 60
+        cat2 = ((float(x[1])) - (float(y[1]))) * 1852 * 60
 
-    def __extracao(self,item):
-        self.__numero_cabo = 1
-        self.__dados = {}
-        for root in self.__root.iter(self.__placemark):
-            for cabo in root.iter(self.__lineString):
-                if 'nome' in item:
-                    self.__dados[self.__numero_cabo] = root.findtext(self.__name).strip()
-                elif 'linha' in item:
-                    self.__dados[self.__numero_cabo] = cabo.findtext(self.__coordinates).strip()
-                self.__numero_cabo += 1
-        return self.__dados
+        h = sqrt((cat1 * cat1) + (cat2 * cat2))
+
+        return float(h)
 
     @property
     def nome(self):
-        self.__nome_cabo = self.__extracao('nome')
+        self.__nome_cabo = self._extracao_cabo('nome')
         return self.__nome_cabo
 
     @property
     def percuso(self):
-        self.__percuso = self.__extracao('linha')
+        self.__percuso = self._extracao_cabo('linha')
         return self.__percuso
-
-arquivo = Cabo('Coreaú.kml')
-
-teste = arquivo.percuso
-
-# print(len(teste))
-print(teste)
