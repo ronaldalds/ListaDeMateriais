@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as Et
+from math import sqrt
 
 class Projeto:
     def __init__(self, arquivo):
@@ -13,6 +14,10 @@ class Projeto:
         self.__point = '{http://www.opengis.net/kml/2.2}Point'
         self.__coordinates = '{http://www.opengis.net/kml/2.2}coordinates'
         self.__lineString = '{http://www.opengis.net/kml/2.2}LineString'
+
+
+
+
 
     def _extracao_cabo(self, item):
         self.__numero_cabo = 1
@@ -54,3 +59,11 @@ class Projeto:
                         self.__dados[self.__numero_poste] = coord.findtext(self.__coordinates).split(',')
                     self.__numero_poste += 1
         return self.__dados
+
+    def distancia(self,x,y):#['-40.652', '-3.55307', '0']
+        cat1 = ((float(x[0])) - (float(y[0]))) * 1852 * 60
+        cat2 = ((float(x[1])) - (float(y[1]))) * 1852 * 60
+
+        h = sqrt((cat1 * cat1) + (cat2 * cat2))
+
+        return float(h)

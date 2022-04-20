@@ -1,9 +1,10 @@
 from projeto import Projeto
 from math import sqrt
+from poste import Poste
 class Cabo(Projeto):
     def __init__(self,arquivo):
         super().__init__(arquivo)
-        self.__percuso = {}
+        self.__percuso = super()._extracao_cabo('linha')
         self.__nome_cabo = {}
         self.__comprimento = {}
         self.__tipo_alca = {}
@@ -16,21 +17,42 @@ class Cabo(Projeto):
         self.__diametro_externo = {}
         self.__pressao_do_vento = {}
 
+
     @property
-    def distancia(self,x,y):#x=['-40.65200273', '-3.5530714', '0'] y=['-40.64269', '-3.55596', '0']
-        cat1 = ((float(x[0])) - (float(y[0]))) * 1852 * 60
-        cat2 = ((float(x[1])) - (float(y[1]))) * 1852 * 60
+    def tratamento(self):
 
-        h = sqrt((cat1 * cat1) + (cat2 * cat2))
+        postes = super()._extracao_coordenada()
+        for x in self.__percuso:
+            for c,y in enumerate(self.__percuso[x]):
+                for i in postes:
+                    if super().distancia(y,postes[i]) <= 2:
+                        self.__percuso[x][c] = i
+                        break
 
-        return float(h)
+                    else:
+                        if super().distancia(y, postes[i]) <= 10:
+                            if self.__percuso[x][c] == type(int):
+                                break
+                            self.__percuso[x][c] = i
+
+        return self.__percuso
+
 
     @property
     def nome(self):
-        self.__nome_cabo = self._extracao_cabo('nome')
+        self.__nome_cabo = super()._extracao_cabo('nome')
         return self.__nome_cabo
 
     @property
     def percuso(self):
-        self.__percuso = self._extracao_cabo('linha')
+
         return self.__percuso
+
+
+test = Cabo('Rede FTTh.kml')
+
+
+n = 259
+# print(test.nome[n],test.tratamento[n],test.percuso[n])
+# print(test.coordanada_poste)
+print(test.tratamento)
