@@ -4,8 +4,8 @@ from poste import Poste
 class Cabo(Projeto):
     def __init__(self,arquivo):
         super().__init__(arquivo)
-        self.__percuso = super()._extracao_cabo('linha')
-        self.__nome_cabo = {}
+        self.__percuso = super()._ext_cabo('linha')
+        self.__nome_cabo = super()._ext_cabo('nome')
         self.__comprimento = {}
         self.__tipo_alca = {}
         self.__tipo_laco = {}
@@ -17,42 +17,26 @@ class Cabo(Projeto):
         self.__diametro_externo = {}
         self.__pressao_do_vento = {}
 
-
-    @property
-    def tratamento(self):
-
-        postes = super()._extracao_coordenada()
-        for x in self.__percuso:
-            for c,y in enumerate(self.__percuso[x]):
-                for i in postes:
-                    if super().distancia(y,postes[i]) <= 2:
-                        self.__percuso[x][c] = i
+    def tratamento(self,poste,disc):
+        self.__dados = disc
+        for x in disc:
+            for c,y in enumerate(disc[x]):
+                for i in poste:
+                    if self.distancia(y,poste[i]) <= 2:
+                        self.__dados[x][c] = i
                         break
-
                     else:
-                        if super().distancia(y, postes[i]) <= 10:
-                            if self.__percuso[x][c] == type(int):
+                        if self.distancia(y, poste[i]) <= 10:
+                            if disc[x][c] == type(int):
                                 break
-                            self.__percuso[x][c] = i
-
-        return self.__percuso
-
+                            self.__dados[x][c] = i
+        return self.__dados
 
     @property
     def nome(self):
-        self.__nome_cabo = super()._extracao_cabo('nome')
         return self.__nome_cabo
 
     @property
     def percuso(self):
 
         return self.__percuso
-
-
-test = Cabo('Rede FTTh.kml')
-
-
-n = 259
-# print(test.nome[n],test.tratamento[n],test.percuso[n])
-# print(test.coordanada_poste)
-print(test.tratamento)

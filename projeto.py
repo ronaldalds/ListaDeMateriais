@@ -15,11 +15,7 @@ class Projeto:
         self.__coordinates = '{http://www.opengis.net/kml/2.2}coordinates'
         self.__lineString = '{http://www.opengis.net/kml/2.2}LineString'
 
-
-
-
-
-    def _extracao_cabo(self, item):
+    def _ext_cabo(self, item):
         self.__numero_cabo = 1
         self.__dados = {}
         for root in self.__root.iter(self.__placemark):
@@ -34,22 +30,38 @@ class Projeto:
                 self.__numero_cabo += 1
         return self.__dados
 
-    def _extracao_poste(self, item):
+    def _ext_poste(self, item):
         self.__numero_poste = 1
         self.__dados = {}
         for root in self.__root.iter(self.__folder):
-            if 'POSTE' in root.findtext(self.__name).upper():
-                for poste in root.iter(self.__placemark):
-                    for data in poste.iter(self.__data):
-                        if item in str(data.findtext(self.__displayName)):
-                            self.__dados[self.__numero_poste] = data.findtext(self.__value)
-                            break
-                        else:
-                            self.__dados[self.__numero_poste] = ""
-                    self.__numero_poste += 1
+            for poste in root.iter(self.__placemark):
+                for data in poste.iter(self.__data):
+                    if item in str(data.findtext(self.__displayName)):
+                        self.__dados[self.__numero_poste] = data.findtext(self.__value)
+                        break
+                    else:
+                        self.__dados[self.__numero_poste] = ""
+                self.__numero_poste += 1
         return self.__dados
 
-    def _extracao_coordenada(self):
+
+    def _ext_caixa_ftth(self,tipo):
+        self.__numero_caixa = 1
+        self.__dados = {}
+        for root in self.__root.iter(self.__placemark):
+
+            for coord in root.iter(self.__point):
+                if 'coordenada' in tipo:
+                    self.__dados[self.__numero_caixa] = coord.findtext(self.__coordinates).split(',')
+                    break
+                elif 'nome' in tipo:
+                    self.__dados[self.__numero_caixa] = root.findtext(self.__name)
+                    break
+            self.__numero_caixa += 1
+        return self.__dados
+
+    @property
+    def _ext_coordenada_poste(self):
         self.__numero_poste = 1
         self.__dados = {}
         for root in self.__root.iter(self.__folder):
@@ -67,3 +79,5 @@ class Projeto:
         h = sqrt((cat1 * cat1) + (cat2 * cat2))
 
         return float(h)
+
+
