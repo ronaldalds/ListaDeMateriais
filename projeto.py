@@ -97,14 +97,16 @@ class Projeto:
             for coord in root.iter(self.__point):
                 if 'coordenada' in tipo:
                     self.__dados[self.__numero_caixa] = coord.findtext(self.__coordinates).split(',')
+                    self.__numero_caixa += 1
                     break
                 elif 'nome' in tipo:
                     self.__dados[self.__numero_caixa] = root.findtext(self.__name)
+                    self.__numero_caixa += 1
                     break
                 elif 'style' in tipo:
                     self.__dados[self.__numero_caixa] = root.findtext(self.__styleUrl).replace('#','')
+                    self.__numero_caixa += 1
                     break
-            self.__numero_caixa += 1
         return self.__dados
 
 

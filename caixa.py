@@ -41,3 +41,10 @@ class Caixa(Projeto):
             elif 'shapes/ranger_station.png' in self.__style[self.__tipo_caixa[tipo]]:
                 self.__tipo_caixa[tipo] = 'POP'
         return self.__tipo_caixa
+
+    def qnt_caixa(self, tipo):
+        cont = 0
+        for i in self.tipo_caixa.values():
+            if tipo == i:
+                cont += 1
+        return cont
