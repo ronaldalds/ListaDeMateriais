@@ -5,6 +5,7 @@ class Projeto:
     def __init__(self, arquivo):
         doc = Et.parse(arquivo)
         self.__root = doc.getroot()
+        self.__site = '{http://www.opengis.net/kml/2.2}'
         self.__document = '{http://www.opengis.net/kml/2.2}Document'
         self.__folder = '{http://www.opengis.net/kml/2.2}Folder'
         self.__name = '{http://www.opengis.net/kml/2.2}name'
@@ -29,14 +30,14 @@ class Projeto:
     @property
     def _ext_style(self):
         self.__dados = {}
-        for root in self.__root.iter(self.__style):
-            for icon in root.iter(self.__icon):
-                trato_tipo = icon.findtext(self.__href).replace('http://maps.google.com/mapfiles/kml/', '')
+        for root in self.__root.iter(f'{self.__site}Style'):
+            for icon in root.iter(f'{self.__site}Icon'):
+                trato_tipo = icon.findtext(f'{self.__site}href').replace('http://maps.google.com/mapfiles/kml/', '')
                 self.__dados[root.attrib['id']] = trato_tipo
-        for root2 in self.__root.iter(self.__styleMap):
-            for pair in root2.iter(self.__pair):
-                if 'normal' in pair.findtext(self.__key):
-                    trato_url = pair.findtext(self.__styleUrl).replace('#', '')
+        for root2 in self.__root.iter(f'{self.__site}StyleMap'):
+            for pair in root2.iter(f'{self.__site}Pair'):
+                if 'normal' in pair.findtext(f'{self.__site}key'):
+                    trato_url = pair.findtext(f'{self.__site}styleUrl').replace('#', '')
                     self.__dados[root2.attrib['id']] = self.__dados[trato_url]
         return self.__dados
 
@@ -92,7 +93,7 @@ class Projeto:
     def _ext_caixa_ftth(self,tipo):
         self.__numero_caixa = 1
         self.__dados = {}
-        for root in self.__root.iter(self.__placemark):
+        for root in self.__root.iter(f'{self.__site}Placemark'):
             for coord in root.iter(self.__point):
                 if 'coordenada' in tipo:
                     self.__dados[self.__numero_caixa] = coord.findtext(self.__coordinates).split(',')

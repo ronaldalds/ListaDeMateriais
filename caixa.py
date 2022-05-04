@@ -38,4 +38,6 @@ class Caixa(Projeto):
                 self.__tipo_caixa[tipo] = 'CTO'
             elif 'ylw-diamond.png' in self.__style[self.__tipo_caixa[tipo]]:
                 self.__tipo_caixa[tipo] = 'CTO-Futura'
+            elif 'shapes/ranger_station.png' in self.__style[self.__tipo_caixa[tipo]]:
+                self.__tipo_caixa[tipo] = 'POP'
         return self.__tipo_caixa
