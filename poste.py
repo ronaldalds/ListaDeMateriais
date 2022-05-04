@@ -2,18 +2,29 @@ from projeto import Projeto
 class Poste(Projeto):
     def __init__(self, arquivo):
         super().__init__(arquivo)
-        self.__coordenada_poste = self._ext_coordenada_poste
-        self.__tipo_poste = self._ext_poste("00")
-        self.__altura_poste = self._ext_poste("01")
-        self.__esforco_poste = self._ext_poste("02")
-        self.__rede_eletrica = self._ext_poste("03")
-        self.__quantidade_casa = self._ext_poste("04")
-        self.__quantidade_comercio = self._ext_poste("05")
-        self.__quantidade_apartamento = self._ext_poste("06")
-        self.__tipo_equipamento = self._ext_poste("07")
-        self.__codigo_poste = self._ext_poste("08")
-        self.__ocupacao = self._ext_poste("09")
+        self.__coordenada_pop = super()._ext_pop
+        self.__coordenada_poste = super()._ext_poste("POSTE")
+        self.__coordenada_pop_poste = {**self.__coordenada_poste,**self.__coordenada_pop}
+        self.__tipo_poste = super()._ext_poste("00")
+        self.__altura_poste = super()._ext_poste("01")
+        self.__esforco_poste = super()._ext_poste("02")
+        self.__rede_eletrica = super()._ext_poste("03")
+        self.__quantidade_casa = super()._ext_poste("04")
+        self.__quantidade_comercio = super()._ext_poste("05")
+        self.__quantidade_apartamento = super()._ext_poste("06")
+        self.__tipo_equipamento = super()._ext_poste("07")
+        self.__codigo_poste = super()._ext_poste("08")
+        self.__ocupacao = super()._ext_poste("09")
         self.__foto = {}
+
+    @property
+    def coordenada_pop_poste(self):
+        # self.__coordenada_pop_poste = {**self.__coordenada_pop,**self.__coordenada_poste}
+        return self.__coordenada_pop_poste
+
+    @property
+    def coordanada_pop(self):
+        return self.__coordenada_pop
 
     @property
     def coordanada_poste(self):

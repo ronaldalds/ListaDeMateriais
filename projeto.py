@@ -22,6 +22,9 @@ class Projeto:
         self.__icon = '{http://www.opengis.net/kml/2.2}Icon'
         self.__pair = '{http://www.opengis.net/kml/2.2}Pair'
         self.__key = '{http://www.opengis.net/kml/2.2}key'
+        self.__linestyle = '{http://www.opengis.net/kml/2.2}LineStyle'
+        self.__color = '{http://www.opengis.net/kml/2.2}color'
+        self.__tipo_style = self._ext_style
 
     @property
     def _ext_style(self):
@@ -52,18 +55,38 @@ class Projeto:
                 self.__numero_cabo += 1
         return self.__dados
 
+    @property
+    def _ext_pop(self):
+        self.__dados = {}
+        for root in self.__root.iter(self.__folder):
+            for pop in root.iter(self.__placemark):
+                if 'shapes/ranger_station.png' in self.__tipo_style[pop.findtext(self.__styleUrl).replace('#','')]:
+                    for c in pop.iter(self.__point):
+                        self.__dados['POP'] = c.findtext(self.__coordinates).split(',')
+                        break
+                    break
+                break
+        return self.__dados
+
     def _ext_poste(self, item):
         self.__numero_poste = 1
         self.__dados = {}
-        for root in self.__root.iter(self.__folder):
-            for poste in root.iter(self.__placemark):
-                for data in poste.iter(self.__data):
-                    if item in str(data.findtext(self.__displayName)):
-                        self.__dados[self.__numero_poste] = data.findtext(self.__value)
-                        break
-                    else:
-                        self.__dados[self.__numero_poste] = ""
-                self.__numero_poste += 1
+        for root in self.__root.iter(self.__folder): #shapes/ranger_station.png
+            if 'POSTE' == item:
+                if 'POSTE' in root.findtext(self.__name).upper():
+                    for poste in root.iter(self.__placemark):
+                        for coord in poste.iter(self.__point):
+                            self.__dados[self.__numero_poste] = coord.findtext(self.__coordinates).split(',')
+                        self.__numero_poste += 1
+            else:
+                for poste in root.iter(self.__placemark):
+                    for data in poste.iter(self.__data):
+                        if item in str(data.findtext(self.__displayName)):
+                            self.__dados[self.__numero_poste] = data.findtext(self.__value)
+                            break
+                        else:
+                            self.__dados[self.__numero_poste] = ""
+                    self.__numero_poste += 1
         return self.__dados
 
     def _ext_caixa_ftth(self,tipo):
@@ -83,17 +106,6 @@ class Projeto:
             self.__numero_caixa += 1
         return self.__dados
 
-    @property
-    def _ext_coordenada_poste(self):
-        self.__numero_poste = 1
-        self.__dados = {}
-        for root in self.__root.iter(self.__folder):
-            if 'POSTE' in root.findtext(self.__name).upper():
-                for poste in root.iter(self.__placemark):
-                    for coord in poste.iter(self.__point):
-                        self.__dados[self.__numero_poste] = coord.findtext(self.__coordinates).split(',')
-                    self.__numero_poste += 1
-        return self.__dados
 
     def distancia(self,x,y):#['-40.652', '-3.55307', '0']
         cat1 = ((float(x[0])) - (float(y[0]))) * 1852 * 60
