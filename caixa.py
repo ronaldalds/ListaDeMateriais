@@ -7,26 +7,18 @@ class Caixa(Projeto):
         self.__nome_caixa = super()._ext_caixa_ftth('nome')
         self.__tipo_caixa = super()._ext_caixa_ftth('style')
         self.__style = super()._ext_style
+        self.__tipo = self.__separador()
 
-    def tratamento(self,poste,disc):
-        self.__dados = disc
-        for x in disc:
+    def tratamento(self,poste):
+        self.__dados = self.__coordenada_caixa
+        for x in self.__coordenada_caixa:
             for i in poste:
-                if self.distancia(disc[x],poste[i]) <= 2:
+                if self.distancia(self.__coordenada_caixa[x],poste[i]) <= 2:
                     self.__dados[x] = i
                     break
         return self.__dados
 
-    @property
-    def coordenada_caixa(self):
-        return self.__coordenada_caixa
-
-    @property
-    def nome_caixa(self):
-        return self.__nome_caixa
-
-    @property
-    def tipo_caixa(self):
+    def __separador(self):
         for tipo in self.__tipo_caixa:
             if 'donut.png' in self.__style[self.__tipo_caixa[tipo]]:
                 self.__tipo_caixa[tipo] = 'CEO'
@@ -42,9 +34,21 @@ class Caixa(Projeto):
                 self.__tipo_caixa[tipo] = 'POP'
         return self.__tipo_caixa
 
-    def qnt_caixa(self, tipo):
+    @property
+    def coordenada_caixa(self):
+        return self.__coordenada_caixa
+
+    @property
+    def nome_caixa(self):
+        return self.__nome_caixa
+
+    @property
+    def tipo(self):
+        return self.__tipo
+
+    def contador(self, tipo):
         cont = 0
-        for i in self.tipo_caixa.values():
+        for i in self.__tipo.values():
             if tipo == i:
                 cont += 1
         return cont

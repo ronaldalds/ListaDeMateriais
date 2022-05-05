@@ -17,17 +17,17 @@ class Cabo(Projeto):
         self.__diametro_externo = {}
         self.__pressao_do_vento = {}
 
-    def tratamento(self,poste,disc):
-        self.__dados = disc
-        for x in disc:
-            for c,y in enumerate(disc[x]):
+    def tratamento(self,poste):
+        self.__dados = self.__percuso
+        for x in self.__percuso:
+            for c,y in enumerate(self.__percuso[x]):
                 for i in poste:
                     if self.distancia(y,poste[i]) <= 2:
                         self.__dados[x][c] = i
                         break
                     else:
                         if self.distancia(y, poste[i]) <= 10:
-                            if disc[x][c] == type(int):
+                            if self.__percuso[x][c] == type(int):
                                 break
                             self.__dados[x][c] = i
         return self.__dados

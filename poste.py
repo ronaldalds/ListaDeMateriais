@@ -19,7 +19,6 @@ class Poste(Projeto):
 
     @property
     def coordenada_pop_poste(self):
-        # self.__coordenada_pop_poste = {**self.__coordenada_pop,**self.__coordenada_poste}
         return self.__coordenada_pop_poste
 
     @property
