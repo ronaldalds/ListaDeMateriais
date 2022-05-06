@@ -10,13 +10,13 @@ class Caixa(Projeto):
         self.__tipo = self.__separador()
 
     def tratamento(self,poste):
-        self.__dados = self.__coordenada_caixa
+        dados = self.__coordenada_caixa
         for x in self.__coordenada_caixa:
             for i in poste:
-                if self.distancia(self.__coordenada_caixa[x],poste[i]) <= 2:
-                    self.__dados[x] = i
+                if super().distancia(self.__coordenada_caixa[x],poste[i]) <= 2:
+                    dados[x] = i
                     break
-        return self.__dados
+        return dados
 
     def __separador(self):
         for tipo in self.__tipo_caixa:

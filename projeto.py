@@ -22,6 +22,19 @@ class Projeto:
                     self.__dados[root2.attrib['id']] = self.__dados[trato_url]
         return self.__dados
 
+    @property
+    def _ext_pop(self):
+        self.__dados = {}
+        for root in self.__root.iter(f'{self.__site}Folder'):
+            for pop in root.iter(f'{self.__site}Placemark'):
+                if 'shapes/ranger_station.png' in self.__tipo_style[pop.findtext(f'{self.__site}styleUrl').replace('#','')]:
+                    for c in pop.iter(f'{self.__site}Point'):
+                        self.__dados['POP'] = c.findtext(f'{self.__site}coordinates').split(',')
+                        break
+                    break
+                break
+        return self.__dados
+
     def _ext_cabo(self, item):
         self.__numero_cabo = 1
         self.__dados = {}
@@ -37,38 +50,29 @@ class Projeto:
                 self.__numero_cabo += 1
         return self.__dados
 
-    @property
-    def _ext_pop(self):
-        self.__dados = {}
-        for root in self.__root.iter(f'{self.__site}Folder'):
-            for pop in root.iter(f'{self.__site}Placemark'):
-                if 'shapes/ranger_station.png' in self.__tipo_style[pop.findtext(f'{self.__site}styleUrl').replace('#','')]:
-                    for c in pop.iter(f'{self.__site}Point'):
-                        self.__dados['POP'] = c.findtext(f'{self.__site}coordinates').split(',')
-                        break
-                    break
-                break
-        return self.__dados
-
     def _ext_poste(self, item):
         self.__numero_poste = 1
         self.__dados = {}
         for root in self.__root.iter(f'{self.__site}Folder'):
-            if 'POSTE' == item:
-                if 'POSTE' in root.findtext(f'{self.__site}name').upper():
-                    for poste in root.iter(f'{self.__site}Placemark'):
+            if 'POSTE' in root.findtext(f'{self.__site}name').upper():
+                for poste in root.iter(f'{self.__site}Placemark'):
+                    if 'POSTE' in item:
                         for coord in poste.iter(f'{self.__site}Point'):
                             self.__dados[self.__numero_poste] = coord.findtext(f'{self.__site}coordinates').split(',')
-                        self.__numero_poste += 1
-            else:
-                for poste in root.iter(f'{self.__site}Placemark'):
-                    for data in poste.iter(f'{self.__site}Data'):
-                        if item in str(data.findtext(f'{self.__site}displayName')):
-                            self.__dados[self.__numero_poste] = data.findtext(f'{self.__site}value')
-                            break
-                        else:
-                            self.__dados[self.__numero_poste] = ""
+
+                    else:
+                        for data in poste.iter(f'{self.__site}Data'):
+                            # print(data.attrib['name'])
+                            if data.attrib['name'].startswith(item):
+                                # print(data.attrib)
+                                self.__dados[self.__numero_poste] = data.findtext(f'{self.__site}value')
+                                # self.__numero_poste += 1
+
+                            # else:
+                            #     self.__dados[self.__numero_poste] = ""
                     self.__numero_poste += 1
+
+
         return self.__dados
 
     def _ext_caixa_ftth(self,tipo):
