@@ -51,25 +51,23 @@ class Projeto:
         return self.__dados
 
     def _ext_poste(self, item):
+
         self.__numero_poste = 1
         self.__dados = {}
         for root in self.__root.iter(f'{self.__site}Folder'):
             if 'POSTE' in root.findtext(f'{self.__site}name').upper():
                 for poste in root.iter(f'{self.__site}Placemark'):
+
                     if 'POSTE' in item:
                         for coord in poste.iter(f'{self.__site}Point'):
                             self.__dados[self.__numero_poste] = coord.findtext(f'{self.__site}coordinates').split(',')
 
                     else:
                         for data in poste.iter(f'{self.__site}Data'):
-                            # print(data.attrib['name'])
-                            if data.attrib['name'].startswith(item):
-                                # print(data.attrib)
+                            if item in data.attrib['name']:
                                 self.__dados[self.__numero_poste] = data.findtext(f'{self.__site}value')
-                                # self.__numero_poste += 1
-
-                            # else:
-                            #     self.__dados[self.__numero_poste] = ""
+                            else:
+                                self.__dados[self.__numero_poste] = ""
                     self.__numero_poste += 1
 
 
