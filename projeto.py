@@ -1,15 +1,16 @@
 import xml.etree.ElementTree as Et
 from math import sqrt
 
+
 class Projeto:
     def __init__(self, arquivo):
         doc = Et.parse(arquivo)
         self.__root = doc.getroot()
         self.__site = '{http://www.opengis.net/kml/2.2}'
-        self.__tipo_style = self._ext_style
+        self.__tipo_style = self.ext_style
 
     @property
-    def _ext_style(self):
+    def ext_style(self):
         self.__dados = {}
         for root in self.__root.iter(f'{self.__site}Style'):
             for icon in root.iter(f'{self.__site}Icon'):
@@ -23,11 +24,12 @@ class Projeto:
         return self.__dados
 
     @property
-    def _ext_pop(self):
-        self.__dados = {}
+    def ext_pop(self):
+        self.__dados = {'POP': None}
         for root in self.__root.iter(f'{self.__site}Folder'):
             for pop in root.iter(f'{self.__site}Placemark'):
-                if 'shapes/ranger_station.png' in self.__tipo_style[pop.findtext(f'{self.__site}styleUrl').replace('#','')]:
+                if 'shapes/ranger_station.png' in self.__tipo_style[
+                    pop.findtext(f'{self.__site}styleUrl').replace('#', '')]:
                     for c in pop.iter(f'{self.__site}Point'):
                         self.__dados['POP'] = c.findtext(f'{self.__site}coordinates').split(',')
                         break
@@ -35,7 +37,7 @@ class Projeto:
                 break
         return self.__dados
 
-    def _ext_cabo(self, item):
+    def ext_cabo(self, item):
         self.__numero_cabo = 1
         self.__dados = {}
         for root in self.__root.iter(f'{self.__site}Placemark'):
@@ -50,30 +52,29 @@ class Projeto:
                 self.__numero_cabo += 1
         return self.__dados
 
-    def _ext_poste(self, item):
-
+    def ext_poste(self, item):
         self.__numero_poste = 1
         self.__dados = {}
         for root in self.__root.iter(f'{self.__site}Folder'):
             if 'POSTE' in root.findtext(f'{self.__site}name').upper():
                 for poste in root.iter(f'{self.__site}Placemark'):
-
                     if 'POSTE' in item:
                         for coord in poste.iter(f'{self.__site}Point'):
                             self.__dados[self.__numero_poste] = coord.findtext(f'{self.__site}coordinates').split(',')
-
+                            break
+                        else:
+                            self.__dados[self.__numero_poste] = None
                     else:
                         for data in poste.iter(f'{self.__site}Data'):
                             if item in data.attrib['name']:
                                 self.__dados[self.__numero_poste] = data.findtext(f'{self.__site}value')
+                                break
                             else:
-                                self.__dados[self.__numero_poste] = ""
+                                self.__dados[self.__numero_poste] = None
                     self.__numero_poste += 1
-
-
         return self.__dados
 
-    def _ext_caixa_ftth(self,tipo):
+    def ext_caixa_ftth(self, tipo):
         self.__numero_caixa = 1
         self.__dados = {}
         for root in self.__root.iter(f'{self.__site}Placemark'):
@@ -87,12 +88,12 @@ class Projeto:
                     self.__numero_caixa += 1
                     break
                 elif 'style' in tipo:
-                    self.__dados[self.__numero_caixa] = root.findtext(f'{self.__site}styleUrl').replace('#','')
+                    self.__dados[self.__numero_caixa] = root.findtext(f'{self.__site}styleUrl').replace('#', '')
                     self.__numero_caixa += 1
                     break
         return self.__dados
 
-    def distancia(self,x,y):#['-40.652', '-3.55307', '0']
+    def distancia(self, x, y):  # ['-40.652', '-3.55307', '0']
         cat1 = ((float(x[0])) - (float(y[0]))) * 1852 * 60
         cat2 = ((float(x[1])) - (float(y[1]))) * 1852 * 60
         h = sqrt((cat1 * cat1) + (cat2 * cat2))

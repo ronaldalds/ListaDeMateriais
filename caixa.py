@@ -3,10 +3,10 @@ from projeto import Projeto
 class Caixa(Projeto):
     def __init__(self,arquivo):
         super().__init__(arquivo)
-        self.__coordenada_caixa = super()._ext_caixa_ftth('coordenada')
-        self.__nome_caixa = super()._ext_caixa_ftth('nome')
-        self.__tipo_caixa = super()._ext_caixa_ftth('style')
-        self.__style = super()._ext_style
+        self.__coordenada_caixa = super().ext_caixa_ftth('coordenada')
+        self.__nome_caixa = super().ext_caixa_ftth('nome')
+        self.__tipo_caixa = super().ext_caixa_ftth('style')
+        self.__style = super().ext_style
         self.__tipo = self.__separador()
 
     def tratamento(self,poste):
@@ -43,7 +43,7 @@ class Caixa(Projeto):
         return self.__nome_caixa
 
     @property
-    def tipo(self):
+    def tipo_caixa(self):
         return self.__tipo
 
     def contador(self, tipo):
