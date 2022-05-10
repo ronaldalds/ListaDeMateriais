@@ -35,7 +35,7 @@ class Cabo(Projeto):
                             self.__dados[x][c] = i
         return self.__dados
 
-    def comprimento_ceo(self, poste):
+    def ceo(self, poste):
         self.__dados = self.tratamento(poste)
         distancia = 0
         poste_ceo = self.__elemento.poste_ceo(poste)
@@ -48,7 +48,7 @@ class Cabo(Projeto):
             distancia = 0
         return self.__comprimento
 
-    def comprimento_reserva(self, poste):
+    def reserva(self, poste):
         self.__dados = self.tratamento(poste)
         distancia = 0
         padrao = re.compile("[0-9]{2,3}")
@@ -67,7 +67,7 @@ class Cabo(Projeto):
             distancia = 0
         return self.__comprimento
 
-    def comprimento_cto_hub(self, poste):
+    def cto_hub(self, poste):
         self.__dados = self.tratamento(poste)
         distancia = 0
         poste_cto_hub = self.__elemento.poste_cto_hub(poste)
@@ -75,12 +75,14 @@ class Cabo(Projeto):
             for d in self.__dados[i]:
                 for cto_hub in poste_cto_hub.values():
                     if d == cto_hub:
-                        distancia += 15
+                        if i == 0 or i == len(self.__dados)-1:
+                            distancia += 15
+                        distancia += 30
             self.__comprimento[i] = round(distancia,2)
             distancia = 0
         return self.__comprimento
 
-    def comprimento_cto(self, poste):
+    def cto(self, poste):
         self.__dados = self.tratamento(poste)
         distancia = 0
         poste_cto = self.__elemento.poste_cto(poste)
@@ -88,12 +90,14 @@ class Cabo(Projeto):
             for d in self.__dados[i]:
                 for cto in poste_cto.values():
                     if d == cto:
-                        distancia += 15
+                        if i == 0 or i == len(self.__dados) - 1:
+                            distancia += 15
+                        distancia += 30
             self.__comprimento[i] = round(distancia,2)
             distancia = 0
         return self.__comprimento
 
-    def comprimento_cto_futura(self, poste):
+    def cto_futura(self, poste):
         self.__dados = self.tratamento(poste)
         distancia = 0
         poste_cto_futura = self.__elemento.poste_cto_futura(poste)
@@ -101,12 +105,14 @@ class Cabo(Projeto):
             for d in self.__dados[i]:
                 for cto_futura in poste_cto_futura.values():
                     if d == cto_futura:
-                        distancia += 15
+                        if i == 0 or i == len(self.__dados) - 1:
+                            distancia += 15
+                        distancia += 30
             self.__comprimento[i] = round(distancia,2)
             distancia = 0
         return self.__comprimento
 
-    def comprimento_cabo(self, poste, margem=0.05):
+    def comprimento_cabo(self, poste, margem=0.03):
         self.__dados = self.tratamento(poste)
         p1 = 0
         distancia = 0
@@ -128,6 +134,12 @@ class Cabo(Projeto):
             p1 = 0
         return self.__comprimento
 
+    def alca(self, poste):
+        pass
+
+    def bap(self, poste):
+        pass
+
     @property
     def nome(self):
         self.__nome_cabo = super().ext_cabo('nome')
@@ -137,4 +149,3 @@ class Cabo(Projeto):
     def percuso(self):
         self.__percuso = super().ext_cabo('linha')
         return self.__percuso
-
