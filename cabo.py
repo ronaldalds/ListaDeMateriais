@@ -67,36 +67,51 @@ class Cabo(Projeto):
             distancia = 0
         return self.__comprimento
 
+    def comprimento_cto_hub(self, poste):
+        self.__dados = self.tratamento(poste)
+        distancia = 0
+        poste_cto_hub = self.__elemento.poste_cto_hub(poste)
+        for i in self.__dados:
+            for d in self.__dados[i]:
+                for cto_hub in poste_cto_hub.values():
+                    if d == cto_hub:
+                        distancia += 15
+            self.__comprimento[i] = round(distancia,2)
+            distancia = 0
+        return self.__comprimento
+
+    def comprimento_cto(self, poste):
+        self.__dados = self.tratamento(poste)
+        distancia = 0
+        poste_cto = self.__elemento.poste_cto(poste)
+        for i in self.__dados:
+            for d in self.__dados[i]:
+                for cto in poste_cto.values():
+                    if d == cto:
+                        distancia += 15
+            self.__comprimento[i] = round(distancia,2)
+            distancia = 0
+        return self.__comprimento
+
+    def comprimento_cto_futura(self, poste):
+        self.__dados = self.tratamento(poste)
+        distancia = 0
+        poste_cto_futura = self.__elemento.poste_cto_futura(poste)
+        for i in self.__dados:
+            for d in self.__dados[i]:
+                for cto_futura in poste_cto_futura.values():
+                    if d == cto_futura:
+                        distancia += 15
+            self.__comprimento[i] = round(distancia,2)
+            distancia = 0
+        return self.__comprimento
+
     def comprimento_cabo(self, poste, margem=0.05):
         self.__dados = self.tratamento(poste)
         p1 = 0
         distancia = 0
-        # nome_elemento = self.__elemento.nome_elemento
-        # poste_ceo = self.__elemento.poste_ceo(poste)
-        # poste_reserva = self.__elemento.poste_reserva(poste)
-        poste_cto_hub = self.__elemento.poste_cto_hub(poste)
-        # poste_cto = self.__elemento.poste_cto(poste)
-        # poste_cto_futura = self.__elemento.poste_cto_futura(poste)
         for i in self.__dados:
             for d in self.__dados[i]:
-
-                # for reserva in poste_reserva:
-                #     if d == poste_reserva[reserva]:
-                #         distancia += 15
-
-                # for cto_hub in poste_cto_hub.values():
-                #     if d == cto_hub:
-                #         distancia += 15
-
-                # for cto in poste_cto.values():
-                #     if d == cto:
-                #         distancia += 12
-                #
-                # for cto_futura in poste_cto_futura.values():
-                #     if d == cto_futura:
-                #         distancia += 12
-
-
                 if d == 'POP':
                     distancia += 80
                     p1 = poste[d]
