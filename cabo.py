@@ -1,5 +1,6 @@
 from projeto import Projeto
-
+from elemento import Elemento
+import re
 
 class Cabo(Projeto):
     def __init__(self,arquivo):
@@ -16,6 +17,8 @@ class Cabo(Projeto):
         self.__peso_do_cabo = {}
         self.__diametro_externo = {}
         self.__pressao_do_vento = {}
+        self.__elemento = Elemento(arquivo)
+
 
     def tratamento(self,poste):
         self.__dados = super().ext_cabo('linha')
@@ -32,12 +35,68 @@ class Cabo(Projeto):
                             self.__dados[x][c] = i
         return self.__dados
 
-    def comprimento(self,poste,margem=0.05):
+    def comprimento_ceo(self, poste):
+        self.__dados = self.tratamento(poste)
+        distancia = 0
+        poste_ceo = self.__elemento.poste_ceo(poste)
+        for i in self.__dados:
+            for d in self.__dados[i]:
+                for ceo in poste_ceo.values():
+                    if d == ceo:
+                        distancia += 15
+            self.__comprimento[i] = round(distancia,2)
+            distancia = 0
+        return self.__comprimento
+
+    def comprimento_reserva(self, poste):
+        self.__dados = self.tratamento(poste)
+        distancia = 0
+        padrao = re.compile("[0-9]{2,3}")
+        nome_reserva = self.__elemento.nome_elemento
+        poste_reserva = self.__elemento.poste_reserva(poste)
+        for i in self.__dados:
+            for d in self.__dados[i]:
+                for reserva in poste_reserva:
+                    if d == poste_reserva[reserva]:
+                        busca = padrao.search(nome_reserva[reserva])
+                        if busca:
+                            distancia += int(busca.group())
+                        else:
+                            distancia += 80
+            self.__comprimento[i] = round(distancia,2)
+            distancia = 0
+        return self.__comprimento
+
+    def comprimento_cabo(self, poste, margem=0.05):
         self.__dados = self.tratamento(poste)
         p1 = 0
         distancia = 0
+        # nome_elemento = self.__elemento.nome_elemento
+        # poste_ceo = self.__elemento.poste_ceo(poste)
+        # poste_reserva = self.__elemento.poste_reserva(poste)
+        poste_cto_hub = self.__elemento.poste_cto_hub(poste)
+        # poste_cto = self.__elemento.poste_cto(poste)
+        # poste_cto_futura = self.__elemento.poste_cto_futura(poste)
         for i in self.__dados:
             for d in self.__dados[i]:
+
+                # for reserva in poste_reserva:
+                #     if d == poste_reserva[reserva]:
+                #         distancia += 15
+
+                # for cto_hub in poste_cto_hub.values():
+                #     if d == cto_hub:
+                #         distancia += 15
+
+                # for cto in poste_cto.values():
+                #     if d == cto:
+                #         distancia += 12
+                #
+                # for cto_futura in poste_cto_futura.values():
+                #     if d == cto_futura:
+                #         distancia += 12
+
+
                 if d == 'POP':
                     distancia += 80
                     p1 = poste[d]
@@ -52,7 +111,6 @@ class Cabo(Projeto):
             self.__comprimento[i] = round(distancia,2)
             distancia = 0
             p1 = 0
-
         return self.__comprimento
 
     @property

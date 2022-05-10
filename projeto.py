@@ -7,7 +7,7 @@ class Projeto:
         doc = Et.parse(arquivo)
         self.__root = doc.getroot()
         self.__site = '{http://www.opengis.net/kml/2.2}'
-        self.__tipo_style = self.ext_style
+
 
     @property
     def ext_style(self):
@@ -25,11 +25,11 @@ class Projeto:
 
     @property
     def ext_pop(self):
+        self.__tipo = self.ext_style
         self.__dados = {'POP': None}
         for root in self.__root.iter(f'{self.__site}Folder'):
             for pop in root.iter(f'{self.__site}Placemark'):
-                if 'shapes/ranger_station.png' in self.__tipo_style[
-                    pop.findtext(f'{self.__site}styleUrl').replace('#', '')]:
+                if 'shapes/ranger_station.png' in self.__tipo[pop.findtext(f'{self.__site}styleUrl').replace('#', '')]:
                     for c in pop.iter(f'{self.__site}Point'):
                         self.__dados['POP'] = c.findtext(f'{self.__site}coordinates').split(',')
                         break
@@ -74,22 +74,22 @@ class Projeto:
                     self.__numero_poste += 1
         return self.__dados
 
-    def ext_caixa_ftth(self, tipo):
-        self.__numero_caixa = 1
+    def ext_elemento(self, tipo):
+        self.__numero_elemento = 1
         self.__dados = {}
         for root in self.__root.iter(f'{self.__site}Placemark'):
             for coord in root.iter(f'{self.__site}Point'):
                 if 'coordenada' in tipo:
-                    self.__dados[self.__numero_caixa] = coord.findtext(f'{self.__site}coordinates').split(',')
-                    self.__numero_caixa += 1
+                    self.__dados[self.__numero_elemento] = coord.findtext(f'{self.__site}coordinates').split(',')
+                    self.__numero_elemento += 1
                     break
                 elif 'nome' in tipo:
-                    self.__dados[self.__numero_caixa] = root.findtext(f'{self.__site}name')
-                    self.__numero_caixa += 1
+                    self.__dados[self.__numero_elemento] = root.findtext(f'{self.__site}name')
+                    self.__numero_elemento += 1
                     break
                 elif 'style' in tipo:
-                    self.__dados[self.__numero_caixa] = root.findtext(f'{self.__site}styleUrl').replace('#', '')
-                    self.__numero_caixa += 1
+                    self.__dados[self.__numero_elemento] = root.findtext(f'{self.__site}styleUrl').replace('#', '')
+                    self.__numero_elemento += 1
                     break
         return self.__dados
 
