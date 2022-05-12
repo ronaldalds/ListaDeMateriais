@@ -10,12 +10,30 @@ class Projeto:
 
 
     @property
-    def ext_style(self):
+    def style(self):
         self.__dados = {}
+
         for root in self.__root.iter(f'{self.__site}Style'):
-            for icon in root.iter(f'{self.__site}Icon'):
-                trato_tipo = icon.findtext(f'{self.__site}href').replace('http://maps.google.com/mapfiles/kml/', '')
-                self.__dados[root.attrib['id']] = trato_tipo
+            self.__dados[root.attrib['id']] = ''
+            for icon_style in root.iter(f'{self.__site}IconStyle'):
+                cor_icon = icon_style.findtext(f'{self.__site}color')
+                for icon in icon_style.iter(f'{self.__site}Icon'):
+                    tipo_icon = icon.findtext(f'{self.__site}href').replace('http://maps.google.com/mapfiles/kml/','')
+                    if cor_icon == None:
+                        for label in root.iter(f'{self.__site}LabelStyle'):
+                            cor_icon = label.findtext(f'{self.__site}color')
+                    self.__dados[root.attrib['id']] = f'{tipo_icon}{cor_icon}'
+
+            if self.__dados[root.attrib['id']] == '':
+                for poly in root.iter(f'{self.__site}PolyStyle'):
+                    cor_poly = poly.findtext(f'{self.__site}color')
+                    self.__dados[root.attrib['id']] = cor_poly
+
+            if self.__dados[root.attrib['id']] == '':
+                for line in root.iter(f'{self.__site}LineStyle'):
+                    cor_line = line.findtext(f'{self.__site}color')
+                    self.__dados[root.attrib['id']] = cor_line
+
         for root2 in self.__root.iter(f'{self.__site}StyleMap'):
             for pair in root2.iter(f'{self.__site}Pair'):
                 if 'normal' in pair.findtext(f'{self.__site}key'):
@@ -23,36 +41,7 @@ class Projeto:
                     self.__dados[root2.attrib['id']] = self.__dados[trato_url]
         return self.__dados
 
-    @property
-    def ext_pop(self):
-        self.__tipo = self.ext_style
-        self.__dados = {'POP': None}
-        for root in self.__root.iter(f'{self.__site}Folder'):
-            for pop in root.iter(f'{self.__site}Placemark'):
-                if 'shapes/ranger_station.png' in self.__tipo[pop.findtext(f'{self.__site}styleUrl').replace('#', '')]:
-                    for c in pop.iter(f'{self.__site}Point'):
-                        self.__dados['POP'] = c.findtext(f'{self.__site}coordinates').split(',')
-                        break
-                    break
-                break
-        return self.__dados
-
-    def ext_cabo(self, item):
-        self.__numero_cabo = 1
-        self.__dados = {}
-        for root in self.__root.iter(f'{self.__site}Placemark'):
-            for cabo in root.iter(f'{self.__site}LineString'):
-                if 'nome' in item:
-                    self.__dados[self.__numero_cabo] = root.findtext(f'{self.__site}name').strip()
-                elif 'linha' in item:
-                    pontos = []
-                    for i in cabo.findtext(f'{self.__site}coordinates').strip().split(' '):
-                        pontos.append(i.split(','))
-                    self.__dados[self.__numero_cabo] = pontos
-                self.__numero_cabo += 1
-        return self.__dados
-
-    def ext_poste(self, item):
+    def poste(self, item):
         self.__numero_poste = 1
         self.__dados = {}
         for root in self.__root.iter(f'{self.__site}Folder'):
@@ -74,23 +63,56 @@ class Projeto:
                     self.__numero_poste += 1
         return self.__dados
 
-    def ext_elemento(self, tipo):
+    @property
+    def pop(self):
+        self.__tipo_style = self.style
+        self.__dados = {'POP': None}
+        for root in self.__root.iter(f'{self.__site}Folder'):
+            for pop in root.iter(f'{self.__site}Placemark'):
+                if 'shapes/ranger_station.png' in self.__tipo_style[pop.findtext(f'{self.__site}styleUrl').replace('#', '')]:
+                    for c in pop.iter(f'{self.__site}Point'):
+                        self.__dados['POP'] = c.findtext(f'{self.__site}coordinates').split(',')
+                        break
+                    break
+                break
+        return self.__dados
+
+    def cabo_rede(self, item):
+        self.__numero_cabo = 1
+        self.__dados = {}
+        for root in self.__root.iter(f'{self.__site}Folder'):
+            if 'REDE FTTH' == root.findtext(f'{self.__site}name').upper():
+                for rede in root.iter(f'{self.__site}Placemark'):
+                    for cabo in rede.iter(f'{self.__site}LineString'):
+                        if 'nome' in item:
+                            self.__dados[self.__numero_cabo] = rede.findtext(f'{self.__site}name').strip()
+                        elif 'linha' in item:
+                            pontos = []
+                            for i in cabo.findtext(f'{self.__site}coordinates').strip().split(' '):
+                                pontos.append(i.split(','))
+                            self.__dados[self.__numero_cabo] = pontos
+                        self.__numero_cabo += 1
+        return self.__dados
+
+    def elemento_rede(self, tipo):
         self.__numero_elemento = 1
         self.__dados = {}
-        for root in self.__root.iter(f'{self.__site}Placemark'):
-            for coord in root.iter(f'{self.__site}Point'):
-                if 'coordenada' in tipo:
-                    self.__dados[self.__numero_elemento] = coord.findtext(f'{self.__site}coordinates').split(',')
-                    self.__numero_elemento += 1
-                    break
-                elif 'nome' in tipo:
-                    self.__dados[self.__numero_elemento] = root.findtext(f'{self.__site}name')
-                    self.__numero_elemento += 1
-                    break
-                elif 'style' in tipo:
-                    self.__dados[self.__numero_elemento] = root.findtext(f'{self.__site}styleUrl').replace('#', '')
-                    self.__numero_elemento += 1
-                    break
+        for root in self.__root.iter(f'{self.__site}Folder'):
+            if 'REDE FTTH' == root.findtext(f'{self.__site}name').upper():
+                for elemento in root.iter(f'{self.__site}Placemark'):
+                    for coord in elemento.iter(f'{self.__site}Point'):
+                        if 'coordenada' in tipo:
+                            self.__dados[self.__numero_elemento] = coord.findtext(f'{self.__site}coordinates').split(',')
+                            self.__numero_elemento += 1
+                            break
+                        elif 'nome' in tipo:
+                            self.__dados[self.__numero_elemento] = elemento.findtext(f'{self.__site}name')
+                            self.__numero_elemento += 1
+                            break
+                        elif 'style' in tipo:
+                            self.__dados[self.__numero_elemento] = elemento.findtext(f'{self.__site}styleUrl').replace('#', '')
+                            self.__numero_elemento += 1
+                            break
         return self.__dados
 
     def distancia(self, x, y):  # ['-40.652', '-3.55307', '0']

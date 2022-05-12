@@ -7,5 +7,5 @@ class Style(Projeto):
 
     @property
     def tipo_style(self):
-        self.__style_item = super().ext_style
+        self.__style_item = super().style
         return self.__style_item
