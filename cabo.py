@@ -1,11 +1,12 @@
 from projeto import Projeto
 from elemento import Elemento
 import re
-from poste import Poste
+
 class Cabo(Projeto):
     def __init__(self,arquivo):
         super().__init__(arquivo)
-        self.__percuso = {}
+        self.__percuso_coordenada = super().cabo_rede('linha')
+        self.__percuso_poste = {}
         self.__nome_cabo = {}
         self.__comprimento = {}
         self.__tipo_alca = {}
@@ -19,28 +20,29 @@ class Cabo(Projeto):
         self.__diametro_externo = {}
         self.__pressao_do_vento = {}
         self.__elemento = Elemento(arquivo)
-        self.__poste_tratado = self.tratamento
-
+        self.tratamento()
+        print(self.__percuso_coordenada)
+        print(self.__percuso_poste)
 
     @property
-    def poste_tratado(self):
-        return self.__poste_tratado
+    def percuso_poste(self):
+        return self.__percuso_poste
 
 
-    def tratamento(self, poste):
-        self.__dados = super().cabo_rede('linha')
-        for x in self.__dados:
-            for c,y in enumerate(self.__dados[x]):
-                for i in poste:
-                    if super().distancia(y,poste[i]) <= 2:
-                        self.__dados[x][c] = i
+    def tratamento(self):
+        self.__percuso_poste = self.__percuso_coordenada
+        for x in self.__percuso_coordenada:
+            for c,y in enumerate(self.__percuso_coordenada[x]):
+                for i in self.poste_coordenada:
+                    if super().distancia(y,self.poste_coordenada[i]) <= 2:
+                        self.__percuso_poste[x][c] = i
                         break
                     else:
-                        if super().distancia(y, poste[i]) <= 10:
-                            if self.__dados[x][c] == type(int):
+                        if super().distancia(y, self.poste_coordenada[i]) <= 10:
+                            if self.__percuso_coordenada[x][c] == type(int):
                                 break
-                            self.__dados[x][c] = i
-        return self.__dados
+                            self.__percuso_poste[x][c] = i
+
 
     def ceo(self, poste):
         self.__dados = self.tratamento(poste)
@@ -174,6 +176,5 @@ class Cabo(Projeto):
         return self.__nome_cabo
 
     @property
-    def percuso(self):
-        self.__percuso = super().cabo_rede('linha')
-        return self.__percuso
+    def percuso_coordenada(self):
+        return self.__percuso_coordenada

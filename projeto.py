@@ -7,14 +7,23 @@ class Projeto:
         doc = Et.parse(arquivo)
         self.__root = doc.getroot()
         self.__site = '{http://www.opengis.net/kml/2.2}'
+        self.poste_coordenada = {}
+        self.style = {}
+        self.pop = {}
+        self.__ext_coordenadas()
+        self.__ext_style()
+        self.__ext_pop()
 
+    def __ext_coordenadas(self):
+        for root in self.__root.iter(f'{self.__site}Folder'):
+            if 'POSTE' in root.findtext(f'{self.__site}name').upper():
+                for n, poste in enumerate(root.iter(f'{self.__site}Placemark')):
+                    for coord in poste.iter(f'{self.__site}Point'):
+                        self.poste_coordenada[n + 1] = coord.findtext(f'{self.__site}coordinates').split(',')
 
-    @property
-    def style(self):
-        self.__dados = {}
-
+    def __ext_style(self):
         for root in self.__root.iter(f'{self.__site}Style'):
-            self.__dados[root.attrib['id']] = ''
+            self.style[root.attrib['id']] = ''
             for icon_style in root.iter(f'{self.__site}IconStyle'):
                 cor_icon = icon_style.findtext(f'{self.__site}color')
                 for icon in icon_style.iter(f'{self.__site}Icon'):
@@ -22,49 +31,39 @@ class Projeto:
                     if cor_icon == None:
                         for label in root.iter(f'{self.__site}LabelStyle'):
                             cor_icon = label.findtext(f'{self.__site}color')
-                    self.__dados[root.attrib['id']] = f'{tipo_icon}{cor_icon}'
+                    self.style[root.attrib['id']] = f'{tipo_icon}{cor_icon}'
 
-            if self.__dados[root.attrib['id']] == '':
+            if self.style[root.attrib['id']] == '':
                 for poly in root.iter(f'{self.__site}PolyStyle'):
                     cor_poly = poly.findtext(f'{self.__site}color')
-                    self.__dados[root.attrib['id']] = cor_poly
+                    self.style[root.attrib['id']] = cor_poly
 
-            if self.__dados[root.attrib['id']] == '':
+            if self.style[root.attrib['id']] == '':
                 for line in root.iter(f'{self.__site}LineStyle'):
                     cor_line = line.findtext(f'{self.__site}color')
-                    self.__dados[root.attrib['id']] = cor_line
+                    self.style[root.attrib['id']] = cor_line
 
         for root2 in self.__root.iter(f'{self.__site}StyleMap'):
             for pair in root2.iter(f'{self.__site}Pair'):
                 if 'normal' in pair.findtext(f'{self.__site}key'):
                     trato_url = pair.findtext(f'{self.__site}styleUrl').replace('#', '')
-                    self.__dados[root2.attrib['id']] = self.__dados[trato_url]
-        return self.__dados
+                    self.style[root2.attrib['id']] = self.style[trato_url]
 
-    def poste(self, item):
-        self.__numero_poste = 1
-        self.__dados = {}
+    def descricao_poste(self, item):
+        dados = {}
         for root in self.__root.iter(f'{self.__site}Folder'):
             if 'POSTE' in root.findtext(f'{self.__site}name').upper():
-                for poste in root.iter(f'{self.__site}Placemark'):
-                    if 'POSTE' in item:
-                        for coord in poste.iter(f'{self.__site}Point'):
-                            self.__dados[self.__numero_poste] = coord.findtext(f'{self.__site}coordinates').split(',')
+                for n,poste in enumerate(root.iter(f'{self.__site}Placemark')):
+                    for data in poste.iter(f'{self.__site}Data'):
+                        if item in data.attrib['name']:
+                            dados[n+1] = data.findtext(f'{self.__site}value')
                             break
                         else:
-                            self.__dados[self.__numero_poste] = None
-                    else:
-                        for data in poste.iter(f'{self.__site}Data'):
-                            if item in data.attrib['name']:
-                                self.__dados[self.__numero_poste] = data.findtext(f'{self.__site}value')
-                                break
-                            else:
-                                self.__dados[self.__numero_poste] = None
-                    self.__numero_poste += 1
-        return self.__dados
+                            dados[n+1] = None
+        return dados
 
-    @property
-    def pop(self):
+
+    def __ext_pop(self):
         self.__tipo_style = self.style
         self.__dados = {'POP': None}
         for root in self.__root.iter(f'{self.__site}Folder'):

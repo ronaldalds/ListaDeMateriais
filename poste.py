@@ -26,65 +26,65 @@ class Poste(Projeto):
 
     @property
     def coordenada_pop(self):
-        self.__coordenada_pop = super().pop
+        self.__coordenada_pop = super().__ext_pop
         return self.__coordenada_pop
 
     @property
     def coordenada_poste(self):
-        self.__coordenada_poste = super().poste("POSTE")
+        self.__coordenada_poste = super().descricao_poste("POSTE")
         return self.__coordenada_poste
 
     @property
     def tipo_poste(self):
-        self.__tipo_poste = super().poste("00")
+        self.__tipo_poste = super().descricao_poste("00")
         return self.__tipo_poste
 
     @property
     def altura_poste(self):
-        self.__altura_poste = super().poste("01")
+        self.__altura_poste = super().descricao_poste("01")
         return self.__altura_poste
 
     @property
     def esforco_poste(self):
-        self.__esforco_poste = super().poste("02")
+        self.__esforco_poste = super().descricao_poste("02")
         return self.__esforco_poste
 
     @property
     def rede_eletrica(self):
-        self.__rede_eletrica = super().poste("03")
+        self.__rede_eletrica = super().descricao_poste("03")
         return self.__rede_eletrica
 
     @property
     def quantidade_casa(self):
-        self.__quantidade_casa = super().poste("04")
+        self.__quantidade_casa = super().descricao_poste("04")
         return self.__quantidade_casa
 
     @property
     def quantidade_comercio(self):
-        self.__quantidade_comercio = super().poste("05")
+        self.__quantidade_comercio = super().descricao_poste("05")
         return self.__quantidade_comercio
 
     @property
     def quantidade_apartamento(self):
-        self.__quantidade_apartamento = super().poste("06")
+        self.__quantidade_apartamento = super().descricao_poste("06")
         return self.__quantidade_apartamento
 
     @property
     def tipo_equipamento(self):
-        self.__tipo_equipamento = super().poste("07")
+        self.__tipo_equipamento = super().descricao_poste("07")
         return self.__tipo_equipamento
 
     @property
     def codigo_poste(self):
-        self.__codigo_poste = super().poste("08")
+        self.__codigo_poste = super().descricao_poste("08")
         return self.__codigo_poste
 
     @property
     def ocupacao(self):
-        self.__ocupacao = super().poste("09")
+        self.__ocupacao = super().descricao_poste("09")
         return self.__ocupacao
 
     @property
     def foto(self):
-        self.__foto = self.poste("pictures")  # verificar função de busca para busca fotos do mapeamento
+        self.__foto = super().descricao_poste("pictures")  # verificar função de busca para busca fotos do mapeamento
         return self.__foto
