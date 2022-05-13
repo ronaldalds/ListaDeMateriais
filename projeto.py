@@ -13,6 +13,7 @@ class Projeto:
         self.__ext_coordenadas()
         self.__ext_style()
         self.__ext_pop()
+        self.coordenada_poste_pop = {**self.poste_coordenada, **self.pop}
 
     def __ext_coordenadas(self):
         for root in self.__root.iter(f'{self.__site}Folder'):
@@ -62,19 +63,17 @@ class Projeto:
                             dados[n+1] = None
         return dados
 
-
     def __ext_pop(self):
-        self.__tipo_style = self.style
-        self.__dados = {'POP': None}
+        self.pop = {'POP': None}
         for root in self.__root.iter(f'{self.__site}Folder'):
             for pop in root.iter(f'{self.__site}Placemark'):
-                if 'shapes/ranger_station.png' in self.__tipo_style[pop.findtext(f'{self.__site}styleUrl').replace('#', '')]:
+                if 'shapes/ranger_station.png' in self.style[pop.findtext(f'{self.__site}styleUrl').replace('#', '')]:
                     for c in pop.iter(f'{self.__site}Point'):
-                        self.__dados['POP'] = c.findtext(f'{self.__site}coordinates').split(',')
+                        self.pop['POP'] = c.findtext(f'{self.__site}coordinates').split(',')
                         break
                     break
                 break
-        return self.__dados
+        return self.pop
 
     def cabo_rede(self, item):
         self.__numero_cabo = 1
