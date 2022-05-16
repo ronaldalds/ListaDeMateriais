@@ -1,13 +1,14 @@
-from projeto import Projeto
-# from elemento import Elemento
+
+from elemento import Elemento
 import re
 
-class Cabo(Projeto):
+class Cabo(Elemento):
     def __init__(self,arquivo):
         super().__init__(arquivo)
-        self.__percuso = super().cabo_rede('linha')
+        self.__coordenadas = super().fibra_rede('linha')
+        self.__percuso = super().fibra_rede('linha')
         # self.__nome_cabo = {}
-        # self.__comprimento = {}
+        self.__comprimento = {}
         # self.__tipo_alca = {}
         # self.__tipo_laco = {}
         # self.__quantidade_alca = {}
@@ -18,12 +19,14 @@ class Cabo(Projeto):
         # self.__peso_do_cabo = {}
         # self.__diametro_externo = {}
         # self.__pressao_do_vento = {}
-        # self.__elemento = Elemento(arquivo)
         self.__tratamento()
 
     @property
     def percuso(self):
         return self.__percuso
+    @property
+    def coordenadas(self):
+        return self.__coordenadas
     def __tratamento(self):
         for x in self.__percuso:
             for c,y in enumerate(self.__percuso[x]):
@@ -36,39 +39,63 @@ class Cabo(Projeto):
                             if type(self.__percuso[x][c]) == int:
                                 break
                             self.__percuso[x][c] = i
+    def comprimento_cabo(self, margem=3):
+        p1 = 0
+        distancia = 0
+        for i in self.__percuso:
+            for d in self.__percuso[i]:
+                if d == 'POP':
+                    distancia += 80
+                    p1 = self.coordenada_poste_pop[d]
+                if p1 == 0:
+                    p1 = self.coordenada_poste_pop[d]
+                elif type(p1) == list and type(d) == int:
+                    distancia += (super().distancia(p1, self.coordenada_poste_pop[d]))*(1+(margem/100))
+                    p1 = self.coordenada_poste_pop[d]
+                elif type(p1) == list and type(d) == list:
+                    distancia += (super().distancia(p1, d))*(1+(margem/100))
+                    p1 = d
+            self.__comprimento[i] = round(distancia,2)
+            distancia = 0
+            p1 = 0
+        return self.__comprimento
 
-    # def ceo(self, poste):
-    #     self.__dados = self.tratamento(poste)
-    #     distancia = 0
-    #     poste_ceo = self.__elemento.poste_ceo(poste)
-    #     for i in self.__dados:
-    #         for d in self.__dados[i]:
-    #             for ceo in poste_ceo.values():
-    #                 if d == ceo:
-    #                     distancia += 15
-    #         self.__comprimento[i] = round(distancia,2)
-    #         distancia = 0
-    #     return self.__comprimento
-    #
-    # def reserva(self, poste):
-    #     self.__dados = self.tratamento(poste)
-    #     distancia = 0
-    #     padrao = re.compile("[0-9]{2,3}")
-    #     nome_reserva = self.__elemento.nome_elemento
-    #     poste_reserva = self.__elemento.poste_reserva(poste)
-    #     for i in self.__dados:
-    #         for d in self.__dados[i]:
-    #             for reserva in poste_reserva:
-    #                 if d == poste_reserva[reserva]:
-    #                     busca = padrao.search(nome_reserva[reserva])
-    #                     if busca:
-    #                         distancia += int(busca.group())
-    #                     else:
-    #                         distancia += 80
-    #         self.__comprimento[i] = round(distancia,2)
-    #         distancia = 0
-    #     return self.__comprimento
-    #
+    @property
+    def ceo(self):
+        dados = {}
+        distancia = 0
+        poste_ceo = {**self.poste_por_elemento('CEO'),**self.poste_por_elemento('CEO-Futura')}
+        for i in self.__percuso:
+            for n,d in enumerate(self.__percuso[i]):
+                for ceo in poste_ceo.values():
+                    if d == ceo:
+                        if n == 0 or n == (len(self.__percuso[i]) - 1):
+                            distancia += 15
+                        else:
+                            distancia += 30
+            dados[i] = round(distancia,2)
+            distancia = 0
+        return dados
+
+    @property
+    def reserva(self):
+        dados = {}
+        distancia = 0
+        padrao = re.compile("[0-9]{2,3}")
+        poste_reserva = self.poste_por_elemento('Reserva')
+        for i in self.__percuso:
+            for n, d in enumerate(self.__percuso[i]):
+                for reserva in poste_reserva:
+                    if d == poste_reserva[reserva]:
+                        busca = padrao.search(self.nome_elemento[reserva])
+                        if busca:
+                            distancia += int(busca.group())
+                        else:
+                            distancia += 80
+            dados[i] = round(distancia, 2)
+            distancia = 0
+        return dados
+
     # def cto_hub(self, poste):
     #     self.__dados = self.tratamento(poste)
     #     distancia = 0

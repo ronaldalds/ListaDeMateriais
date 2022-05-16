@@ -1,7 +1,6 @@
 import xml.etree.ElementTree as Et
 from math import sqrt
 
-
 class Projeto:
     def __init__(self, arquivo):
         doc = Et.parse(arquivo)
@@ -75,43 +74,92 @@ class Projeto:
                 break
         return self.pop
 
-    def cabo_rede(self, item):
-        self.__numero_cabo = 1
-        self.__dados = {}
+    def fibra_rede(self, item):
+        n = 1
+        dados = {}
         for root in self.__root.iter(f'{self.__site}Folder'):
             if 'REDE FTTH' == root.findtext(f'{self.__site}name').upper():
-                for rede in root.iter(f'{self.__site}Placemark'):
-                    for cabo in rede.iter(f'{self.__site}LineString'):
-                        if 'nome' in item:
-                            self.__dados[self.__numero_cabo] = rede.findtext(f'{self.__site}name').strip()
-                        elif 'linha' in item:
-                            pontos = []
-                            for i in cabo.findtext(f'{self.__site}coordinates').strip().split(' '):
-                                pontos.append(i.split(','))
-                            self.__dados[self.__numero_cabo] = pontos
-                        self.__numero_cabo += 1
-        return self.__dados
+                for olt in root.iter(f'{self.__site}Folder'):
+                    if 'OLT' in olt.findtext(f'{self.__site}name').upper():
+                        for rota in olt.iter(f'{self.__site}Folder'):
+                            if 'ROTA' in rota.findtext(f'{self.__site}name').upper():
+                                for AP in rota.iter(f'{self.__site}Folder'):
+                                    if 'AP' == AP.findtext(f'{self.__site}name').upper():
+                                        for fibra in AP.iter(f'{self.__site}Placemark'):
+                                            for linha in fibra.iter(f'{self.__site}LineString'):
+                                                if 'nome' in item:
+                                                    a = olt.findtext(f'{self.__site}name').strip()
+                                                    b = rota.findtext(f'{self.__site}name').strip()
+                                                    c = fibra.findtext(f'{self.__site}name').strip()
+                                                    dados[n] = f'{a};{b};{c}'
+
+                                                elif 'linha' in item:
+                                                    pontos = []
+                                                    for i in linha.findtext(f'{self.__site}coordinates').strip().split(' '):
+                                                        pontos.append(i.split(','))
+                                                        dados[n] = pontos
+                                                n += 1
+
+                                for AS in rota.iter(f'{self.__site}Folder'):
+                                    if 'AS' == AS.findtext(f'{self.__site}name').upper():
+                                        for fibra in AS.iter(f'{self.__site}Placemark'):
+                                            for linha in fibra.iter(f'{self.__site}LineString'):
+                                                if 'nome' in item:
+                                                    a = olt.findtext(f'{self.__site}name').strip()
+                                                    b = rota.findtext(f'{self.__site}name').strip()
+                                                    c = fibra.findtext(f'{self.__site}name').strip()
+                                                    dados[n] = f'{a};{b};{c}'
+
+                                                elif 'linha' in item:
+                                                    pontos = []
+                                                    for i in linha.findtext(f'{self.__site}coordinates').strip().split(' '):
+                                                        pontos.append(i.split(','))
+                                                        dados[n] = pontos
+                                                n += 1
+
+                                for setor in rota.iter(f'{self.__site}Folder'):
+                                    if 'SETOR' in setor.findtext(f'{self.__site}name').upper():
+                                        for rede in rota.iter(f'{self.__site}Folder'):
+                                            if 'REDE' in rede.findtext(f'{self.__site}name').upper():
+                                                for fibra in rede.iter(f'{self.__site}Placemark'):
+                                                    for linha in fibra.iter(f'{self.__site}LineString'):
+                                                        if 'nome' in item:
+                                                            a = olt.findtext(f'{self.__site}name').strip()
+                                                            b = rota.findtext(f'{self.__site}name').strip()
+                                                            c = setor.findtext(f'{self.__site}name').strip()
+                                                            d = rede.findtext(f'{self.__site}name').strip()
+                                                            e = fibra.findtext(f'{self.__site}name').strip()
+                                                            dados[n] = f'{a};{b};{c};{d};{e}'
+
+                                                        elif 'linha' in item:
+                                                            pontos = []
+                                                            for i in linha.findtext(f'{self.__site}coordinates').strip().split(
+                                                                    ' '):
+                                                                pontos.append(i.split(','))
+                                                                dados[n] = pontos
+                                                        n += 1
+        return dados
 
     def elemento_rede(self, tipo):
-        self.__numero_elemento = 1
-        self.__dados = {}
+        n = 1
+        dados = {}
         for root in self.__root.iter(f'{self.__site}Folder'):
             if 'REDE FTTH' == root.findtext(f'{self.__site}name').upper():
                 for elemento in root.iter(f'{self.__site}Placemark'):
                     for coord in elemento.iter(f'{self.__site}Point'):
                         if 'coordenada' in tipo:
-                            self.__dados[self.__numero_elemento] = coord.findtext(f'{self.__site}coordinates').split(',')
-                            self.__numero_elemento += 1
+                            dados[n] = coord.findtext(f'{self.__site}coordinates').split(',')
+                            n += 1
                             break
                         elif 'nome' in tipo:
-                            self.__dados[self.__numero_elemento] = elemento.findtext(f'{self.__site}name')
-                            self.__numero_elemento += 1
+                            dados[n] = elemento.findtext(f'{self.__site}name')
+                            n += 1
                             break
                         elif 'style' in tipo:
-                            self.__dados[self.__numero_elemento] = elemento.findtext(f'{self.__site}styleUrl').replace('#', '')
-                            self.__numero_elemento += 1
+                            dados[n] = elemento.findtext(f'{self.__site}styleUrl').replace('#', '')
+                            n += 1
                             break
-        return self.__dados
+        return dados
 
     def distancia(self, x, y):  # ['-40.652', '-3.55307', '0']
         cat1 = ((float(x[0])) - (float(y[0]))) * 1852 * 60
