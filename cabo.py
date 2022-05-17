@@ -5,53 +5,46 @@ import re
 class Cabo(Elemento):
     def __init__(self,arquivo):
         super().__init__(arquivo)
-        self.__coordenadas = super().fibra_rede('linha')
-        self.__percuso = super().fibra_rede('linha')
-        # self.__nome_cabo = {}
+        self.__percuso = {}
         self.__comprimento = {}
-        # self.__tipo_alca = {}
-        # self.__tipo_laco = {}
-        # self.__quantidade_alca = {}
-        # self.__quantidade_laco = {}
-        # self.__quantidade_bap = {}
-        # self.__quantidade_de_fibra_no_cabo = {}
-        # self.__vao_suportado = {}
-        # self.__peso_do_cabo = {}
-        # self.__diametro_externo = {}
-        # self.__pressao_do_vento = {}
-        self.__tratamento()
+        self._tipo_fibra = {}
+        # self.__osnap()
+        self.__fibras()
 
-    @property
-    def percuso(self):
-        return self.__percuso
-    @property
-    def coordenadas(self):
-        return self.__coordenadas
-    def __tratamento(self):
-        for x in self.__percuso:
-            for c,y in enumerate(self.__percuso[x]):
-                for i in self.coordenada_poste_pop:
-                    if super().distancia(y,self.coordenada_poste_pop[i]) <= 2:
+    def __fibras(self):
+        for i in self._nome_fibra:
+            print(self._nome_fibra[i])
+
+
+    def __osnap(self):
+        all = {**self._coordenada_poste,**self._coordenada_pop}
+        self.__percuso = self._coordenada_fibra
+        for x in self._coordenada_fibra:
+            for c,y in enumerate(self._coordenada_fibra[x]):
+                for i in all:
+                    if super().distancia(y,all[i]) <= 2:
                         self.__percuso[x][c] = i
                         break
                     else:
-                        if super().distancia(y, self.coordenada_poste_pop[i]) <= 10:
-                            if type(self.__percuso[x][c]) == int:
+                        if super().distancia(y, all[i]) <= 10:
+                            if type(self._coordenada_fibra[x][c]) == int:
                                 break
                             self.__percuso[x][c] = i
+
     def comprimento_cabo(self, margem=3):
         p1 = 0
         distancia = 0
+        all = {**self._coordenada_poste, **self._coordenada_pop}
         for i in self.__percuso:
             for d in self.__percuso[i]:
                 if d == 'POP':
                     distancia += 80
-                    p1 = self.coordenada_poste_pop[d]
+                    p1 = all[d]
                 if p1 == 0:
-                    p1 = self.coordenada_poste_pop[d]
+                    p1 = all[d]
                 elif type(p1) == list and type(d) == int:
-                    distancia += (super().distancia(p1, self.coordenada_poste_pop[d]))*(1+(margem/100))
-                    p1 = self.coordenada_poste_pop[d]
+                    distancia += (super().distancia(p1, all[d]))*(1+(margem/100))
+                    p1 = all[d]
                 elif type(p1) == list and type(d) == list:
                     distancia += (super().distancia(p1, d))*(1+(margem/100))
                     p1 = d
@@ -60,41 +53,42 @@ class Cabo(Elemento):
             p1 = 0
         return self.__comprimento
 
-    @property
-    def ceo(self):
-        dados = {}
-        distancia = 0
-        poste_ceo = {**self.poste_por_elemento('CEO'),**self.poste_por_elemento('CEO-Futura')}
-        for i in self.__percuso:
-            for n,d in enumerate(self.__percuso[i]):
-                for ceo in poste_ceo.values():
-                    if d == ceo:
-                        if n == 0 or n == (len(self.__percuso[i]) - 1):
-                            distancia += 15
-                        else:
-                            distancia += 30
-            dados[i] = round(distancia,2)
-            distancia = 0
-        return dados
+    # @property
+    # def ceo(self):
+    #     dados = {}
+    #     distancia = 0
+    #     poste_ceo = {**self.poste_por_elemento('CEO'),**self.poste_por_elemento('CEO-Futura')}
+    #     for i in self.__percuso:
+    #         for n,d in enumerate(self.__percuso[i]):
+    #             for ceo in poste_ceo:
+    #                 if d == poste_ceo[ceo]:
+    #                     print(self._nome_elemento[ceo], self._nome_fibra[i])
+    #                     if n == 0 or n == (len(self.__percuso[i]) - 1):
+    #                         distancia += 15
+    #                     else:
+    #                         distancia += 30
+    #         dados[i] = round(distancia,2)
+    #         distancia = 0
+    #     return dados
 
-    @property
-    def reserva(self):
-        dados = {}
-        distancia = 0
-        padrao = re.compile("[0-9]{2,3}")
-        poste_reserva = self.poste_por_elemento('Reserva')
-        for i in self.__percuso:
-            for n, d in enumerate(self.__percuso[i]):
-                for reserva in poste_reserva:
-                    if d == poste_reserva[reserva]:
-                        busca = padrao.search(self.nome_elemento[reserva])
-                        if busca:
-                            distancia += int(busca.group())
-                        else:
-                            distancia += 80
-            dados[i] = round(distancia, 2)
-            distancia = 0
-        return dados
+    # @property
+    # def reserva(self):
+    #     dados = {}
+    #     distancia = 0
+    #     padrao = re.compile("[0-9]{2,3}")
+    #     poste_reserva = self.poste_por_elemento('Reserva')
+    #     for i in self.__percuso:
+    #         for n, d in enumerate(self.__percuso[i]):
+    #             for reserva in poste_reserva:
+    #                 if d == poste_reserva[reserva]:
+    #                     busca = padrao.search(self._nome_elemento[reserva])
+    #                     if busca:
+    #                         distancia += int(busca.group())
+    #                     else:
+    #                         distancia += 80
+    #         dados[i] = round(distancia, 2)
+    #         distancia = 0
+    #     return dados
 
     # def cto_hub(self, poste):
     #     self.__dados = self.tratamento(poste)
