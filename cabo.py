@@ -8,12 +8,12 @@ class Cabo(Elemento):
         self.__percuso = {}
         self.__comprimento = {}
         self._tipo_fibra = {}
-        # self.__osnap()
-        self.__fibras()
+        self.__osnap()
+        # self.__fibras()
 
-    def __fibras(self):
-        for i in self._nome_fibra:
-            print(self._nome_fibra[i])
+    # def __fibras(self):
+    #     for i in self._nome_fibra:
+    #         print(self._nome_fibra[i])
 
 
     def __osnap(self):
@@ -31,6 +31,7 @@ class Cabo(Elemento):
                                 break
                             self.__percuso[x][c] = i
 
+    @property
     def comprimento_cabo(self, margem=3):
         p1 = 0
         distancia = 0
@@ -53,57 +54,63 @@ class Cabo(Elemento):
             p1 = 0
         return self.__comprimento
 
-    # @property
-    # def ceo(self):
-    #     dados = {}
-    #     distancia = 0
-    #     poste_ceo = {**self.poste_por_elemento('CEO'),**self.poste_por_elemento('CEO-Futura')}
-    #     for i in self.__percuso:
-    #         for n,d in enumerate(self.__percuso[i]):
-    #             for ceo in poste_ceo:
-    #                 if d == poste_ceo[ceo]:
-    #                     print(self._nome_elemento[ceo], self._nome_fibra[i])
-    #                     if n == 0 or n == (len(self.__percuso[i]) - 1):
-    #                         distancia += 15
-    #                     else:
-    #                         distancia += 30
-    #         dados[i] = round(distancia,2)
-    #         distancia = 0
-    #     return dados
+    @property
+    def ceo(self):
+        dados = {}
+        distancia = 0
+        poste_ceo = {**self.poste_por_elemento('CEO'),**self.poste_por_elemento('CEO-Futura')}
+        for i in self.__percuso:
+            for n,d in enumerate(self.__percuso[i]):
+                for ceo in poste_ceo:
+                    l1 = self._nome_elemento[ceo].split(';')
+                    l2 = self._nome_fibra[i].split(';')
+                    if d == poste_ceo[ceo] and l1[0]==l2[0] and l1[1]==l2[1] and l1[2]==l2[2] and l1[3]==l2[3]:
+                        if n == 0 or n == (len(self.__percuso[i]) - 1):
+                            distancia += 15
+                        else:
+                            distancia += 30
+            dados[i] = round(distancia,2)
+            distancia = 0
+        return dados
 
-    # @property
-    # def reserva(self):
-    #     dados = {}
-    #     distancia = 0
-    #     padrao = re.compile("[0-9]{2,3}")
-    #     poste_reserva = self.poste_por_elemento('Reserva')
-    #     for i in self.__percuso:
-    #         for n, d in enumerate(self.__percuso[i]):
-    #             for reserva in poste_reserva:
-    #                 if d == poste_reserva[reserva]:
-    #                     busca = padrao.search(self._nome_elemento[reserva])
-    #                     if busca:
-    #                         distancia += int(busca.group())
-    #                     else:
-    #                         distancia += 80
-    #         dados[i] = round(distancia, 2)
-    #         distancia = 0
-    #     return dados
+    @property
+    def reserva(self):
+        dados = {}
+        distancia = 0
+        padrao = re.compile("[0-9]{2,3}")
+        poste_reserva = self.poste_por_elemento('Reserva')
+        for i in self.__percuso:
+            for n, d in enumerate(self.__percuso[i]):
+                for reserva in poste_reserva:
+                    l1 = self._nome_elemento[reserva].split(';')
+                    l2 = self._nome_fibra[i].split(';')
+                    if d == poste_reserva[reserva] and l1[0]==l2[0] and l1[1]==l2[1] and l1[2]==l2[2] and l1[3]==l2[3]:
+                        busca = padrao.search(self._nome_elemento[reserva])
+                        if busca:
+                            distancia += int(busca.group())
+                        else:
+                            distancia += 80
+            dados[i] = round(distancia, 2)
+            distancia = 0
+        return dados
 
-    # def cto_hub(self, poste):
-    #     self.__dados = self.tratamento(poste)
-    #     distancia = 0
-    #     poste_cto_hub = self.__elemento.poste_cto_hub(poste)
-    #     for i in self.__dados:
-    #         for d in self.__dados[i]:
-    #             for cto_hub in poste_cto_hub.values():
-    #                 if d == cto_hub:
-    #                     if i == 0 or i == len(self.__dados)-1:
-    #                         distancia += 15
-    #                     distancia += 30
-    #         self.__comprimento[i] = round(distancia,2)
-    #         distancia = 0
-    #     return self.__comprimento
+    def cto_hub(self):
+        dados = {}
+        distancia = 0
+        poste_ceo = {**self.poste_por_elemento('CEO'), **self.poste_por_elemento('CEO-Futura')}
+        for i in self.__percuso:
+            for n, d in enumerate(self.__percuso[i]):
+                for ceo in poste_ceo:
+                    l1 = self._nome_elemento[ceo].split(';')
+                    l2 = self._nome_fibra[i].split(';')
+                    if d == poste_ceo[ceo] and l1[0] == l2[0] and l1[1] == l2[1] and l1[2] == l2[2] and l1[3] == l2[3]:
+                        if n == 0 or n == (len(self.__percuso[i]) - 1):
+                            distancia += 15
+                        else:
+                            distancia += 30
+            dados[i] = round(distancia, 2)
+            distancia = 0
+        return dados
     #
     # def cto(self, poste):
     #     self.__dados = self.tratamento(poste)
