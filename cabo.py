@@ -30,7 +30,6 @@ class Cabo(Elemento):
                             if type(self._coordenada_fibra[x][c]) == int:
                                 break
                             self.__percuso[x][c] = i
-
     @property
     def comprimento_cabo(self, margem=3):
         p1 = 0
@@ -53,7 +52,6 @@ class Cabo(Elemento):
             distancia = 0
             p1 = 0
         return self.__comprimento
-
     @property
     def ceo(self):
         dados = {}
@@ -72,7 +70,6 @@ class Cabo(Elemento):
             dados[i] = round(distancia,2)
             distancia = 0
         return dados
-
     @property
     def reserva(self):
         dados = {}
@@ -93,78 +90,43 @@ class Cabo(Elemento):
             dados[i] = round(distancia, 2)
             distancia = 0
         return dados
-
+    @property
     def cto_hub(self):
         dados = {}
         distancia = 0
-        poste_ceo = {**self.poste_por_elemento('CEO'), **self.poste_por_elemento('CEO-Futura')}
+        poste_cto_hub = {**self.poste_por_elemento('CTO-HUB'), **self.poste_por_elemento('CTO-HUB-Futura')}
         for i in self.__percuso:
             for n, d in enumerate(self.__percuso[i]):
-                for ceo in poste_ceo:
-                    l1 = self._nome_elemento[ceo].split(';')
+                for cto_hub in poste_cto_hub:
+                    l1 = self._nome_elemento[cto_hub].split(';')
                     l2 = self._nome_fibra[i].split(';')
-                    if d == poste_ceo[ceo] and l1[0] == l2[0] and l1[1] == l2[1] and l1[2] == l2[2] and l1[3] == l2[3]:
+                    if d == poste_cto_hub[cto_hub] and l1[0] == l2[0] and l1[1] == l2[1]:
                         if n == 0 or n == (len(self.__percuso[i]) - 1):
-                            distancia += 15
+                            distancia += 10
                         else:
-                            distancia += 30
+                            distancia += 20
             dados[i] = round(distancia, 2)
             distancia = 0
         return dados
-    #
-    # def cto(self, poste):
-    #     self.__dados = self.tratamento(poste)
-    #     distancia = 0
-    #     poste_cto = self.__elemento.poste_cto(poste)
-    #     for i in self.__dados:
-    #         for d in self.__dados[i]:
-    #             for cto in poste_cto.values():
-    #                 if d == cto:
-    #                     if i == 0 or i == len(self.__dados) - 1:
-    #                         distancia += 15
-    #                     distancia += 30
-    #         self.__comprimento[i] = round(distancia,2)
-    #         distancia = 0
-    #     return self.__comprimento
-    #
-    # def cto_futura(self, poste):
-    #     self.__dados = self.tratamento(poste)
-    #     distancia = 0
-    #     poste_cto_futura = self.__elemento.poste_cto_futura(poste)
-    #     for i in self.__dados:
-    #         for d in self.__dados[i]:
-    #             for cto_futura in poste_cto_futura.values():
-    #                 if d == cto_futura:
-    #                     if i == 0 or i == len(self.__dados) - 1:
-    #                         distancia += 15
-    #                     distancia += 30
-    #         self.__comprimento[i] = round(distancia,2)
-    #         distancia = 0
-    #     return self.__comprimento
-    #
-    # def comprimento_cabo(self, margem=0.03):
-    #     self.__dados = self.__poste_tratado
-    #
-    #     p1 = 0
-    #     distancia = 0
-    #     for i in self.__dados:
-    #         for d in self.__dados[i]:
-    #             if d == 'POP':
-    #                 distancia += 80
-    #                 p1 = self.__poste[d]
-    #             if p1 == 0:
-    #                 p1 = self.__poste[d]
-    #             elif type(p1) == list and type(d) == int:
-    #                 distancia += (super().distancia(p1, self.__poste[d]))*(1+margem)
-    #                 p1 = self.__poste[d]
-    #             elif type(p1) == list and type(d) == list:
-    #                 distancia += (super().distancia(p1, d))*(1+margem)
-    #                 p1 = d
-    #         self.__comprimento[i] = round(distancia,2)
-    #         distancia = 0
-    #         p1 = 0
-    #     return self.__comprimento
-    #
+
+    @property
+    def cto(self):
+        dados = {}
+        distancia = 0
+        poste_cto = {**self.poste_por_elemento('CTO'), **self.poste_por_elemento('CTO-Futura')}
+        for i in self.__percuso:
+            for n, d in enumerate(self.__percuso[i]):
+                for cto in poste_cto:
+                    l1 = self._nome_elemento[cto].split(';')
+                    l2 = self._nome_fibra[i].split(';')
+                    if d == poste_cto[cto] and l1[0]==l2[0] and l1[1]==l2[1] and l1[2]==l2[2] and l1[3]==l2[3]:
+                        if n == 0 or n == (len(self.__percuso[i]) - 1):
+                            distancia += 10
+                        else:
+                            distancia += 20
+            dados[i] = round(distancia, 2)
+            distancia = 0
+        return dados
     # def laco(self, poste):
     #     self.__dados = self.tratamento(poste)
     #     for i in self.__dados:

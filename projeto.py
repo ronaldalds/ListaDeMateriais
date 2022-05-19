@@ -110,6 +110,19 @@ class Projeto:
 
                                 for setor in rota.iter(f'{self._site}Folder'):
                                     if 'SETOR' in setor.findtext(f'{self._site}name').upper():
+                                        for hub in setor.iter(f'{self._site}Placemark'):
+                                            for elemento in hub.iter(f'{self._site}Point'):
+                                                a = olt.findtext(f'{self._site}name').strip()
+                                                b = rota.findtext(f'{self._site}name').strip()
+                                                c = setor.findtext(f'{self._site}name').strip()
+                                                d = ''
+                                                e = hub.findtext(f'{self._site}name').strip()
+                                                self._tipo_elemento[ne] = hub.findtext(
+                                                    f'{self._site}styleUrl').replace('#', '')
+                                                self._nome_elemento[ne] = f'{a};{b};{c};{d};{e}'
+                                                self._coordenada_elemento[ne] = elemento.findtext(
+                                                    f'{self._site}coordinates').split(',')
+                                                ne += 1
                                         for rede in setor.iter(f'{self._site}Folder'):
                                             if 'REDE' in rede.findtext(f'{self._site}name').upper():
                                                 for fibra in rede.iter(f'{self._site}Placemark'):
