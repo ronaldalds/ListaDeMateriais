@@ -73,3 +73,7 @@ class Elemento(Poste):
             if elemento == i:
                 cont += 1
         return cont
+
+    @property
+    def nome(self):
+        return self._nome_elemento

@@ -8,13 +8,27 @@ class Cabo(Elemento):
         self.__percuso = {}
         self.__comprimento = {}
         self._tipo_fibra = {}
+        self.__quantidade_laco = {}
+        self.__quantidade_alca = {}
+        self.__quantidade_bap = {}
         self.__osnap()
-        # self.__fibras()
 
-    # def __fibras(self):
-    #     for i in self._nome_fibra:
-    #         print(self._nome_fibra[i])
 
+    def tipo_fibras(self):
+        padrao = re.compile("[0-9]{1,2}[Ff]")
+        for i in self._nome_fibra:
+            if "REDE" in self._nome_fibra[i].upper():
+                busca = padrao.search(self._nome_fibra[i].upper())
+                if busca:
+                    if busca.group() == '12F':
+                        self._tipo_fibra[i] = 'CFOA-SM-ASU80-S 12F MINI-RA'
+                    elif busca.group() == '06F':
+                        self._tipo_fibra[i] = 'CFOA-SM-ASU80-S 06F MINI-RA'
+                    else:
+                        self._tipo_fibra[i] = self._nome_fibra[i]
+            else:
+                self._tipo_fibra[i] = self._nome_fibra[i].split(';')[4].split('|')[2].strip()
+        return self._tipo_fibra
 
     def __osnap(self):
         all = {**self._coordenada_poste,**self._coordenada_pop}
@@ -30,7 +44,7 @@ class Cabo(Elemento):
                             if type(self._coordenada_fibra[x][c]) == int:
                                 break
                             self.__percuso[x][c] = i
-    @property
+
     def comprimento_cabo(self, margem=3):
         p1 = 0
         distancia = 0
@@ -108,7 +122,6 @@ class Cabo(Elemento):
             dados[i] = round(distancia, 2)
             distancia = 0
         return dados
-
     @property
     def cto(self):
         dados = {}
@@ -127,35 +140,31 @@ class Cabo(Elemento):
             dados[i] = round(distancia, 2)
             distancia = 0
         return dados
-    # def laco(self, poste):
-    #     self.__dados = self.tratamento(poste)
-    #     for i in self.__dados:
-    #         laco = (len(self.__dados[i])-1)
-    #         self.__quantidade_laco[i] = round(laco * 0.15)
-    #     return self.__quantidade_laco
-    #
-    # def alca(self, poste):
-    #     self.__dados = self.tratamento(poste)
-    #     for i in self.__dados:
-    #         alca = (len(self.__dados[i])-1)*2
-    #         self.__quantidade_alca[i] = round(alca)
-    #     return self.__quantidade_alca
-    #
-    # @property
-    # def bap(self):
-    #     self.__dados = self.__poste_tratado
-    #     bap = []
-    #     for i in self.__dados.values():
-    #         for b in i:
-    #             if type(b) == list:
-    #                 continue
-    #             bap.append(b)
-    #     self.__quantidade_bap = len(set(bap))
-    #     return self.__quantidade_bap
-    #
-    # @property
-    # def nome(self):
-    #     self.__nome_cabo = super().cabo_rede('nome')
-    #     return self.__nome_cabo
-    #
+    @property
+    def laco(self):
+        for i in self._coordenada_fibra:
+            laco = len(self._coordenada_fibra[i])
+            self.__quantidade_laco[i] = round(laco * 0.15)
+        return self.__quantidade_laco
+    @property
+    def alca(self):
+        for i in self._coordenada_fibra:
+            laco = (len(self._coordenada_fibra[i]) - 1)
+            self.__quantidade_alca[i] = round(laco * 2)
+        return self.__quantidade_alca
+
+    @property
+    def bap(self):
+        bap = []
+        for i in self.__percuso.values():
+            for b in i:
+                if type(b) == list:
+                    continue
+                bap.append(b)
+        self.__quantidade_bap = len(set(bap))
+        return self.__quantidade_bap
+
+    @property
+    def nome(self):
+        return self._nome_fibra
 
