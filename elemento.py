@@ -7,21 +7,18 @@ class Elemento(Poste):
         self._nome_pop = {'POP': None}
         self._elemento_poste = {}
         self.__separador()
-        self.__osnap()
         self.__ext_pop()
+        self.__osnap_elemento()
 
     def __ext_pop(self):
-        for root in self._root.iter(f'{self._site}Folder'):
-            for pop in root.iter(f'{self._site}Placemark'):
-                if 'shapes/ranger_station.png' in self.style[pop.findtext(f'{self._site}styleUrl').replace('#', '')]:
-                    self._nome_pop['POP'] = pop.findtext(f'{self._site}name')
-                    for c in pop.iter(f'{self._site}Point'):
-                        self._coordenada_pop['POP'] = c.findtext(f'{self._site}coordinates').split(',')
-                        break
-                    break
+        for pop in self._root.iter(f'{self._site}Placemark'):
+            if 'shapes/ranger_station.pngff0000ff' in self.style[pop.findtext(f'{self._site}styleUrl').replace('#', '')]:
+                self._nome_pop['POP'] = pop.findtext(f'{self._site}name')
+                for c in pop.iter(f'{self._site}Point'):
+                    self._coordenada_pop['POP'] = c.findtext(f'{self._site}coordinates').split(',')
                 break
 
-    def __osnap(self):
+    def __osnap_elemento(self):
         for x in self._coordenada_elemento:
             for i in self._coordenada_poste:
                 if super().distancia(self._coordenada_elemento[x], self._coordenada_poste[i]) <= 2:
@@ -73,7 +70,6 @@ class Elemento(Poste):
             if elemento == i:
                 cont += 1
         return cont
-
     @property
     def nome(self):
         return self._nome_elemento
