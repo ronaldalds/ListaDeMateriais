@@ -14,8 +14,42 @@ class Cabo(Elemento):
         self.__cto = {}
         self.__quantidade_laco = {}
         self.__quantidade_alca = {}
-        self.__quantidade_bap = []
+        self._bap = []
+        self._poste_sco = []
+        self._plaqueta_lancamento = 0
+        self._plaqueta_fusao = 0
         self.__osnap_cabo()
+        self.ceo()
+        self.reserva()
+        self.cto_hub()
+        self.cto()
+
+    def sco(self):
+        all = {**self._coordenada_poste, **self._coordenada_pop}
+        for i in self._percuso:
+            p1 = 0
+            for c,d in enumerate(self._percuso[i]):
+                try:
+                    pt = all[d]
+                except:
+                    pt = d
+                if p1 == 0:
+                    p1 = pt
+
+                elif pt[0] < p1[0] and pt[1] > p1[1]:
+                    self._poste_sco.append(f'{self._percuso[i][c-1]};Q4')
+                    self._poste_sco.append(f'{d};Q1')
+                elif pt[0] > p1[0] and pt[1] > p1[1]:
+                    self._poste_sco.append(f'{self._percuso[i][c - 1]};Q3')
+                    self._poste_sco.append(f'{d};Q2')
+                elif pt[0] < p1[0] and pt[1] < p1[1]:
+                    self._poste_sco.append(f'{self._percuso[i][c - 1]};Q2')
+                    self._poste_sco.append(f'{d};Q3')
+                elif pt[0] > p1[0] and pt[1] < p1[1]:
+                    self._poste_sco.append(f'{self._percuso[i][c - 1]};Q1')
+                    self._poste_sco.append(f'{d};Q4')
+
+        return self._poste_sco
 
     def somador(self, tipo, qnt):
         dados = {}
@@ -60,10 +94,6 @@ class Cabo(Elemento):
                             self._percuso[x][c] = i
 
     def comprimento_cabo(self):
-        self.ceo()
-        self.reserva()
-        self.cto_hub()
-        self.cto()
         p1 = 0
         distancia = 0
         all = {**self._coordenada_poste, **self._coordenada_pop}
@@ -95,6 +125,7 @@ class Cabo(Elemento):
                     l1 = self._nome_elemento[ceo].split(';')
                     l2 = self._nome_fibra[i].split(';')
                     if d == poste_ceo[ceo] and l1[0]==l2[0] and l1[1]==l2[1] and l1[2]==l2[2] and l1[3]==l2[3]:
+                        self._plaqueta_lancamento += 2
                         if n == 0 or n == (len(self._percuso[i]) - 1):
                             distancia += 15
                         else:
@@ -113,6 +144,7 @@ class Cabo(Elemento):
                     l1 = self._nome_elemento[reserva].split(';')
                     l2 = self._nome_fibra[i].split(';')
                     if d == poste_reserva[reserva] and l1[0]==l2[0] and l1[1]==l2[1] and l1[2]==l2[2] and l1[3]==l2[3]:
+                        self._plaqueta_lancamento += 1
                         busca = padrao.search(self._nome_elemento[reserva])
                         if busca:
                             distancia += int(busca.group())
@@ -131,6 +163,7 @@ class Cabo(Elemento):
                     l1 = self._nome_elemento[cto_hub].split(';')
                     l2 = self._nome_fibra[i].split(';')
                     if d == poste_cto_hub[cto_hub] and l1[0] == l2[0] and l1[1] == l2[1]:
+                        self._plaqueta_lancamento += 2
                         if n == 0 or n == (len(self._percuso[i]) - 1):
                             distancia += 10
                         else:
@@ -148,6 +181,8 @@ class Cabo(Elemento):
                     l1 = self._nome_elemento[cto].split(';')
                     l2 = self._nome_fibra[i].split(';')
                     if d == poste_cto[cto] and l1[0]==l2[0] and l1[1]==l2[1] and l1[2]==l2[2] and l1[3]==l2[3]:
+                        self._plaqueta_lancamento += 1
+                        self._plaqueta_fusao += 1
                         if n == 0 or n == (len(self._percuso[i]) - 1):
                             distancia += 10
                         else:
@@ -160,21 +195,25 @@ class Cabo(Elemento):
     def laco(self):
         for i in self._coordenada_fibra:
             laco = len(self._coordenada_fibra[i])
-            self.__quantidade_laco[i] = round(laco * 0.15)
+            self.__quantidade_laco[i] = round(laco * 0.17)
         return self.__quantidade_laco
     @property
     def alca(self):
         for i in self._coordenada_fibra:
             laco = (len(self._coordenada_fibra[i]) - 1)
-            self.__quantidade_alca[i] = round(laco * 2)
+            self.__quantidade_alca[i] = round(laco * 0.9 * 2)
         return self.__quantidade_alca
     @property
+    def plaqueta(self):
+        for i in self._coordenada_fibra:
+            self._plaqueta_lancamento += (len(self._coordenada_fibra[i]) - 1)
+        return self._plaqueta_lancamento
     def bap(self):
         for i in self._percuso.values():
             for t in i:
-                if t not in self.__quantidade_bap:
-                    self.__quantidade_bap.append(t)
-        return self.__quantidade_bap
+                if t not in self._bap:
+                    self._bap.append(t)
+        return self._bap
     @property
     def nome(self):
         return self._nome_fibra
