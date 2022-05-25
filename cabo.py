@@ -108,10 +108,10 @@ class Cabo(Elemento):
                     p1 = pt
                 if p1 == 0:
                     p1 = pt
-                distancia += (super().distancia(p1, pt)) * 1.03
+                distancia += round(super().distancia(p1, pt) * 1.03, 2)
                 p1 = pt
             equipamento = self.__ceo[i]+self.__reserva[i]+self.__cto_hub[i]+self.__cto[i]
-            self.__comprimento[i] = round(distancia,2) + equipamento
+            self.__comprimento[i] = distancia + equipamento
             distancia = 0
             p1 = 0
         return self.__comprimento
@@ -130,7 +130,7 @@ class Cabo(Elemento):
                             distancia += 15
                         else:
                             distancia += 30
-            self.__ceo[i] = round(distancia,2)
+            self.__ceo[i] = round(distancia, 2)
             distancia = 0
         return self.__ceo
 
@@ -181,7 +181,6 @@ class Cabo(Elemento):
                     l1 = self._nome_elemento[cto].split(';')
                     l2 = self._nome_fibra[i].split(';')
                     if d == poste_cto[cto] and l1[0]==l2[0] and l1[1]==l2[1] and l1[2]==l2[2] and l1[3]==l2[3]:
-                        self._plaqueta_lancamento += 1
                         self._plaqueta_fusao += 1
                         if n == 0 or n == (len(self._percuso[i]) - 1):
                             distancia += 10
@@ -204,11 +203,14 @@ class Cabo(Elemento):
             self.__quantidade_alca[i] = round(laco * 0.9 * 2)
         return self.__quantidade_alca
     @property
-    def plaqueta(self):
+    def plaqueta_lancamento(self):
         for i in self._coordenada_fibra:
             self._plaqueta_lancamento += (len(self._coordenada_fibra[i]) - 1)
         return self._plaqueta_lancamento
-    def bap(self):
+    @property
+    def plaqueta_fusao(self):
+        return self._plaqueta_fusao
+    def bap_lancamento(self):
         for i in self._percuso.values():
             for t in i:
                 if t not in self._bap:

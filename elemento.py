@@ -1,4 +1,5 @@
 from poste import Poste
+import re
 
 class Elemento(Poste):
     def __init__(self,arquivo):
@@ -62,6 +63,13 @@ class Elemento(Poste):
         for i in self._tipo_elemento:
             if self._tipo_elemento[i] == elemento:
                 dados[i] = self._elemento_poste[i]
+        return dados
+
+    def nome_por_elemento(self, elemento):
+        dados = {}
+        for i in self._tipo_elemento:
+            if self._tipo_elemento[i] == elemento:
+                dados[i] = self._nome_elemento[i]
         return dados
 
     def contador(self, elemento):
