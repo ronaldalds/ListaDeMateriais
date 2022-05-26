@@ -1,9 +1,9 @@
-
 from elemento import Elemento
 import re
 
+
 class Cabo(Elemento):
-    def __init__(self,arquivo):
+    def __init__(self, arquivo):
         super().__init__(arquivo)
         self._percuso = {}
         self.__comprimento = {}
@@ -28,7 +28,7 @@ class Cabo(Elemento):
         all = {**self._coordenada_poste, **self._coordenada_pop}
         for i in self._percuso:
             p1 = 0
-            for c,d in enumerate(self._percuso[i]):
+            for c, d in enumerate(self._percuso[i]):
                 try:
                     pt = all[d]
                 except:
@@ -37,7 +37,7 @@ class Cabo(Elemento):
                     p1 = pt
 
                 elif pt[0] < p1[0] and pt[1] > p1[1]:
-                    self._poste_sco.append(f'{self._percuso[i][c-1]};Q4')
+                    self._poste_sco.append(f'{self._percuso[i][c - 1]};Q4')
                     self._poste_sco.append(f'{d};Q1')
                 elif pt[0] > p1[0] and pt[1] > p1[1]:
                     self._poste_sco.append(f'{self._percuso[i][c - 1]};Q3')
@@ -79,12 +79,12 @@ class Cabo(Elemento):
         return self._tipo_fibra
 
     def __osnap_cabo(self):
-        all = {**self._coordenada_poste,**self._coordenada_pop}
+        all = {**self._coordenada_poste, **self._coordenada_pop}
         self._percuso = self._coordenada_fibra
         for x in self._coordenada_fibra:
-            for c,y in enumerate(self._coordenada_fibra[x]):
+            for c, y in enumerate(self._coordenada_fibra[x]):
                 for i in all:
-                    if super().distancia(y,all[i]) <= 2:
+                    if super().distancia(y, all[i]) <= 2:
                         self._percuso[x][c] = i
                         break
                     else:
@@ -110,7 +110,7 @@ class Cabo(Elemento):
                     p1 = pt
                 distancia += round(super().distancia(p1, pt) * 1.03, 2)
                 p1 = pt
-            equipamento = self.__ceo[i]+self.__reserva[i]+self.__cto_hub[i]+self.__cto[i]
+            equipamento = self.__ceo[i] + self.__reserva[i] + self.__cto_hub[i] + self.__cto[i]
             self.__comprimento[i] = distancia + equipamento
             distancia = 0
             p1 = 0
@@ -118,13 +118,13 @@ class Cabo(Elemento):
 
     def ceo(self):
         distancia = 0
-        poste_ceo = {**self.poste_por_elemento('CEO'),**self.poste_por_elemento('CEO-Futura')}
+        poste_ceo = {**self.poste_por_elemento('CEO'), **self.poste_por_elemento('CEO-Futura')}
         for i in self._percuso:
-            for n,d in enumerate(self._percuso[i]):
+            for n, d in enumerate(self._percuso[i]):
                 for ceo in poste_ceo:
                     l1 = self._nome_elemento[ceo].split(';')
                     l2 = self._nome_fibra[i].split(';')
-                    if d == poste_ceo[ceo] and l1[0]==l2[0] and l1[1]==l2[1] and l1[2]==l2[2] and l1[3]==l2[3]:
+                    if d == poste_ceo[ceo] and l1[0] == l2[0] and l1[1] == l2[1] and l1[2] == l2[2] and l1[3] == l2[3]:
                         self._plaqueta_lancamento += 2
                         if n == 0 or n == (len(self._percuso[i]) - 1):
                             distancia += 15
@@ -143,7 +143,7 @@ class Cabo(Elemento):
                 for reserva in poste_reserva:
                     l1 = self._nome_elemento[reserva].split(';')
                     l2 = self._nome_fibra[i].split(';')
-                    if d == poste_reserva[reserva] and l1[0]==l2[0] and l1[1]==l2[1] and l1[2]==l2[2] and l1[3]==l2[3]:
+                    if d == poste_reserva[reserva] and l1[0] == l2[0] and l1[1] == l2[1] and l1[2] == l2[2] and l1[3] == l2[3]:
                         self._plaqueta_lancamento += 1
                         busca = padrao.search(self._nome_elemento[reserva])
                         if busca:
@@ -180,7 +180,7 @@ class Cabo(Elemento):
                 for cto in poste_cto:
                     l1 = self._nome_elemento[cto].split(';')
                     l2 = self._nome_fibra[i].split(';')
-                    if d == poste_cto[cto] and l1[0]==l2[0] and l1[1]==l2[1] and l1[2]==l2[2] and l1[3]==l2[3]:
+                    if d == poste_cto[cto] and l1[0] == l2[0] and l1[1] == l2[1] and l1[2] == l2[2] and l1[3] == l2[3]:
                         self._plaqueta_fusao += 1
                         if n == 0 or n == (len(self._percuso[i]) - 1):
                             distancia += 10
@@ -196,27 +196,31 @@ class Cabo(Elemento):
             laco = len(self._coordenada_fibra[i])
             self.__quantidade_laco[i] = round(laco * 0.17)
         return self.__quantidade_laco
+
     @property
     def alca(self):
         for i in self._coordenada_fibra:
             laco = (len(self._coordenada_fibra[i]) - 1)
             self.__quantidade_alca[i] = round(laco * 0.9 * 2)
         return self.__quantidade_alca
+
     @property
     def plaqueta_lancamento(self):
         for i in self._coordenada_fibra:
             self._plaqueta_lancamento += (len(self._coordenada_fibra[i]) - 1)
         return self._plaqueta_lancamento
+
     @property
     def plaqueta_fusao(self):
         return self._plaqueta_fusao
+
     def bap_lancamento(self):
         for i in self._percuso.values():
             for t in i:
                 if t not in self._bap:
                     self._bap.append(t)
         return self._bap
+
     @property
     def nome(self):
         return self._nome_fibra
-

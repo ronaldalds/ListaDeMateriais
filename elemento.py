@@ -1,8 +1,9 @@
 from poste import Poste
 import re
 
+
 class Elemento(Poste):
-    def __init__(self,arquivo):
+    def __init__(self, arquivo):
         super().__init__(arquivo)
         self._coordenada_pop = {'POP': None}
         self._nome_pop = {'POP': None}
@@ -10,6 +11,9 @@ class Elemento(Poste):
         self.__separador()
         self.__ext_pop()
         self.__osnap_elemento()
+
+    def spliter(self):
+        pass
 
     def __ext_pop(self):
         for pop in self._root.iter(f'{self._site}Placemark'):
@@ -51,14 +55,14 @@ class Elemento(Poste):
             elif 'shapes/ranger_station.png' in self.style[self._tipo_elemento[tipo]]:
                 self._tipo_elemento[tipo] = 'POP'
 
-    def coordenada_por_elemento(self,elemento):
+    def coordenada_por_elemento(self, elemento):
         dados = {}
         for i in self._tipo_elemento:
             if self._tipo_elemento[i] == elemento:
                 dados[i] = self._coordenada_elemento[i]
         return dados
 
-    def poste_por_elemento(self,elemento):
+    def poste_por_elemento(self, elemento):
         dados = {}
         for i in self._tipo_elemento:
             if self._tipo_elemento[i] == elemento:
@@ -68,8 +72,9 @@ class Elemento(Poste):
     def nome_por_elemento(self, elemento):
         dados = {}
         for i in self._tipo_elemento:
-            if self._tipo_elemento[i] == elemento:
-                dados[i] = self._nome_elemento[i]
+            for t in elemento:
+                if self._tipo_elemento[i] == t:
+                    dados[i] = self._nome_elemento[i]
         return dados
 
     def contador(self, elemento):
@@ -78,6 +83,7 @@ class Elemento(Poste):
             if elemento == i:
                 cont += 1
         return cont
+
     @property
     def nome(self):
         return self._nome_elemento
