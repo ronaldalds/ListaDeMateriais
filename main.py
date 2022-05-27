@@ -11,7 +11,11 @@ cabo = Cabo('Projeto.kml')
 # projeto = Projeto('Projeto.kml')
 # reserva = Reserva('Projeto.kml')
 
+cabo.lista_expansao()
+
+print(cabo._nome_fibra)
 print(cabo._nome_elemento)
+# print(cabo._nome_fibra)
 # for i in cabo.somador(cabo.tipo_fibras(),cabo.comprimento_cabo()):
 #     print(f'Cabo {i} - {cabo.somador(cabo.tipo_fibras(), cabo.comprimento_cabo())[i]:.2f} m')
 # for i in cabo.somador(cabo.tipo_fibras(),cabo.alca):
@@ -29,4 +33,4 @@ print(cabo._nome_elemento)
 # print(f'CTO Indoor - {cabo.contador("CTO-Indoor")}')
 # print(cabo.nome_por_elemento("CTO"))
 # a = ["CTO"]
-# print(cabo.nome_por_elemento(a))
+# print(cabo.nome_por_elemento(a)) 95: 'OLT A;Rota 2;Setor C;Rede 14;rede 14 - 06F'}
