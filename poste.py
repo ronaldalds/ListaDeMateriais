@@ -15,6 +15,7 @@ class Poste(Projeto):
         self._ocupacao = {}
         self._foto = {}
         self.descricao_poste()
+
     def descricao_poste(self):
         for root in self._root.iter(f'{self._site}Folder'):
             if 'POSTE' in root.findtext(f'{self._site}name').upper():

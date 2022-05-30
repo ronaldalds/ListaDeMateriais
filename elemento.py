@@ -10,11 +10,22 @@ class Elemento(Poste):
         self._elemento_poste = {}
         self.__separador()
         self.__ext_pop()
-        self.__osnap_elemento()
+        self.osnap_elemento()
 
     def spliter(self):
-        pass
-
+        spl = {**self.nome_por_elemento('CEO'),**self.nome_por_elemento('CTO'), **self.nome_por_elemento('CTO-HUB')}
+        print(spl)
+        dados = []
+        spl_conecto_1x8 = re.compile("[A-Z]{2}[.][0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,2}[ ]?[/|][ ]?[A-Z]{1,2}[.][0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,2}")
+        spl_conecto_1x16 = re.compile("[0-9]")
+        spl_nc_1x2 = re.compile("[0-9]")
+        spl_nc_1x8 = re.compile("[0-9]")
+        spl_nc_1x16 = re.compile("[0-9]")
+        for i in spl:
+            busca_conector_1x8 = spl_conecto_1x8.search(spl[i])
+            if busca_conector_1x8:
+                dados.append("DIVISOR DE SINAL (SPLITTER) OPTICO PLC 1X8 G.657A NC-SC/APC 0.9M/0.6M")
+        return len(dados)
     def __ext_pop(self):
         for pop in self._root.iter(f'{self._site}Placemark'):
             if 'shapes/ranger_station.pngff0000ff' in self.style[pop.findtext(f'{self._site}styleUrl').replace('#', '')]:
@@ -23,7 +34,7 @@ class Elemento(Poste):
                     self._coordenada_pop['POP'] = c.findtext(f'{self._site}coordinates').split(',')
                 break
 
-    def __osnap_elemento(self):
+    def osnap_elemento(self):
         for x in self._coordenada_elemento:
             for i in self._coordenada_poste:
                 if super().distancia(self._coordenada_elemento[x], self._coordenada_poste[i]) <= 2:
@@ -72,9 +83,9 @@ class Elemento(Poste):
     def nome_por_elemento(self, elemento):
         dados = {}
         for i in self._tipo_elemento:
-            for t in elemento:
-                if self._tipo_elemento[i] == t:
-                    dados[i] = self._nome_elemento[i]
+            # for t in elemento: # trabalhar com solicitação em lista
+            if self._tipo_elemento[i] == elemento:
+                dados[i] = self._nome_elemento[i][-1]
         return dados
 
     def contador(self, elemento):
