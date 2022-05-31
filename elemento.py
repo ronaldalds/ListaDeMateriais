@@ -7,25 +7,12 @@ class Elemento(Poste):
         super().__init__(arquivo)
         self._coordenada_pop = {'POP': None}
         self._nome_pop = {'POP': None}
-        self._elemento_poste = {}
+        self._poste_elemento = {}
         self.__separador()
         self.__ext_pop()
         self.osnap_elemento()
 
-    def spliter(self):
-        spl = {**self.nome_por_elemento('CEO'),**self.nome_por_elemento('CTO'), **self.nome_por_elemento('CTO-HUB')}
-        print(spl)
-        dados = []
-        spl_conecto_1x8 = re.compile("[A-Z]{2}[.][0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,2}[ ]?[/|][ ]?[A-Z]{1,2}[.][0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,2}")
-        spl_conecto_1x16 = re.compile("[0-9]")
-        spl_nc_1x2 = re.compile("[0-9]")
-        spl_nc_1x8 = re.compile("[0-9]")
-        spl_nc_1x16 = re.compile("[0-9]")
-        for i in spl:
-            busca_conector_1x8 = spl_conecto_1x8.search(spl[i])
-            if busca_conector_1x8:
-                dados.append("DIVISOR DE SINAL (SPLITTER) OPTICO PLC 1X8 G.657A NC-SC/APC 0.9M/0.6M")
-        return len(dados)
+
     def __ext_pop(self):
         for pop in self._root.iter(f'{self._site}Placemark'):
             if 'shapes/ranger_station.pngff0000ff' in self.style[pop.findtext(f'{self._site}styleUrl').replace('#', '')]:
@@ -38,10 +25,10 @@ class Elemento(Poste):
         for x in self._coordenada_elemento:
             for i in self._coordenada_poste:
                 if super().distancia(self._coordenada_elemento[x], self._coordenada_poste[i]) <= 2:
-                    self._elemento_poste[x] = i
+                    self._poste_elemento[x] = i
                     break
                 else:
-                    self._elemento_poste[x] = self._coordenada_elemento[x]
+                    self._poste_elemento[x] = self._coordenada_elemento[x]
 
     def __separador(self):
         for tipo in self._tipo_elemento:
@@ -77,7 +64,7 @@ class Elemento(Poste):
         dados = {}
         for i in self._tipo_elemento:
             if self._tipo_elemento[i] == elemento:
-                dados[i] = self._elemento_poste[i]
+                dados[i] = self._poste_elemento[i]
         return dados
 
     def nome_por_elemento(self, elemento):

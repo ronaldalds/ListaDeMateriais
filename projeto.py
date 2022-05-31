@@ -15,11 +15,18 @@ class Projeto:
         self._nome_fibra = {}
         self._tipo_fibra = {}
         self._coordenada_fibra = {}
+        self._ra = {}
 
         self.style = {}
         self.pop = {}
         self.__ext_style()
         self.lista_rede()
+        self.fibra_ra()
+
+    def fibra_ra(self):
+        for i in self._nome_fibra:
+            if 'REDE' in self._nome_fibra[i][3].upper():
+                self._ra[i] = self._nome_fibra[i]
 
     def lista_rede(self):
         for ro in self._root.iter(f'{self._site}Folder'):

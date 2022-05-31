@@ -17,7 +17,6 @@ class Cabo(Elemento):
         self._poste_sco = []
         self._plaqueta_lancamento = 0
         self._plaqueta_fusao = 0
-
         self.__osnap_cabo()
         self.ceo()
         self.reserva()
