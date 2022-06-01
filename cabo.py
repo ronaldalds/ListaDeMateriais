@@ -13,15 +13,25 @@ class Cabo(Elemento):
         self._cto = {}
         self.__quantidade_laco = {}
         self.__quantidade_alca = {}
-        self._bap = []
         self._poste_sco = []
         self._plaqueta_lancamento = 0
         self._plaqueta_fusao = 0
+        self._cabo = {}
         self.__osnap_cabo()
         self.ceo()
         self.reserva()
         self.cto_hub()
         self.cto()
+
+    def cabo(self):
+        tipo = {**self.tipo_fibras(),'CDLH':0}
+        qnt = self.comprimento_cabo()
+        for i in qnt:
+            try:
+                self._cabo[tipo[i]] += qnt[i]
+            except:
+                self._cabo[tipo[i]] = qnt[i]
+        return self._cabo
 
     def sco(self):
         all = {**self._coordenada_poste, **self._coordenada_pop}
@@ -126,6 +136,7 @@ class Cabo(Elemento):
                     l2 = self._nome_fibra[i]
                     if d == poste_ceo[ceo] and l1[0] == l2[0] and l1[1] == l2[1]:
                         self._plaqueta_lancamento += 2
+                        self._plaqueta_fusao += 1
                         if n == 0 or n == (len(self._percuso[i]) - 1):
                             distancia += 15
                         else:
@@ -165,8 +176,10 @@ class Cabo(Elemento):
                     l2 = self._nome_fibra[i]
                     if d == poste_cto_hub[cto_hub] and l1[0] == l2[0] and l1[1] == l2[1]:
                         self._plaqueta_lancamento += 2
+                        self._plaqueta_fusao += 1
                         if n == 0 or n == (len(self._percuso[i]) - 1):
                             distancia += 10
+
                         else:
                             distancia += 20
             self._cto_hub[i] = round(distancia, 2)
@@ -207,22 +220,8 @@ class Cabo(Elemento):
             self.__quantidade_alca[i] = round(laco * 0.9 * 2)
         return self.__quantidade_alca
 
-    @property
-    def plaqueta_lancamento(self):
-        for i in self._coordenada_fibra:
-            self._plaqueta_lancamento += (len(self._coordenada_fibra[i]) - 1)
-        return self._plaqueta_lancamento
 
-    @property
-    def plaqueta_fusao(self):
-        return self._plaqueta_fusao
 
-    def bap_lancamento(self):
-        for i in self._percuso.values():
-            for t in i:
-                if t not in self._bap:
-                    self._bap.append(t)
-        return self._bap
 
     @property
     def nome(self):

@@ -18,11 +18,15 @@ equipamento = Equipamento('Projeto.kml')
 # print(f'CAIXA DE EMENDA ÓPTICA AÉREA 24F C/ SUPORTE RESERVA DPR - {equipamento.contador("CEO") + equipamento.contador("HUB-DPR")}')
 # print(f'CAIXA DE DISTRIBUIÇÃO ÓPTICA CTO PRESLEY - {equipamento.contador("CTO-HUB")}')
 # print(f'BANDEJA PARA CAIXA DE EMENDA ÓPTICA DPR - 0 und')# falta cálculos
-# print(f'BANDEJA INFERIOR PARA CTO PRESLEY - 0 und')# falta cálculos
+# print(f'BANDEJA INFERIOR PARA CTO PRESLEY - {equipamento.bandeja_cto_hub()} und')
 # print(f'KIT DE DERIVAÇÃO PARA CAIXA DE EMENDA ÓPTICA - 0 und')# falta cálculos
 # print(f'CAIXA DE DISTRIBUIÇÃO OPTICA CTO MINI PRESLEY - {equipamento.contador("CTO")}')
+# print(f'DIVISOR DE SINAL (SPLITTER) OPTICO PLC 1X8 G.657A NC-NC 250UM 2M/2M - {equipamento.spliter_con_1x8()} und')
+# print(f'DIVISOR DE SINAL (SPLITTER) OPTICO PLC 1X2 G.657A NC-NC 250UM 2M/2M - {equipamento.spliter_nc_1x2()} und')
+# print(f"DIVISOR DE SINAL (SPLITTER) OPTICO PLC 1X8 G.657A NC-NC 250UM 2M/2M - {equipamento.spliter_nc_1x8()} und")
+# print(f'ADAPTADOR ÓPTICO SM SIMPLEX SC/APC - {equipamento.spliter_con_1x8()*8} und')
 # print(f'CAIXA TERMINAL ÓPTICA INDOOR CONECTORIZADA C/ SPLITTER 1X8 SMAP - {equipamento.contador("CTO-Indoor")}')
-# for i in equipamento.spliter():
-#     print(f'{i[0]} - {i[1]} und')
-
-print(equipamento.bandeja_cto())
+# print(f'BRAÇADEIRA AJUSTÁVEL BAP4 (1000MM) C/ PARAFUSO - {equipamento.bap_fusao()} und')
+# print(f'PLAQUETA DE IDENTIFICAÇÃO DE CABO ÓPTICO ONLINE TELECOM - {equipamento.plaqueta_fusao} und')
+print(equipamento.fio_lancamento())
+print(equipamento.fio_fusao())
