@@ -13,7 +13,7 @@ class Projeto:
         self._coordenada_elemento = {}
 
         self._nome_fibra = {}
-        self._tipo_fibra = {}
+        self._tipo_fibra = {'CDLH':0}
         self._coordenada_fibra = {}
         self._ra = {}
 

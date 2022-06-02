@@ -26,11 +26,7 @@ class Cabo(Elemento):
     def cabo(self):
         tipo = {**self.tipo_fibras(),'CDLH':0}
         qnt = self.comprimento_cabo()
-        for i in qnt:
-            try:
-                self._cabo[tipo[i]] += qnt[i]
-            except:
-                self._cabo[tipo[i]] = qnt[i]
+        self._cabo = self.somador(tipo,qnt)
         return self._cabo
 
     def sco(self):
@@ -76,16 +72,16 @@ class Cabo(Elemento):
                 busca = padrao.search(self._nome_fibra[i][-1].upper())
                 if busca:
                     if busca.group() == '12F':
-                        self._tipo_fibra[i] = 'CFOA-SM-ASU80-S 12F MINI-RA'
+                        self._tipo_fibra[i] = 'Cabo CFOA-SM-ASU80-S 12F MINI-RA'
                     elif busca.group() == '06F':
-                        self._tipo_fibra[i] = 'CFOA-SM-ASU80-S 06F MINI-RA'
+                        self._tipo_fibra[i] = 'Cabo CFOA-SM-ASU80-S 06F MINI-RA'
                     else:
                         self._tipo_fibra[i] = self._nome_fibra[i]
             else:
                 if "CORDOALHA" in self._nome_fibra[i][2].upper():
                     self._tipo_fibra[i] = self._nome_fibra[i][-1]
                 else:
-                    self._tipo_fibra[i] = self._nome_fibra[i][-1].split('|')[2].strip()
+                    self._tipo_fibra[i] = f"Cabo {self._nome_fibra[i][-1].split('|')[2].strip()}"
         return self._tipo_fibra
 
     def __osnap_cabo(self):

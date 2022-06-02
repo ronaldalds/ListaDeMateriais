@@ -85,7 +85,7 @@ class Equipamento(Cabo):
             for t in i:
                 if t not in self._bap_lancamento:
                     self._bap_lancamento.append(t)
-        return self._bap_lancamento
+        return len(self._bap_lancamento)
 
     def bap_fusao(self):
         b1 = self.poste_por_elemento('CTO')
@@ -95,14 +95,20 @@ class Equipamento(Cabo):
 
     def fio_lancamento(self):
         cordoalha = self.cabo()['CDLH']*1.3
-        plaqueta = self.plaqueta_lancamento*0.3
+        plaqueta = self._plaqueta_lancamento*0.3
         ceo = self.contador('CEO')*2 + self.contador('HUB-DPR')*2
         rt = self.contador('Reserva')*2
         fio_espina = cordoalha + plaqueta + ceo + rt
         return math.ceil(fio_espina/130)
 
     def fio_fusao(self):
-        plaqueta = self.plaqueta_fusao*0.3
+        plaqueta = self._plaqueta_fusao*0.3
         cto = self.contador('CTO')*1
         fio_espina = plaqueta + cto
         return math.ceil(fio_espina/130)
+
+    def prensa_cabo(self):
+        prensa_reserva = self.contador('Reserva') * 2
+        prensa_ceo = self.contador('CEO') * 2
+        prensa = prensa_ceo + prensa_reserva
+        return prensa
