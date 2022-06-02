@@ -16,12 +16,21 @@ class Projeto:
         self._tipo_fibra = {'CDLH':0}
         self._coordenada_fibra = {}
         self._ra = {}
+        self._alimentador = {}
 
         self.style = {}
         self.pop = {}
         self.__ext_style()
         self.lista_rede()
         self.fibra_ra()
+        self.alimentador()
+
+    def alimentador(self):
+        for i in self._nome_fibra:
+            if 'AP' == self._nome_fibra[i][2].upper():
+                self._alimentador[i] = self._nome_fibra[i]
+            if 'AS' == self._nome_fibra[i][2].upper():
+                self._alimentador[i] = self._nome_fibra[i]
 
     def fibra_ra(self):
         for i in self._nome_fibra:

@@ -73,7 +73,7 @@ class Cabo(Elemento):
                 if busca:
                     if busca.group() == '12F':
                         self._tipo_fibra[i] = 'Cabo CFOA-SM-ASU80-S 12F MINI-RA'
-                    elif busca.group() == '06F':
+                    elif busca.group() == '6F':
                         self._tipo_fibra[i] = 'Cabo CFOA-SM-ASU80-S 06F MINI-RA'
                     else:
                         self._tipo_fibra[i] = self._nome_fibra[i]

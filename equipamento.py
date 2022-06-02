@@ -112,3 +112,20 @@ class Equipamento(Cabo):
         prensa_ceo = self.contador('CEO') * 2
         prensa = prensa_ceo + prensa_reserva
         return prensa
+
+    def tubete(self):
+        padrao_fibra = re.compile("[0-9]{1,2,3}[fF]")
+        ceo = {**self.poste_por_elemento("CEO"),**self.poste_por_elemento("HUB-DPR"),**self.poste_por_elemento("CTO-HUB")}
+        for i in self._alimentador:
+            # print(self._percuso[i])
+            # for n,f in enumerate(self._percuso[i]):
+            for c in ceo.values():
+                if c == self._percuso[i][0] or c == self._percuso[i][-1]:
+                    print(c,i,self._percuso[i],self._alimentador[i][-1])
+
+            # print(i)
+        rede = len(self._rede_ativa_cto_hub)
+        spl_nc_1x2 = self.spliter_nc_1x2()
+        spl_nc_1x8 = self.spliter_nc_1x8() * 9
+
+        return ceo
