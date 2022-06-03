@@ -33,4 +33,5 @@ equipamento = Equipamento('Projeto.kml')
 # print(equipamento._percuso)
 # print(equipamento.poste_por_elemento("CTO-HUB"))
 # print(equipamento.nome_por_elemento("CTO-HUB"))
-print(equipamento.tubete())
+
+print(equipamento.rede_cto_hub())

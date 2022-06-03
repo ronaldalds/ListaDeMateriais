@@ -10,7 +10,7 @@ class Equipamento(Cabo):
         self._rede_ativa_cto_hub = []
         self._bap_lancamento = []
         self._bap_fusao = 0
-        self.rede_cto_hub()
+        # self.rede_cto_hub()
 
     def rede_cto_hub(self):
         lista = {**self.nome_por_elemento('CTO-HUB')}
@@ -27,7 +27,20 @@ class Equipamento(Cabo):
                         t3 = s.split("'")[0]
                         if ((t1 == t2[0]) or (t1 == t2[-1])) and (t3 in self._nome_fibra[f][3]):
                             r = self._nome_fibra[f]
-                            self._rede_ativa_cto_hub.append([r[0], r[2], r[3]])
+                            topologia = []
+                            for cto_rede in self._nome_elemento.values():
+                                if r[0] == cto_rede[0] and r[2] == cto_rede[2] and r[3] == cto_rede[3]:
+                                    topologia.append(cto_rede[-1])
+
+                            if "'1" not in s:
+                                if len(topologia) > 8:
+                                    topologia = '1x16'
+                                else:
+                                    topologia = '1x8'
+                            else:
+                                topologia = "1x2 1x8 1x8"
+                            self._rede_ativa_cto_hub.append([r[0], r[2], r[3],topologia])
+                            print(self._rede_ativa_cto_hub)
 
     def cont_spl(self,rex):
         c = 0
@@ -113,19 +126,30 @@ class Equipamento(Cabo):
         prensa = prensa_ceo + prensa_reserva
         return prensa
 
-    def tubete(self):
-        padrao_fibra = re.compile("[0-9]{1,2,3}[fF]")
+    def tubete_45(self):
+        padrao_fibra = re.compile("[0-9]{1,2}[0-9]?[fF]")
         ceo = {**self.poste_por_elemento("CEO"),**self.poste_por_elemento("HUB-DPR"),**self.poste_por_elemento("CTO-HUB")}
+        fusao_ceo_hub = 0
+
         for i in self._alimentador:
-            # print(self._percuso[i])
-            # for n,f in enumerate(self._percuso[i]):
-            for c in ceo.values():
-                if c == self._percuso[i][0] or c == self._percuso[i][-1]:
-                    print(c,i,self._percuso[i],self._alimentador[i][-1])
+            for c in ceo:
+                if ceo[c] == self._percuso[i][0] or ceo[c] == self._percuso[i][-1]:
+                    fusoes = padrao_fibra.search(self._alimentador[i][-1])
+                    f = int(re.sub('[^0-9]','',fusoes.group()))
+                    fusao_ceo_hub += f
+                    # print(self._nome_elemento[c][-1],f)
+                    break
 
-            # print(i)
         rede = len(self._rede_ativa_cto_hub)
+        # print(rede)
         spl_nc_1x2 = self.spliter_nc_1x2()
+        # print(spl_nc_1x2)
         spl_nc_1x8 = self.spliter_nc_1x8() * 9
+        # print(spl_nc_1x8)
+        cto_ativa = len(self.coordenada_por_elemento("CTO"))
+        # print(cto_ativa)
+        spl_con_1x8 = self.spliter_con_1x8()
+        # print(spl_con_1x8)
+        tubetes = fusao_ceo_hub + rede + spl_nc_1x2 + spl_nc_1x8 + cto_ativa + spl_con_1x8
 
-        return ceo
+        return tubetes
