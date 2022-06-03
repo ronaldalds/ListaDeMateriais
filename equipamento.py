@@ -10,10 +10,10 @@ class Equipamento(Cabo):
         self._rede_ativa_cto_hub = []
         self._bap_lancamento = []
         self._bap_fusao = 0
-        # self.rede_cto_hub()
+        self.rede_cto_hub()
 
     def rede_cto_hub(self):
-        lista = {**self.nome_por_elemento('CTO-HUB')}
+        lista = {**self.nome_por_elemento('CTO-HUB'),**self.nome_por_elemento('HUB-DPR')}
         padrao_hub = re.compile("[A-Z]{2}[.][0-9]{1,2}[']?[1-2]?[-][0-9]{1,2}[']?[1-2]?[-]?[0-9]{1,2}?[']?[1-2]?")
         padrao_rede = re.compile("[0-9]{1,2}[']?[1-2]?")
         for i in lista:
@@ -40,10 +40,9 @@ class Equipamento(Cabo):
                             else:
                                 topologia = "1x2 1x8 1x8"
                             self._rede_ativa_cto_hub.append([r[0], r[2], r[3],topologia])
-                            print(self._rede_ativa_cto_hub)
 
     def cont_spl(self,rex):
-        c = 0
+        c = []
         spl_hub = self.nome_por_elemento('HUB-DPR')
         spl_cto_hub = self.nome_por_elemento('CTO-HUB')
         spl_cto = self.nome_por_elemento('CTO')
@@ -52,9 +51,7 @@ class Equipamento(Cabo):
             busca = rex.findall(lista[i])
             if len(busca) > 0:
                 if "'2" in busca[0]:
-                    c += 1
-                elif len(busca[0].split("'")[0]) > 5:
-                    c += 1
+                    c.append(lista[i])
                 else:
                     for f in self._ra:
                         for s in busca:
@@ -62,23 +59,40 @@ class Equipamento(Cabo):
                             t2 = self._percuso[f]
                             t3 = s.split("'")[0]
                             if ((t1 == t2[0]) or (t1 == t2[-1])) and (t3 in self._nome_fibra[f][3]):
-                                c += 1
+                                c.append(lista[i])
         return c
 
     def spliter_con_1x8(self):
-        spl_conecto_1x8 = re.compile("[A-Z]{2}[.][0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,2}[ ]?[/|][ ]?[A-Z]{1,2}[.][0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,2}")
-        conecto_1x8 = "DIVISOR DE SINAL (SPLITTER) OPTICO PLC 1X8 G.657A NC-SC/APC 0.9M/0.6M"
-        return self.cont_spl(spl_conecto_1x8)
+        padrao = re.compile(
+"[A-Z]{2}[.][0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,2}[ ]?[/|][ ]?[A-Z]{1,2}[.][0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,2}")
+        cto_hub = self.nome_por_elemento('CTO-HUB')
+        cto = self.nome_por_elemento('CTO')
+        lista = {**cto_hub, **cto}
+        spl_con_1x8 = []
+        for i in lista:
+            busca = padrao.findall(lista[i])
+            if len(busca) > 0:
+                spl_con_1x8.append(busca)
+        return spl_con_1x8
+
+    def spliter_nc_1x16(self):
+        nc_1x16 = []
+        for i in self._rede_ativa_cto_hub:
+            if "1x16" == i[-1]:
+                nc_1x16.append(i)
+        return nc_1x16
 
     def spliter_nc_1x2(self):
         spl_nc_1x2 = re.compile("[0-9]{1,2}['][1]")
-        nc_1x2 = "DIVISOR DE SINAL (SPLITTER) OPTICO PLC 1X2 G.657A NC-NC 250UM 2M/2M"
         return self.cont_spl(spl_nc_1x2)
 
     def spliter_nc_1x8(self):
         spl_nc_1x8 = re.compile("[0-9]{1,2}['][1-2]")
-        nc_1x8 = "DIVISOR DE SINAL (SPLITTER) OPTICO PLC 1X8 G.657A NC-NC 250UM 2M/2M"
-        return self.cont_spl(spl_nc_1x8)
+        nc_1x8 = self.cont_spl(spl_nc_1x8)
+        for i in self._rede_ativa_cto_hub:
+            if "1x8" == i[-1]:
+                nc_1x8.append(i)
+        return nc_1x8
 
     def bandeja_cto_hub(self):
         return len(self._rede_ativa_cto_hub)

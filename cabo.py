@@ -6,7 +6,7 @@ class Cabo(Elemento):
     def __init__(self, arquivo):
         super().__init__(arquivo)
         self._percuso = {}
-        self.__comprimento = {}
+        self._comprimento = {}
         self._ceo = {}
         self._reserva = {}
         self._cto_hub = {}
@@ -23,9 +23,19 @@ class Cabo(Elemento):
         self.cto_hub()
         self.cto()
 
+    def somador(self, tipo, qnt):
+        dados = {}
+        for i in qnt:
+            try:
+                dados[tipo[i]] += qnt[i]
+            except:
+                dados[tipo[i]] = qnt[i]
+        return dados
+
     def cabo(self):
-        tipo = {**self.tipo_fibras(),'CDLH':0}
-        qnt = self.comprimento_cabo()
+        tipo = {**self.tipo_fibras()}
+        qnt = {**self.comprimento_cabo()}
+
         self._cabo = self.somador(tipo,qnt)
         return self._cabo
 
@@ -55,14 +65,7 @@ class Cabo(Elemento):
                     self._poste_sco.append(f'{d};Q4')
         return self._poste_sco
 
-    def somador(self, tipo, qnt):
-        dados = {}
-        for i in qnt:
-            try:
-                dados[tipo[i]] += qnt[i]
-            except:
-                dados[tipo[i]] = qnt[i]
-        return dados
+
 
     def tipo_fibras(self):
         padrao = re.compile("[0-9]{1,2}[Ff]")
@@ -73,7 +76,7 @@ class Cabo(Elemento):
                 if busca:
                     if busca.group() == '12F':
                         self._tipo_fibra[i] = 'Cabo CFOA-SM-ASU80-S 12F MINI-RA'
-                    elif busca.group() == '6F':
+                    elif '6F' in busca.group():
                         self._tipo_fibra[i] = 'Cabo CFOA-SM-ASU80-S 06F MINI-RA'
                     else:
                         self._tipo_fibra[i] = self._nome_fibra[i]
@@ -117,10 +120,10 @@ class Cabo(Elemento):
                 distancia += round(super().distancia(p1, pt) * 1.03, 2)
                 p1 = pt
             equipamento = self._ceo[i] + self._reserva[i] + self._cto_hub[i] + self._cto[i]
-            self.__comprimento[i] = distancia + equipamento
+            self._comprimento[i] = distancia + equipamento
             distancia = 0
             p1 = 0
-        return self.__comprimento
+        return self._comprimento
 
     def ceo(self):
         distancia = 0
