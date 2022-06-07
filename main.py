@@ -1,5 +1,8 @@
 from equipamento import Equipamento
+from projeto import Projeto
+from elemento import Elemento
 equipamento = Equipamento('Projeto.kml')
+# elemento = Elemento('Projeto.kml')
 
 
 for i in equipamento.cabo():
@@ -22,6 +25,7 @@ print(f'BANDEJA INFERIOR PARA CTO PRESLEY - {equipamento.bandeja_cto_hub()} und'
 print(f'KIT DE DERIVAÇÃO PARA CAIXA DE EMENDA ÓPTICA - 0 und')# falta cálculos
 print(f'CAIXA DE DISTRIBUIÇÃO OPTICA CTO MINI PRESLEY - {equipamento.contador("CTO")}')
 print(f'DIVISOR DE SINAL (SPLITTER) OPTICO PLC 1X8 G.657A NC-NC 250UM 2M/2M - {len(equipamento.spliter_con_1x8())} und')
+print(f'DIVISOR DE SINAL (SPLITTER) OPTICO PLC 1X16 G.657A NC-SC/APC 900UM 0.9M/0.6M - {len(equipamento.spliter_con_1x16())} und')
 print(f'DIVISOR DE SINAL (SPLITTER) OPTICO PLC 1X2 G.657A NC-NC 250UM 2M/2M - {len(equipamento.spliter_nc_1x2())} und')
 print(f"DIVISOR DE SINAL (SPLITTER) OPTICO PLC 1X8 G.657A NC-NC 250UM 2M/2M - {len(equipamento.spliter_nc_1x8())} und")
 print(f"DIVISOR DE SINAL (SPLITTER) OPTICO PLC 1X16 G.657A NC-NC 250UM 2M/2M - {len(equipamento.spliter_nc_1x16())} und")
@@ -31,5 +35,8 @@ print(f'BRAÇADEIRA AJUSTÁVEL BAP4 (1000MM) C/ PARAFUSO - {equipamento.bap_fusa
 print(f'PLAQUETA DE IDENTIFICAÇÃO DE CABO ÓPTICO ONLINE TELECOM - {equipamento.plaqueta_fusao} und')
 print(f'FIO DE ESPINAR ISOLADO FEI-125 - {equipamento.fio_fusao()} RL')
 print(f'PRENSA CABO POLIMERICO P/ CORDOALHA DIELÉTRICA - {equipamento.prensa_cabo()} und')
+print(f'PROTETOR DE EMENDA PE-04 45MM 3,4MM - {equipamento.tubete_45()} und')
 
-# print(equipamento.spliter_nc_1x16())
+# for i in elemento.nome_por_elemento('CTO').values():
+#     print(i)
+# print(equipamento.spliter_con_1x16())

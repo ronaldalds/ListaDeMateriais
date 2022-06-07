@@ -20,7 +20,7 @@ class Projeto:
 
         self.style = {}
         self.pop = {}
-        self.__ext_style()
+        self._ext_style()
         self.lista_rede()
         self.fibra_ra()
         self.alimentador()
@@ -90,27 +90,29 @@ class Projeto:
                     self._tipo_elemento[e] = i.findtext(f'{self._site}styleUrl').replace('#', '')
                     self._coordenada_elemento[e] = t.findtext(f'{self._site}coordinates').split(',')
 
-    def __ext_style(self):
-        for root in self._root.iter(f'{self._site}Style'):
-            self.style[root.attrib['id']] = ''
-            for icon_style in root.iter(f'{self._site}IconStyle'):
-                cor_icon = icon_style.findtext(f'{self._site}color')
-                for icon in icon_style.iter(f'{self._site}Icon'):
-                    tipo_icon = icon.findtext(f'{self._site}href').replace('http://maps.google.com/mapfiles/kml/', '')
-                    if cor_icon == None:
-                        for label in root.iter(f'{self._site}LabelStyle'):
-                            cor_icon = label.findtext(f'{self._site}color')
-                    self.style[root.attrib['id']] = f'{tipo_icon}{cor_icon}'
+    def _ext_style(self):
+        for root in self._root[0]:
+            if 'Style' in root.tag:
+                # print(root.tag)
+                self.style[root.attrib['id']] = ''
+                for icon_style in root.iter(f'{self._site}IconStyle'):
+                    cor_icon = icon_style.findtext(f'{self._site}color')
+                    for icon in icon_style.iter(f'{self._site}Icon'):
+                        tipo_icon = icon.findtext(f'{self._site}href').replace('http://maps.google.com/mapfiles/kml/', '')
+                        if cor_icon == None:
+                            for label in root.iter(f'{self._site}LabelStyle'):
+                                cor_icon = label.findtext(f'{self._site}color')
+                        self.style[root.attrib['id']] = f'{tipo_icon}{cor_icon}'
 
-            if self.style[root.attrib['id']] == '':
-                for poly in root.iter(f'{self._site}PolyStyle'):
-                    cor_poly = poly.findtext(f'{self._site}color')
-                    self.style[root.attrib['id']] = cor_poly
+                if self.style[root.attrib['id']] == '':
+                    for poly in root.iter(f'{self._site}PolyStyle'):
+                        cor_poly = poly.findtext(f'{self._site}color')
+                        self.style[root.attrib['id']] = cor_poly
 
-            if self.style[root.attrib['id']] == '':
-                for line in root.iter(f'{self._site}LineStyle'):
-                    cor_line = line.findtext(f'{self._site}color')
-                    self.style[root.attrib['id']] = cor_line
+                if self.style[root.attrib['id']] == '':
+                    for line in root.iter(f'{self._site}LineStyle'):
+                        cor_line = line.findtext(f'{self._site}color')
+                        self.style[root.attrib['id']] = cor_line
 
         for root2 in self._root.iter(f'{self._site}StyleMap'):
             for pair in root2.iter(f'{self._site}Pair'):
