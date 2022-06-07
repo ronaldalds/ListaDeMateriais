@@ -12,7 +12,6 @@ class Elemento(Poste):
         self.__ext_pop()
         self.osnap_elemento()
 
-
     def __ext_pop(self):
         for pop in self._root.iter(f'{self._site}Placemark'):
             if 'shapes/ranger_station.pngff0000ff' in self.style[pop.findtext(f'{self._site}styleUrl').replace('#', '')]:

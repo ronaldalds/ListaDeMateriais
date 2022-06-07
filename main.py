@@ -1,8 +1,11 @@
 from equipamento import Equipamento
 from projeto import Projeto
 from elemento import Elemento
+import time
+inicial = time.time()
 equipamento = Equipamento('Projeto.kml')
 # elemento = Elemento('Projeto.kml')
+
 
 
 for i in equipamento.cabo():
@@ -36,7 +39,9 @@ print(f'PLAQUETA DE IDENTIFICAÇÃO DE CABO ÓPTICO ONLINE TELECOM - {equipament
 print(f'FIO DE ESPINAR ISOLADO FEI-125 - {equipamento.fio_fusao()} RL')
 print(f'PRENSA CABO POLIMERICO P/ CORDOALHA DIELÉTRICA - {equipamento.prensa_cabo()} und')
 print(f'PROTETOR DE EMENDA PE-04 45MM 3,4MM - {equipamento.tubete_45()} und')
-
 # for i in elemento.nome_por_elemento('CTO').values():
 #     print(i)
 # print(equipamento.spliter_con_1x16())
+
+final = time.time()
+print(final - inicial)

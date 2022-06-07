@@ -43,6 +43,12 @@ class Projeto:
                 self.ext_cabo(ro)
                 self.ext_elemento(ro)
 
+    # def lista_expansao(self):
+    #     for ro in self._root.iter(f'{self._site}Folder'):
+    #         if 'EXPANSAO' == ro[0].text.upper():
+    #             self.ext_cabo(ro)
+    #             self.ext_elemento(ro)
+
     def ext_cabo(self, item, nome=None, tipo=None, coord=None):
         global c
         if nome is None:
