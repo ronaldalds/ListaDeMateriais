@@ -133,7 +133,7 @@ class Equipamento(Cabo):
         return self._bap_fusao
 
     def fio_lancamento(self):
-        cordoalha = self.cabo()['CDLH']*1.3
+        cordoalha = self.cabo()['CDLH']*0.1
         plaqueta = self._plaqueta_lancamento*0.3
         ceo = self.contador('CEO')*2 + self.contador('HUB-DPR')*2
         rt = self.contador('Reserva')*2
@@ -152,32 +152,39 @@ class Equipamento(Cabo):
         prensa = prensa_ceo + prensa_reserva
         return prensa
 
+    def tubete_60(self):
+        padrao_fibra = re.compile("[0-9]{1,2}[0-9]?[fF]")
+        ceo = {**self.poste_por_elemento("CTO-HUB")}
+        fusao_ceo_hub = 0
+        for i in self._alimentador:
+            for c in ceo:
+                if ceo[c] == self._percuso[i][0] or ceo[c] == self._percuso[i][-1]:
+                    fusoes = padrao_fibra.search(self._alimentador[i][-1])
+                    f = int(re.sub('[^0-9]', '', fusoes.group()))
+                    fusao_ceo_hub += f
+                    break
+        rede = len(self._rede_ativa_cto_hub)
+        spl_nc_1x2 = len(self.spliter_nc_1x2())
+        spl_nc_1x8 = len(self.spliter_nc_1x8() * 9)
+        cto_ativa = len(self.coordenada_por_elemento("CTO"))
+        spl_con_1x8 = len(self.spliter_con_1x8())
+        spl_con_1x16 = len(self.spliter_con_1x16())
+
+        tubetes = fusao_ceo_hub + rede + spl_nc_1x2 + spl_nc_1x8 + cto_ativa + spl_con_1x8 + spl_con_1x16
+
+        return tubetes
+
     def tubete_45(self):
         padrao_fibra = re.compile("[0-9]{1,2}[0-9]?[fF]")
-        ceo = {**self.poste_por_elemento("CEO"),**self.poste_por_elemento("HUB-DPR"),**self.poste_por_elemento("CTO-HUB")}
+        ceo = {**self.poste_por_elemento("CEO"),**self.poste_por_elemento("HUB-DPR")}
         fusao_ceo_hub = 0
-
         for i in self._alimentador:
             for c in ceo:
                 if ceo[c] == self._percuso[i][0] or ceo[c] == self._percuso[i][-1]:
                     fusoes = padrao_fibra.search(self._alimentador[i][-1])
                     f = int(re.sub('[^0-9]','',fusoes.group()))
                     fusao_ceo_hub += f
-                    # print(self._nome_elemento[c][-1],f)
                     break
-
-        rede = len(self._rede_ativa_cto_hub)
-        # print(rede)
-        spl_nc_1x2 = len(self.spliter_nc_1x2())
-        # print(spl_nc_1x2)
-        spl_nc_1x8 = len(self.spliter_nc_1x8() * 9)
-        # print(spl_nc_1x8)
-        cto_ativa = len(self.coordenada_por_elemento("CTO"))
-        # print(cto_ativa)
-        spl_con_1x8 = len(self.spliter_con_1x8())
-        # print(spl_con_1x8)
-        spl_con_1x16 = len(self.spliter_con_1x16())
-        # print(spl_con_1x8)
-        tubetes = fusao_ceo_hub + rede + spl_nc_1x2 + spl_nc_1x8 + cto_ativa + spl_con_1x8 +spl_con_1x16
+        tubetes = fusao_ceo_hub
 
         return tubetes

@@ -23,7 +23,7 @@ print(f'DERIVAÇÃO PREFORMADA P/ CORDOALHA DIELÉTRICA (6,4MM) - 0 und') # falt
 print('==============================================================================')
 print(f'CAIXA DE EMENDA ÓPTICA AÉREA 24F C/ SUPORTE RESERVA DPR - {equipamento.contador("CEO") + equipamento.contador("HUB-DPR")}')
 print(f'CAIXA DE DISTRIBUIÇÃO ÓPTICA CTO PRESLEY - {equipamento.contador("CTO-HUB")}')
-print(f'BANDEJA PARA CAIXA DE EMENDA ÓPTICA DPR - 0 und')# falta cálculos
+print(f'BANDEJA PARA CAIXA DE EMENDA ÓPTICA DPR - {(equipamento.contador("CEO") + equipamento.contador("HUB-DPR"))*2} und')
 print(f'BANDEJA INFERIOR PARA CTO PRESLEY - {equipamento.bandeja_cto_hub()} und')
 print(f'KIT DE DERIVAÇÃO PARA CAIXA DE EMENDA ÓPTICA - 0 und')# falta cálculos
 print(f'CAIXA DE DISTRIBUIÇÃO OPTICA CTO MINI PRESLEY - {equipamento.contador("CTO")}')
@@ -39,9 +39,10 @@ print(f'PLAQUETA DE IDENTIFICAÇÃO DE CABO ÓPTICO ONLINE TELECOM - {equipament
 print(f'FIO DE ESPINAR ISOLADO FEI-125 - {equipamento.fio_fusao()} RL')
 print(f'PRENSA CABO POLIMERICO P/ CORDOALHA DIELÉTRICA - {equipamento.prensa_cabo()} und')
 print(f'PROTETOR DE EMENDA PE-04 45MM 3,4MM - {equipamento.tubete_45()} und')
+print(f'PROTETOR DE EMENDA PE-05 60MM 3,4MM - {equipamento.tubete_60()} und')
 # for i in elemento.nome_por_elemento('CTO').values():
 #     print(i)
-# print(equipamento.spliter_con_1x16())
+# print(equipamento._percuso)
 
 final = time.time()
 print(final - inicial)
