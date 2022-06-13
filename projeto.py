@@ -17,6 +17,7 @@ class Projeto:
         self._coordenada_fibra = {}
         self._ra = {}
         self._alimentador = {}
+        self._cdlh = {}
 
         self.style = {}
         self.pop = {}
@@ -24,6 +25,12 @@ class Projeto:
         self.lista_rede()
         self.fibra_ra()
         self.alimentador()
+        self.cordoalha()
+
+    def cordoalha(self):
+        for i in self._nome_fibra:
+            if 'CORDOALHA' in self._nome_fibra[i][2].upper():
+                self._cdlh[i] = self._nome_fibra[i]
 
     def alimentador(self):
         for i in self._nome_fibra:

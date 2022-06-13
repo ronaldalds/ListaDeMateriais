@@ -188,3 +188,19 @@ class Equipamento(Cabo):
         tubetes = fusao_ceo_hub
 
         return tubetes
+
+    def derivacao_ceo(self):
+        ceo = {**self.poste_por_elemento("CEO"),**self.poste_por_elemento("HUB-DPR")}
+        derivacao_ceo = 0 - (len(ceo))
+        nome_e = self._nome_elemento
+        nome_f = self._nome_fibra
+        for i in self._alimentador:
+            for c in ceo:
+                for p in self._percuso[i]:
+                    if (ceo[c] == p) and (nome_e[c][0] == nome_f[i][0]) and (nome_e[c][1] == nome_f[i][1]):
+                        derivacao_ceo += 1
+                        break
+        return derivacao_ceo
+
+    def derivacao_cordoalha(self):
+        pass

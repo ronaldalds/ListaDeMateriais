@@ -3,11 +3,10 @@ from projeto import Projeto
 from elemento import Elemento
 import time
 inicial = time.time()
+# cordoalha = Projeto('Projeto.kml')
 equipamento = Equipamento('Projeto.kml')
 # elemento = Elemento('Projeto.kml')
-
-
-
+# print(cordoalha.cordoalha())
 for i in equipamento.cabo():
     print(f'{i} - {equipamento.cabo()[i]:.2f} m')
 for i in equipamento.somador(equipamento.tipo_fibras(), equipamento.alca):
@@ -25,7 +24,7 @@ print(f'CAIXA DE EMENDA ÓPTICA AÉREA 24F C/ SUPORTE RESERVA DPR - {equipamento
 print(f'CAIXA DE DISTRIBUIÇÃO ÓPTICA CTO PRESLEY - {equipamento.contador("CTO-HUB")}')
 print(f'BANDEJA PARA CAIXA DE EMENDA ÓPTICA DPR - {(equipamento.contador("CEO") + equipamento.contador("HUB-DPR"))*2} und')
 print(f'BANDEJA INFERIOR PARA CTO PRESLEY - {equipamento.bandeja_cto_hub()} und')
-print(f'KIT DE DERIVAÇÃO PARA CAIXA DE EMENDA ÓPTICA - 0 und')# falta cálculos
+print(f'KIT DE DERIVAÇÃO PARA CAIXA DE EMENDA ÓPTICA - {equipamento.derivacao_ceo()} und')
 print(f'CAIXA DE DISTRIBUIÇÃO OPTICA CTO MINI PRESLEY - {equipamento.contador("CTO")}')
 print(f'DIVISOR DE SINAL (SPLITTER) OPTICO PLC 1X8 G.657A NC-NC 250UM 2M/2M - {len(equipamento.spliter_con_1x8())} und')
 print(f'DIVISOR DE SINAL (SPLITTER) OPTICO PLC 1X16 G.657A NC-SC/APC 900UM 0.9M/0.6M - {len(equipamento.spliter_con_1x16())} und')
