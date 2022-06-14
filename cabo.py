@@ -39,6 +39,7 @@ class Cabo(Elemento):
         self._cabo = self.somador(tipo,qnt)
         return self._cabo
 
+    @property
     def sco(self):
         all = {**self._coordenada_poste, **self._coordenada_pop}
         for i in self._percuso:
@@ -50,7 +51,6 @@ class Cabo(Elemento):
                     pt = d
                 if p1 == 0:
                     p1 = pt
-
                 elif pt[0] < p1[0] and pt[1] > p1[1]:
                     self._poste_sco.append(f'{self._percuso[i][c - 1]};Q4')
                     self._poste_sco.append(f'{d};Q1')
@@ -63,9 +63,7 @@ class Cabo(Elemento):
                 elif pt[0] > p1[0] and pt[1] < p1[1]:
                     self._poste_sco.append(f'{self._percuso[i][c - 1]};Q1')
                     self._poste_sco.append(f'{d};Q4')
-        return self._poste_sco
-
-
+        return len(set(self._poste_sco))
 
     def tipo_fibras(self):
         padrao = re.compile("[0-9]{1,2}[Ff]")
@@ -75,16 +73,16 @@ class Cabo(Elemento):
                 busca = padrao.search(self._nome_fibra[i][-1].upper())
                 if busca:
                     if busca.group() == '12F':
-                        self._tipo_fibra[i] = 'Cabo CFOA-SM-ASU80-S 12F MINI-RA'
+                        self._tipo_fibra[i] = 'CFOA-SM-ASU80-S 12F MINI-RA'
                     elif '6F' in busca.group():
-                        self._tipo_fibra[i] = 'Cabo CFOA-SM-ASU80-S 06F MINI-RA'
+                        self._tipo_fibra[i] = 'CFOA-SM-ASU80-S 06F MINI-RA'
                     else:
                         self._tipo_fibra[i] = self._nome_fibra[i]
             else:
                 if "CORDOALHA" in self._nome_fibra[i][2].upper():
                     self._tipo_fibra[i] = self._nome_fibra[i][-1]
                 else:
-                    self._tipo_fibra[i] = f"Cabo {self._nome_fibra[i][-1].split('|')[2].strip()}"
+                    self._tipo_fibra[i] = self._nome_fibra[i][-1].split('|')[2].strip()
         return self._tipo_fibra
 
     def __osnap_cabo(self):

@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from equipamento import Equipamento
 
 app = Flask(__name__)
@@ -17,7 +17,8 @@ app.run()
 # for i in equipamento.somador(equipamento.tipo_fibras(), equipamento.laco):
 #     print(f'Laço {i} - {equipamento.somador(equipamento.tipo_fibras(), equipamento.laco)[i]} und')
 # print(f'BRAÇADEIRA AJUSTÁVEL BAP4 (1000MM) C/ PARAFUSO - {equipamento.bap_lancamento()} und')
-# print(f'SUPORTE PARA CABOS ÓPTICOS SCO1 - {len(set(equipamento.sco()))} und')
+# print(f'SUPORTE PARA CABOS ÓPTICOS SCO1 - {equipamento.sco} und')
+
 # print(f'PLAQUETA DE IDENTIFICAÇÃO DE CABO ÓPTICO ONLINE TELECOM - {equipamento.plaqueta_lancamento} und')
 # print(f'FIO DE ESPINAR ISOLADO FEI-125 - {equipamento.fio_lancamento()} RL')
 # print(f'RESERVA TÉCNICA - {equipamento.contador("Reserva")} und')
