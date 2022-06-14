@@ -1,7 +1,10 @@
 import xml.etree.ElementTree as Et
 from math import sqrt
+
 c = 0
 e = 0
+
+
 class Projeto:
     def __init__(self, arquivo):
         doc = Et.parse(arquivo)
@@ -105,7 +108,8 @@ class Projeto:
                 for icon_style in root.iter(f'{self._site}IconStyle'):
                     cor_icon = icon_style.findtext(f'{self._site}color')
                     for icon in icon_style.iter(f'{self._site}Icon'):
-                        tipo_icon = icon.findtext(f'{self._site}href').replace('http://maps.google.com/mapfiles/kml/', '')
+                        tipo_icon = icon.findtext(f'{self._site}href').replace('http://maps.google.com/mapfiles/kml/',
+                                                                               '')
                         if cor_icon == None:
                             for label in root.iter(f'{self._site}LabelStyle'):
                                 cor_icon = label.findtext(f'{self._site}color')

@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+
 # from equipamento import Equipamento
 # from projeto import Projeto
 # from elemento import Elemento
@@ -12,16 +13,13 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 
+
 @app.route('/inicio')
 def ola():
     return render_template('lista.html', titulo='Lista de Materiais')
 
+
 app.run()
-
-
-
-
-
 
 # for i in equipamento.cabo():
 #     print(f'{i} - {equipamento.cabo()[i]:.2f} m')
