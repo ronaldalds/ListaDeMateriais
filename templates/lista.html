@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Jogoteca</title>
+    <title>Lista de Materiais</title>
   </head>
   <body>
     <div class="container">
@@ -14,18 +14,16 @@
             <thead class="thead-default">
                 <tr>
                     <th>Nome</th>
+                    <th>quantidade</th>
                 </tr>
             </thead>
             <tbody>
+            {% for cabo in equipamento.cabo() %}
                 <tr>
-                    <td>God of War</td>
+                    <td>{{ cabo }}</td>
+                    <td>{{  equipamento.cabo()[cabo]  }} m</td>
                 </tr>
-                <tr>
-                    <td>Pokemon Silver</td>
-                </tr>
-                <tr>
-                    <td>Super Mario RPG</td>
-                </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>

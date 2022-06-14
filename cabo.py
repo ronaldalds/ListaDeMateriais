@@ -6,7 +6,7 @@ class Cabo(Elemento):
     def __init__(self, arquivo):
         super().__init__(arquivo)
         self._percuso = {}
-        self._comprimento = {}
+        self.comprimento = {}
         self._ceo = {}
         self._reserva = {}
         self._cto_hub = {}
@@ -120,10 +120,10 @@ class Cabo(Elemento):
                 distancia += round(super().distancia(p1, pt) * 1.03, 2)
                 p1 = pt
             equipamento = self._ceo[i] + self._reserva[i] + self._cto_hub[i] + self._cto[i]
-            self._comprimento[i] = distancia + equipamento
+            self.comprimento[i] = round((distancia + equipamento), 2)
             distancia = 0
             p1 = 0
-        return self._comprimento
+        return self.comprimento
 
     def ceo(self):
         distancia = 0
