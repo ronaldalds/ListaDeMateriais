@@ -24,9 +24,10 @@ class Projeto:
 
         self.style = {}
         self.pop = {}
+
         self._ext_style()
         self.lista_rede()
-        self.fibra_ra()
+        self.RA()
         self.alimentador()
         self.cordoalha()
 
@@ -42,7 +43,7 @@ class Projeto:
             if 'AS' == self._nome_fibra[i][2].upper():
                 self._alimentador[i] = self._nome_fibra[i]
 
-    def fibra_ra(self):
+    def RA(self):
         for i in self._nome_fibra:
             if 'REDE' in self._nome_fibra[i][3].upper():
                 self._ra[i] = self._nome_fibra[i]

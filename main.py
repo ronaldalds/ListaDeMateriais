@@ -1,14 +1,24 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from equipamento import Equipamento
 
+# equipamento = Equipamento('Projeto.kml')
+
+
 app = Flask(__name__)
-equipamento = Equipamento('Projeto.kml')
 
-@app.route('/inicio')
-def ola():
-    return render_template('lista.html', titulo='Lista de Materiais', equipamento = equipamento)
 
-app.run()
+@app.route('/criar', methods=['POST',])
+def arquivo():
+    file = request.form['Arquivo']
+    return render_template('lista.html', titulo='Lista de Materiais', file=file)
+
+
+
+# @app.route('/lista')
+# def lista():
+#     return render_template('lista.html', titulo='Lista de Materiais')#, equipamento = equipamento)
+
+app.run(debug=True)
 
 # for i in equipamento.cabo():
 #     print(f'{i} - {equipamento.cabo()[i]:.2f} m')
