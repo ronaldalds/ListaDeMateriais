@@ -1,7 +1,7 @@
 {% extends "template.html" %}
 {% block conteudo %}
-      <form action="/trata" method="post">
-          <input type="file" name="projeto" id="Arquivo"><br>
-          <button type="submit" class="btn btn-primary btn-salvar">Salvar</button>
+      <form action="/trata" method="post" enctype=multipart/form-data>
+          <input type="file" name="file"><br>
+          <input type=submit value=Upload>
       </form>
 {% endblock %}

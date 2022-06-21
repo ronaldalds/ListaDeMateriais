@@ -23,7 +23,7 @@ class Projeto:
         self._cdlh = {}
 
         self.style = {}
-        self.pop = {}
+        # self.pop = {}
 
         self._ext_style()
         self.lista_rede()
@@ -31,10 +31,12 @@ class Projeto:
         self.alimentador()
         self.cordoalha()
 
+
     def cordoalha(self):
         for i in self._nome_fibra:
             if 'CORDOALHA' in self._nome_fibra[i][2].upper():
                 self._cdlh[i] = self._nome_fibra[i]
+        return self._cdlh
 
     def alimentador(self):
         for i in self._nome_fibra:
@@ -104,7 +106,6 @@ class Projeto:
     def _ext_style(self):
         for root in self._root[0]:
             if 'Style' in root.tag:
-                # print(root.tag)
                 self.style[root.attrib['id']] = ''
                 for icon_style in root.iter(f'{self._site}IconStyle'):
                     cor_icon = icon_style.findtext(f'{self._site}color')
