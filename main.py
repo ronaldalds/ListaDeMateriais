@@ -1,22 +1,23 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 from equipamento import Equipamento
-
-# equipamento = Equipamento('Projeto.kml')
 
 
 app = Flask(__name__)
+app.secret_key = 'ruma'
 
+@app.route('/')
+def anexa():
+    return render_template('novo.html')
 
-@app.route('/criar', methods=['POST',])
-def arquivo():
-    file = request.form['Arquivo']
-    return render_template('lista.html', titulo='Lista de Materiais', file=file)
+@app.route('/trata', methods=['POST',])
+def index():
+    session['arquivo'] = request.form['projeto']
+    return redirect('/lista')
 
-
-
-# @app.route('/lista')
-# def lista():
-#     return render_template('lista.html', titulo='Lista de Materiais')#, equipamento = equipamento)
+@app.route('/lista')
+def lista_material():
+    equipamento = Equipamento(session['arquivo'])
+    return render_template('lista.html', titulo=session['arquivo'], equipamento=equipamento)
 
 app.run(debug=True)
 
