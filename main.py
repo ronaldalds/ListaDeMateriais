@@ -1,7 +1,7 @@
 import os
 from flask import Flask, flash, request, redirect, render_template, session
 from werkzeug.utils import secure_filename
-from projeto import Projeto
+from equipamento import Equipamento
 
 UPLOAD_FOLDER = '/Users/RALDS/Documents/GitHub/ListaDeMateriais'
 ALLOWED_EXTENSIONS = {'kml'}
@@ -39,7 +39,7 @@ def upload_file():
 
 @app.route('/lista')
 def lista_material():
-    arquivo = Projeto(session['arquivo'])
+    arquivo = Equipamento(session['arquivo'])
     if os.path.exists(session['arquivo']):
         os.remove(session['arquivo'])
     return render_template('lista.html', equipamento=arquivo)
