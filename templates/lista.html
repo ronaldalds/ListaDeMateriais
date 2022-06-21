@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="../static/bootstrap.css">
   </head>
     <body>
-            <div class="container">
-        <div class="page-header">
-            <h1>{{  titulo  }}</h1>
+    <div id="Lançamento" class="container">
+        <div class="page-header" style="text-align:center">
+            <h5>RELAÇÃO DE MATERIAIS - LANÇAMENTO DE CABOS DE FIBRAS ÓPTICAS</h5>
         </div>
         <table class="table table-striped table-responsive table-bordered">
             <thead class="thead-default">
@@ -53,7 +53,88 @@
                     <td>und</td>
                     <td>{{  equipamento.sco  }}</td>
                 </tr>
+                <tr>
+                    <td>PLAQUETA DE IDENTIFICAÇÃO DE CABO ÓPTICO ONLINE TELECOM</td>
+                    <td>und</td>
+                    <td>{{  equipamento.plaqueta_lancamento  }}</td>
+                </tr>
+                <tr>
+                    <td>FIO DE ESPINAR ISOLADO FEI-125</td>
+                    <td>und</td>
+                    <td>{{  equipamento.fio_lancamento()  }}</td>
+                </tr>
+                <tr>
+                    <td>RESERVA TÉCNICA</td>
+                    <td>und</td>
+                    <td>{{  equipamento.contador("Reserva")  }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
+
+
+    <div id="Fusão" class="container">
+        <div class="page-header" style="text-align:center">
+            <h5>RELAÇÃO DE MATERIAIS - FUSÃO DE CABOS FIBRAS ÓPTICAS</h5>
+        </div>
+        <table class="table table-striped table-responsive table-bordered">
+            <thead class="thead-default">
+                <tr>
+                    <th>Nome</th>
+                    <th>UND</th>
+                    <th>quantidade</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for cabo in equipamento.cabo() %}
+                <tr>
+                    <td>{{ cabo }}</td>
+                    <td>M</td>
+                    <td>{{  equipamento.cabo()[cabo]  }}</td>
+                </tr>
+            {% endfor %}
+
+            {% for alca in equipamento.somador(equipamento.tipo_fibras(), equipamento.alca) %}
+                <tr>
+                    <td>Alça {{ alca }}</td>
+                    <td>und</td>
+                    <td>{{  equipamento.somador(equipamento.tipo_fibras(), equipamento.alca)[alca]  }}</td>
+                </tr>
+            {% endfor %}
+
+            {% for laco in equipamento.somador(equipamento.tipo_fibras(), equipamento.laco) %}
+                <tr>
+                    <td>Laço {{ laco }}</td>
+                    <td>und</td>
+                    <td>{{  equipamento.somador(equipamento.tipo_fibras(), equipamento.laco)[laco]  }}</td>
+                </tr>
+            {% endfor %}
+                <tr>
+                    <td>BRAÇADEIRA AJUSTÁVEL BAP4 (1000MM) C/ PARAFUSO</td>
+                    <td>und</td>
+                    <td>{{  equipamento.bap_lancamento()  }}</td>
+                </tr>
+                <tr>
+                    <td>SUPORTE PARA CABOS ÓPTICOS SCO1</td>
+                    <td>und</td>
+                    <td>{{  equipamento.sco  }}</td>
+                </tr>
+                <tr>
+                    <td>PLAQUETA DE IDENTIFICAÇÃO DE CABO ÓPTICO ONLINE TELECOM</td>
+                    <td>und</td>
+                    <td>{{  equipamento.plaqueta_lancamento  }}</td>
+                </tr>
+                <tr>
+                    <td>FIO DE ESPINAR ISOLADO FEI-125</td>
+                    <td>und</td>
+                    <td>{{  equipamento.fio_lancamento()  }}</td>
+                </tr>
+                <tr>
+                    <td>RESERVA TÉCNICA</td>
+                    <td>und</td>
+                    <td>{{  equipamento.contador("Reserva")  }}</td>
+                </tr>
             </tbody>
         </table>
     </div>

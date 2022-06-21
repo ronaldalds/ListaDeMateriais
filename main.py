@@ -60,6 +60,9 @@ app.run(port=5001,debug=True)
 # print(f'RESERVA TÉCNICA - {equipamento.contador("Reserva")} und')
 # print(f'DERIVAÇÃO PREFORMADA P/ CORDOALHA DIELÉTRICA (6,4MM) - 0 und') # falta cálculos
 # print('==============================================================================')
+
+
+
 # print(f'CAIXA DE EMENDA ÓPTICA AÉREA 24F C/ SUPORTE RESERVA DPR - {equipamento.contador("CEO") + equipamento.contador("HUB-DPR")}')
 # print(f'CAIXA DE DISTRIBUIÇÃO ÓPTICA CTO PRESLEY - {equipamento.contador("CTO-HUB")}')
 # print(f'BANDEJA PARA CAIXA DE EMENDA ÓPTICA DPR - {(equipamento.contador("CEO") + equipamento.contador("HUB-DPR"))*2} und')
