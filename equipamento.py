@@ -73,7 +73,7 @@ class Equipamento(Cabo):
             busca = padrao.findall(lista[i])
             if len(busca) > 0:
                 spl_con_1x8.append(busca)
-        return spl_con_1x8
+        return len(spl_con_1x8)
 
     def spliter_con_1x16(self):
         padrao = re.compile("[16]{2}[pP]")
@@ -85,18 +85,18 @@ class Equipamento(Cabo):
             busca = padrao.search(lista[i])
             if busca:
                 spl_con_1x16.append(busca.group())
-        return spl_con_1x16
+        return len(spl_con_1x16)
 
     def spliter_nc_1x16(self):
         nc_1x16 = []
         for i in self._rede_ativa_cto_hub:
             if "1x16" == i[-1]:
                 nc_1x16.append(i)
-        return nc_1x16
+        return len(nc_1x16)
 
     def spliter_nc_1x2(self):
         spl_nc_1x2 = re.compile("[0-9]{1,2}['][1]")
-        return self.cont_spl(spl_nc_1x2)
+        return len(self.cont_spl(spl_nc_1x2))
 
     def spliter_nc_1x8(self):
         spl_nc_1x8 = re.compile("[0-9]{1,2}['][1-2]")
@@ -104,7 +104,7 @@ class Equipamento(Cabo):
         for i in self._rede_ativa_cto_hub:
             if "1x8" == i[-1]:
                 nc_1x8.append(i)
-        return nc_1x8
+        return len(nc_1x8)
 
     def bandeja_cto_hub(self):
         return len(self._rede_ativa_cto_hub)
@@ -164,11 +164,11 @@ class Equipamento(Cabo):
                     fusao_ceo_hub += f
                     break
         rede = len(self._rede_ativa_cto_hub)
-        spl_nc_1x2 = len(self.spliter_nc_1x2())
-        spl_nc_1x8 = len(self.spliter_nc_1x8() * 9)
+        spl_nc_1x2 = self.spliter_nc_1x2()
+        spl_nc_1x8 = self.spliter_nc_1x8() * 9
         cto_ativa = len(self.coordenada_por_elemento("CTO"))
-        spl_con_1x8 = len(self.spliter_con_1x8())
-        spl_con_1x16 = len(self.spliter_con_1x16())
+        spl_con_1x8 = self.spliter_con_1x8()
+        spl_con_1x16 = self.spliter_con_1x16()
 
         tubetes = fusao_ceo_hub + rede + spl_nc_1x2 + spl_nc_1x8 + cto_ativa + spl_con_1x8 + spl_con_1x16
 

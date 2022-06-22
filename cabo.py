@@ -118,7 +118,7 @@ class Cabo(Elemento):
                 distancia += round(super().distancia(p1, pt) * 1.03, 2)
                 p1 = pt
             equipamento = self._ceo[i] + self._reserva[i] + self._cto_hub[i] + self._cto[i]
-            self.comprimento[i] = round((distancia + equipamento), 2)
+            self.comprimento[i] = round(distancia + equipamento)
             distancia = 0
             p1 = 0
         return self.comprimento

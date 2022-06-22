@@ -72,8 +72,6 @@
         </table>
     </div>
 
-
-
     <div id="Fusão" class="container">
         <div class="page-header" style="text-align:center">
             <h5>RELAÇÃO DE MATERIAIS - FUSÃO DE CABOS FIBRAS ÓPTICAS</h5>
@@ -87,54 +85,104 @@
                 </tr>
             </thead>
             <tbody>
-            {% for cabo in equipamento.cabo() %}
                 <tr>
-                    <td>{{ cabo }}</td>
-                    <td>M</td>
-                    <td>{{  equipamento.cabo()[cabo]  }}</td>
-                </tr>
-            {% endfor %}
-
-            {% for alca in equipamento.somador(equipamento.tipo_fibras(), equipamento.alca) %}
-                <tr>
-                    <td>Alça {{ alca }}</td>
+                    <td>CAIXA DE EMENDA ÓPTICA AÉREA 24F C/ SUPORTE RESERVA DPR</td>
                     <td>und</td>
-                    <td>{{  equipamento.somador(equipamento.tipo_fibras(), equipamento.alca)[alca]  }}</td>
+                    <td>{{ equipamento.contador("CEO") + equipamento.contador("HUB-DPR")  }}</td>
                 </tr>
-            {% endfor %}
 
-            {% for laco in equipamento.somador(equipamento.tipo_fibras(), equipamento.laco) %}
                 <tr>
-                    <td>Laço {{ laco }}</td>
+                    <td>CAIXA DE DISTRIBUIÇÃO ÓPTICA CTO PRESLEY</td>
                     <td>und</td>
-                    <td>{{  equipamento.somador(equipamento.tipo_fibras(), equipamento.laco)[laco]  }}</td>
+                    <td>{{ equipamento.contador("CTO-HUB")  }}</td>
                 </tr>
-            {% endfor %}
+
+                <tr>
+                    <td>BANDEJA PARA CAIXA DE EMENDA ÓPTICA DPR</td>
+                    <td>und</td>
+                    <td>{{ (equipamento.contador("CEO") + equipamento.contador("HUB-DPR")) * 2  }}</td>
+                </tr>
+                <tr>
+                    <td>BANDEJA INFERIOR PARA CTO PRESLEY</td>
+                    <td>und</td>
+                    <td>{{ equipamento.bandeja_cto_hub()  }}</td>
+                </tr>
+                <tr>
+                    <td>KIT DE DERIVAÇÃO PARA CAIXA DE EMENDA ÓPTICA</td>
+                    <td>und</td>
+                    <td>{{ equipamento.derivacao_ceo()  }}</td>
+                </tr>
+                <tr>
+                    <td>CAIXA DE DISTRIBUIÇÃO OPTICA CTO MINI PRESLEY</td>
+                    <td>und</td>
+                    <td>{{ equipamento.contador("CTO")  }}</td>
+                </tr>
+                <tr>
+                    <td>DIVISOR DE SINAL (SPLITTER) OPTICO PLC 1X8 G.657A NC-NC 250UM 2M/2M</td>
+                    <td>und</td>
+                    <td>{{ equipamento.spliter_con_1x8()  }}</td>
+                </tr>
+                <tr>
+                    <td>DIVISOR DE SINAL (SPLITTER) OPTICO PLC 1X16 G.657A NC-SC/APC 900UM 0.9M/0.6M</td>
+                    <td>und</td>
+                    <td>{{ equipamento.spliter_con_1x16()  }}</td>
+                </tr>
+                <tr>
+                    <td>DIVISOR DE SINAL (SPLITTER) OPTICO PLC 1X2 G.657A NC-NC 250UM 2M/2M</td>
+                    <td>und</td>
+                    <td>{{ equipamento.spliter_nc_1x2()  }}</td>
+                </tr>
+                <tr>
+                    <td>DIVISOR DE SINAL (SPLITTER) OPTICO PLC 1X8 G.657A NC-NC 250UM 2M/2M</td>
+                    <td>und</td>
+                    <td>{{ equipamento.spliter_nc_1x8()  }}</td>
+                </tr>
+                <tr>
+                    <td>DIVISOR DE SINAL (SPLITTER) OPTICO PLC 1X16 G.657A NC-NC 250UM 2M/2M</td>
+                    <td>und</td>
+                    <td>{{ equipamento.spliter_nc_1x16()  }}</td>
+                </tr>
+                <tr>
+                    <td>ADAPTADOR ÓPTICO SM SIMPLEX SC/APC</td>
+                    <td>und</td>
+                    <td>{{ equipamento.spliter_con_1x8() * 8  }}</td>
+                </tr>
+                <tr>
+                    <td>CAIXA TERMINAL ÓPTICA INDOOR CONECTORIZADA C/ SPLITTER 1X8 SMAP</td>
+                    <td>und</td>
+                    <td>{{ equipamento.contador("CTO-Indoor")  }}</td>
+                </tr>
                 <tr>
                     <td>BRAÇADEIRA AJUSTÁVEL BAP4 (1000MM) C/ PARAFUSO</td>
                     <td>und</td>
-                    <td>{{  equipamento.bap_lancamento()  }}</td>
-                </tr>
-                <tr>
-                    <td>SUPORTE PARA CABOS ÓPTICOS SCO1</td>
-                    <td>und</td>
-                    <td>{{  equipamento.sco  }}</td>
+                    <td>{{  equipamento.bap_fusao()  }}</td>
                 </tr>
                 <tr>
                     <td>PLAQUETA DE IDENTIFICAÇÃO DE CABO ÓPTICO ONLINE TELECOM</td>
                     <td>und</td>
-                    <td>{{  equipamento.plaqueta_lancamento  }}</td>
+                    <td>{{  equipamento.plaqueta_fusao  }}</td>
                 </tr>
                 <tr>
                     <td>FIO DE ESPINAR ISOLADO FEI-125</td>
-                    <td>und</td>
-                    <td>{{  equipamento.fio_lancamento()  }}</td>
+                    <td>RL</td>
+                    <td>{{ equipamento.fio_fusao() }}</td>
                 </tr>
                 <tr>
-                    <td>RESERVA TÉCNICA</td>
+                    <td>PRENSA CABO POLIMERICO P/ CORDOALHA DIELÉTRICA</td>
                     <td>und</td>
-                    <td>{{  equipamento.contador("Reserva")  }}</td>
+                    <td>{{ equipamento.prensa_cabo()  }}</td>
                 </tr>
+                <tr>
+                    <td>PROTETOR DE EMENDA PE-04 45MM 3,4MM</td>
+                    <td>und</td>
+                    <td>{{ equipamento.tubete_45()  }}</td>
+                </tr>
+                <tr>
+                    <td>PROTETOR DE EMENDA PE-05 60MM 3,4MM</td>
+                    <td>und</td>
+                    <td>{{ equipamento.tubete_60() }}</td>
+                </tr>
+
             </tbody>
         </table>
     </div>
