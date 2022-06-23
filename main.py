@@ -21,7 +21,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = \
 db = SQLAlchemy(app)
 
 
-class User(db.Model):
+class Usuarios(db.Model):
     nickname = db.Column(db.String(8), nullable=False)
     nome = db.Column(db.String(20), nullable=False)
     senha = db.Column(db.String(100), nullable=False)
