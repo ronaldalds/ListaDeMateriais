@@ -1,4 +1,4 @@
-from flask import Flask, flash, request, redirect, render_template, session
+from flask import Flask, flash, request, redirect, render_template, session, url_for
 import os
 from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
@@ -18,22 +18,20 @@ app.config['SQLALCHEMY_DATABASE_URI'] = \
         servidor='localhost',
         database='eng'
     )
+
 db = SQLAlchemy(app)
 
-
 class Usuarios(db.Model):
-    nickname = db.Column(db.String(8), nullable=False)
+    nickname = db.Column(db.String(8), primary_key=True)
     nome = db.Column(db.String(20), nullable=False)
     senha = db.Column(db.String(100), nullable=False)
 
     def __repr__(self):
-        return '<Name %r>' % self.name
-
+        return '<Name %r>' % self.nome
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
 
 @app.route('/')
 def anexar():
@@ -88,12 +86,15 @@ def logout():
 
 @app.route('/autenticar', methods=['POST', ])
 def autenticar():
-    if '123' == request.form['senha']:
-        session['usuario_logado'] = request.form['usuario']
-        return redirect('/')
+    usuario = Usuarios.query.filter_by(nickname=request.form['usuario']).first()
+    if usuario:
+        if request.form['senha'] == usuario.senha:
+            session['usuario_logado'] = request.form['usuario']
+            flash(usuario.nickname + ' logado com sucesso!')
+            return redirect('/')
     else:
         flash('Senha incorreta!!')
         return redirect('/login')
 
 
-app.run(port=5001, debug=True)
+app.run(debug=True)
