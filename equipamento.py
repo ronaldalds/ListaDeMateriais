@@ -165,6 +165,7 @@ class Equipamento(Cabo):
                     break
         rede = len(self._rede_ativa_cto_hub)
         spl_nc_1x2 = self.spliter_nc_1x2()
+
         spl_nc_1x8 = self.spliter_nc_1x8() * 9
         cto_ativa = len(self.coordenada_por_elemento("CTO"))
         spl_con_1x8 = self.spliter_con_1x8()
