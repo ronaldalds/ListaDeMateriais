@@ -43,9 +43,7 @@ def upload_file():
 
 @app.route('/lista')
 def lista_material():
-    if 'usuario_logado' not in session or session['usuario_logado'] == None:
-        return redirect('/login')
-    if not os.path.exists(session['arquivo']):
+    if 'usuario_logado' not in session or session['usuario_logado'] == None or not os.path.exists(session['arquivo']):
         return redirect('/')
     arquivo = Equipamento(session['arquivo'])
     if os.path.exists(session['arquivo']):
