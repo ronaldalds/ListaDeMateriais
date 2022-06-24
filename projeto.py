@@ -103,7 +103,7 @@ class Projeto:
                     self._coordenada_elemento[e] = t.findtext(f'{self._site}coordinates').split(',')
 
     def _ext_style(self):
-        for root in self._root[0]:
+        for root in self._root.iter(f'{self._site}Style'):
             if 'Style' in root.tag:
                 self.style[root.attrib['id']] = ''
                 for icon_style in root.iter(f'{self._site}IconStyle'):
