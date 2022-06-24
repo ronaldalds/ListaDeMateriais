@@ -1,15 +1,6 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Lista de Materiais</title>
-    <link rel="stylesheet" href="../static/bootstrap.css">
-  </head>
-    <body>
-    <form style="text-align:right" action="/logout" method="post" enctype=multipart/form-data>
-          <input type=submit value=Logout>
-    </form>
+{% extends "template.html" %}
+{% block conteudo %}
+    <a href="{{ url_for('logout') }}">Logout</a>
     <div id="Lançamento" class="container">
         <div class="page-header" style="text-align:center">
             <h5>RELAÇÃO DE MATERIAIS - LANÇAMENTO DE CABOS DE FIBRAS ÓPTICAS</h5>
@@ -189,5 +180,4 @@
             </tbody>
         </table>
     </div>
-  </body>
-</html>
+{% endblock %}
