@@ -1,5 +1,6 @@
 from lista_de_materiais import db
 
+
 class Usuarios(db.Model):
     nickname = db.Column(db.String(8), primary_key=True)
     nome = db.Column(db.String(20), nullable=False)

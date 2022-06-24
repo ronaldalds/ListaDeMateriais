@@ -5,11 +5,13 @@ from lista_de_materiais import app
 from models import Usuarios
 from equipamento import Equipamento
 
+
 @app.route('/')
 def index():
     if 'usuario_logado' not in session or session['usuario_logado'] is None:
         return redirect(url_for('login', proxima=url_for('index')))
     return redirect(url_for('anexar'))
+
 
 @app.route('/upload')
 def anexar():
@@ -18,7 +20,7 @@ def anexar():
     return render_template('novo.html')
 
 
-@app.route('/trata', methods=['POST',])
+@app.route('/trata', methods=['POST', ])
 def upload_file():
     if 'file' not in request.files:
         flash('No file part')

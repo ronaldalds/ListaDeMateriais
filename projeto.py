@@ -1,5 +1,5 @@
 import xml.etree.ElementTree as Et
-from math import sqrt, ceil
+from math import sqrt
 
 c = 0
 e = 0
@@ -23,14 +23,13 @@ class Projeto:
         self._cdlh = {}
 
         self.style = {}
-        # self.pop = {}
+        self.pop = {}
 
         self._ext_style()
         self.lista_rede()
         self.RA()
         self.alimentador()
         self.cordoalha()
-
 
     def cordoalha(self):
         for i in self._nome_fibra:
@@ -112,7 +111,7 @@ class Projeto:
                     for icon in icon_style.iter(f'{self._site}Icon'):
                         tipo_icon = icon.findtext(f'{self._site}href').replace('http://maps.google.com/mapfiles/kml/',
                                                                                '')
-                        if cor_icon == None:
+                        if cor_icon is None:
                             for label in root.iter(f'{self._site}LabelStyle'):
                                 cor_icon = label.findtext(f'{self._site}color')
                         self.style[root.attrib['id']] = f'{tipo_icon}{cor_icon}'

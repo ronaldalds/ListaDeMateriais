@@ -2,6 +2,7 @@ from cabo import Cabo
 import re
 import math
 
+
 class Equipamento(Cabo):
     def __init__(self, arquivo):
         super().__init__(arquivo)
@@ -13,7 +14,7 @@ class Equipamento(Cabo):
         self.rede_cto_hub()
 
     def rede_cto_hub(self):
-        lista = {**self.nome_por_elemento('CTO-HUB'),**self.nome_por_elemento('HUB-DPR')}
+        lista = {**self.nome_por_elemento('CTO-HUB'), **self.nome_por_elemento('HUB-DPR')}
         padrao_hub = re.compile("[A-Z]{2}[.][0-9]{1,2}[']?[1-2]?[-][0-9]{1,2}[']?[1-2]?[-]?[0-9]{1,2}?[']?[1-2]?")
         padrao_rede = re.compile("[0-9]{1,2}[']?[1-2]?")
         for i in lista:
@@ -39,9 +40,9 @@ class Equipamento(Cabo):
                                     topologia = '1x8'
                             else:
                                 topologia = "1x2 1x8 1x8"
-                            self._rede_ativa_cto_hub.append([r[0], r[2], r[3],topologia])
+                            self._rede_ativa_cto_hub.append([r[0], r[2], r[3], topologia])
 
-    def cont_spl(self,rex):
+    def cont_spl(self, rex):
         c = []
         spl_hub = self.nome_por_elemento('HUB-DPR')
         spl_cto_hub = self.nome_por_elemento('CTO-HUB')
@@ -64,7 +65,7 @@ class Equipamento(Cabo):
 
     def spliter_con_1x8(self):
         padrao = re.compile(
-"[A-Z]{2}[.][0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,2}[ ]?[/|][ ]?[A-Z]{1,2}[.][0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,2}")
+            "[A-Z]{2}[.][0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,2}[ ]?[/|][ ]?[A-Z]{1,2}[.][0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,2}")
         cto_hub = self.nome_por_elemento('CTO-HUB')
         cto = self.nome_por_elemento('CTO')
         lista = {**cto_hub, **cto}
@@ -129,22 +130,22 @@ class Equipamento(Cabo):
     def bap_fusao(self):
         b1 = self.poste_por_elemento('CTO')
         b2 = self.poste_por_elemento('CTO-HUB')
-        self._bap_fusao = len({**b1,**b2})*2
+        self._bap_fusao = len({**b1, **b2}) * 2
         return self._bap_fusao
 
     def fio_lancamento(self):
-        cordoalha = self.cabo()['CDLH']*0.1
-        plaqueta = self._plaqueta_lancamento*0.3
-        ceo = self.contador('CEO')*2 + self.contador('HUB-DPR')*2
-        rt = self.contador('Reserva')*2
+        cordoalha = self.cabo()['CDLH'] * 0.1 if self.cabo().get('CDLH') else 0
+        plaqueta = self._plaqueta_lancamento * 0.3
+        ceo = self.contador('CEO') * 2 + self.contador('HUB-DPR') * 2
+        rt = self.contador('Reserva') * 2
         fio_espina = cordoalha + plaqueta + ceo + rt
-        return math.ceil(fio_espina/130)
+        return math.ceil(fio_espina / 130)
 
     def fio_fusao(self):
-        plaqueta = self._plaqueta_fusao*0.3
-        cto = self.contador('CTO')*1
+        plaqueta = self._plaqueta_fusao * 0.3
+        cto = self.contador('CTO') * 1
         fio_espina = plaqueta + cto
-        return math.ceil(fio_espina/130)
+        return math.ceil(fio_espina / 130)
 
     def prensa_cabo(self):
         prensa_reserva = self.contador('Reserva') * 2
@@ -177,13 +178,13 @@ class Equipamento(Cabo):
 
     def tubete_45(self):
         padrao_fibra = re.compile("[0-9]{1,2}[0-9]?[fF]")
-        ceo = {**self.poste_por_elemento("CEO"),**self.poste_por_elemento("HUB-DPR")}
+        ceo = {**self.poste_por_elemento("CEO"), **self.poste_por_elemento("HUB-DPR")}
         fusao_ceo_hub = 0
         for i in self._alimentador:
             for c in ceo:
                 if ceo[c] == self._percuso[i][0] or ceo[c] == self._percuso[i][-1]:
                     fusoes = padrao_fibra.search(self._alimentador[i][-1])
-                    f = int(re.sub('[^0-9]','',fusoes.group()))
+                    f = int(re.sub('[^0-9]', '', fusoes.group()))
                     fusao_ceo_hub += f
                     break
         tubetes = fusao_ceo_hub
@@ -191,7 +192,7 @@ class Equipamento(Cabo):
         return tubetes
 
     def derivacao_ceo(self):
-        ceo = {**self.poste_por_elemento("CEO"),**self.poste_por_elemento("HUB-DPR")}
+        ceo = {**self.poste_por_elemento("CEO"), **self.poste_por_elemento("HUB-DPR")}
         derivacao_ceo = 0 - (len(ceo))
         nome_e = self._nome_elemento
         nome_f = self._nome_fibra
