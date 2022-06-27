@@ -1,7 +1,6 @@
-import os.path
+from os.path import dirname,abspath, join
 
-UPLOAD_PATH = os.path.dirname(os.path.abspath(__file__)) + '/uploads'
-
+UPLOAD_PATH = join(dirname(abspath(__file__)), "uploads")
 SECRET_KEY = 'ruma'
 SQLALCHEMY_DATABASE_URI = \
     '{SGBD}://{usuario}:{senha}@{servidor}/{database}'.format(

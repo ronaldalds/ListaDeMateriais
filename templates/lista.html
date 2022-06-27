@@ -1,6 +1,8 @@
 {% extends "template.html" %}
 {% block conteudo %}
-    <a href="{{ url_for('logout') }}">Logout</a>
+<a class="btn btn-primary" href="{{ url_for('login') }}">Login</a>
+<a class="btn btn-danger" href="{{ url_for('logout') }}">Logout</a>
+<a class="btn btn-primary" href="{{ url_for('anexar') }}">Novo</a>
     <div id="Lançamento" class="container">
         <div class="page-header" style="text-align:center">
             <h5>RELAÇÃO DE MATERIAIS - LANÇAMENTO DE CABOS DE FIBRAS ÓPTICAS</h5>

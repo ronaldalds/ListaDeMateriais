@@ -36,7 +36,7 @@ class Cabo(Elemento):
         tipo = {**self.tipo_fibras()}
         qnt = {**self.comprimento_cabo()}
 
-        self._cabo = self.somador(tipo,qnt)
+        self._cabo = self.somador(tipo, qnt)
         return self._cabo
 
     @property
@@ -216,9 +216,6 @@ class Cabo(Elemento):
             laco = (len(self._coordenada_fibra[i]) - 1)
             self.__quantidade_alca[i] = round(laco * 0.9 * 2)
         return self.__quantidade_alca
-
-
-
 
     @property
     def nome(self):
