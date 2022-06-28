@@ -1,10 +1,12 @@
 from flask import flash, request, redirect, render_template, session, url_for
 from os import path, remove
 from werkzeug.utils import secure_filename
-from lista_de_materiais import app
+from lista_de_materiais import app, db
 from models import Usuarios
 from equipamento import Equipamento
-from helpers import FileForm
+from helpers import FileForm, UsuariosForm
+from flask_bcrypt import check_password_hash, generate_password_hash
+
 
 
 @app.route('/')
@@ -13,6 +15,33 @@ def index():
         return redirect(url_for('login', proxima=url_for('index')))
     return redirect(url_for('anexar'))
 
+
+@app.route('/novo_usuario')
+def novo_usuario():
+    proxima = request.args.get('proxima')
+    if 'usuario_logado' not in session or session['usuario_logado'] == None:
+        return redirect(url_for('login', proxima=url_for('novo')))
+    form = UsuariosForm()
+    return render_template('novo_usuario.html', proxima=proxima, form=form)
+
+
+@app.route('/criar_login', methods=['POST',])
+def criar_login():
+    form = UsuariosForm(request.form)
+    nickname = form.nickname.data
+    nome = form.nome.data
+    senha = generate_password_hash(form.senha.data).decode('utf-8')
+
+    nick = Usuarios.query.filter_by(nickname=nickname).first()
+    if nick:
+        flash('Login Existente!!')
+        return redirect(url_for('login'))
+
+    novo_login = Usuarios(nickname=nickname, nome=nome, senha=senha)
+    db.session.add(novo_login)
+    db.session.commit()
+
+    return redirect(url_for('login'))
 
 @app.route('/upload')
 def anexar():
@@ -48,7 +77,8 @@ def lista_material():
 @app.route('/login')
 def login():
     proxima = request.args.get('proxima')
-    return render_template('login.html', proxima=proxima)
+    form = UsuariosForm()
+    return render_template('login.html', proxima=proxima, form=form)
 
 
 @app.route('/logout')
@@ -60,18 +90,16 @@ def logout():
 
 @app.route('/autenticar', methods=['POST', ])
 def autenticar():
-    usuario = Usuarios.query.filter_by(nickname=request.form['usuario']).first()
-    if usuario:
-        if request.form['senha'] == usuario.senha:
-            session['usuario_logado'] = request.form['usuario']
-            flash(usuario.nickname + ' logado com sucesso!')
-            proxima_pagina = request.form['proxima']
-            if 'None' in proxima_pagina:
-                return redirect(url_for('index'))
-            return redirect(proxima_pagina)
-        else:
-            flash('senha incorreta!!')
-            return redirect(url_for('login'))
+    form = UsuariosForm(request.form)
+    usuario = Usuarios.query.filter_by(nickname=form.nickname.data).first()
+    senha = check_password_hash(usuario.senha, form.senha.data)
+    if usuario and senha:
+        session['usuario_logado'] = usuario.nickname
+        flash(usuario.nickname + ' logado com sucesso!')
+        proxima_pagina = request.form['proxima']
+        if 'None' in proxima_pagina:
+            return redirect(url_for('index'))
+        return redirect(proxima_pagina)
     else:
-        flash('log incorreta!!')
+        flash('login ou senha incorreta!!')
         return redirect(url_for('login'))
