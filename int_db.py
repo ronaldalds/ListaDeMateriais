@@ -1,6 +1,5 @@
 import psycopg2
-# https://www.digitalocean.com/community/tutorials/how-to-use-a-postgresql-database-in-a-flask-application
-# https://towardsdatascience.com/sending-data-from-a-flask-app-to-postgresql-database-889304964bf2
+
 conn = psycopg2.connect(
         host="localhost",
         database="flask_db",
