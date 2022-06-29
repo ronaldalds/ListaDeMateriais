@@ -78,7 +78,7 @@ def lista_material():
 def login():
     proxima = request.args.get('proxima')
     form = UsuariosForm()
-    return render_template('login.html', proxima=proxima, form=form)
+    return render_template('index.html', proxima=proxima, form=form)
 
 
 @app.route('/logout')
