@@ -17,7 +17,7 @@ def index():
 @app.route('/novo_usuario')
 def novo_usuario():
     proxima = request.args.get('proxima')
-    if 'usuario_logado' not in session or session['usuario_logado'] == None:
+    if 'usuario_logado' not in session or session['usuario_logado'] is None:
         return redirect(url_for('login', proxima=url_for('novo')))
     form = UsuariosForm()
     return render_template('novo_usuario.html', proxima=proxima, form=form)
