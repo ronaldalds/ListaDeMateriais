@@ -8,7 +8,6 @@ from helpers import FileForm, UsuariosForm
 from flask_bcrypt import check_password_hash, generate_password_hash
 
 
-
 @app.route('/')
 def index():
     if 'usuario_logado' not in session or session['usuario_logado'] == None:
