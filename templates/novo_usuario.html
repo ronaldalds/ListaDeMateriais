@@ -7,7 +7,7 @@
         <h1>Novo login</h1>
         <form method="POST" action="{{ url_for('criar_login') }}">
             <input type="hidden" name="proxima" value="{{ proxima }}">
-            {{ form.csrf_token }}
+
             <div class="form-group">
                 {{ form.nickname.label(class="form-label") }}
                 {{ form.nickname(class="form-control") }}
