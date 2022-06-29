@@ -11,9 +11,16 @@ from flask_bcrypt import check_password_hash, generate_password_hash
 
 @app.route('/')
 def index():
-    if 'usuario_logado' not in session or session['usuario_logado'] is None:
+    if 'usuario_logado' not in session or session['usuario_logado'] == None:
         return redirect(url_for('login', proxima=url_for('index')))
     return redirect(url_for('anexar'))
+
+
+@app.route('/login')
+def login():
+    proxima = request.args.get('proxima')
+    form = UsuariosForm()
+    return render_template('login.html', proxima=proxima, form=form)
 
 
 @app.route('/novo_usuario')
@@ -72,13 +79,6 @@ def lista_material():
     if path.exists(session['arquivo']):
         remove(session['arquivo'])
     return render_template('lista.html', equipamento=arquivo)
-
-
-@app.route('/login')
-def login():
-    proxima = request.args.get('proxima')
-    form = UsuariosForm()
-    return render_template('index.html', proxima=proxima, form=form)
 
 
 @app.route('/logout')
