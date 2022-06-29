@@ -3,10 +3,10 @@ from flask_bcrypt import generate_password_hash
 
 
 conn = psycopg2.connect(
-        host="localhost",
-        database="eng",
-        user='ralds',
-        password='admin')
+        host="ec2-44-195-162-77.compute-1.amazonaws.com",
+        database="dckbnake75kr9r",
+        user='gtxmgfpnwqemej',
+        password='0a3ade179595158f9d6c9440ed155a467b361e197146ac6af303b234085d1518')
 
 # Open a cursor to perform database operations
 cur = conn.cursor()
