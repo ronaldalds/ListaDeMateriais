@@ -1,4 +1,4 @@
-from lista_de_materiais import db
+from main import db
 
 
 class Usuarios(db.Model):

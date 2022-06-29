@@ -1,9 +1,10 @@
 import psycopg2
-# https://www.digitalocean.com/community/tutorials/how-to-use-a-postgresql-database-in-a-flask-application
-# https://towardsdatascience.com/sending-data-from-a-flask-app-to-postgresql-database-889304964bf2
+from flask_bcrypt import generate_password_hash
+
+
 conn = psycopg2.connect(
         host="localhost",
-        database="flask_db",
+        database="eng",
         user='ralds',
         password='admin')
 
@@ -11,38 +12,26 @@ conn = psycopg2.connect(
 cur = conn.cursor()
 
 # Execute a command: this creates a new table
-cur.execute('DROP TABLE IF EXISTS books;')
+cur.execute('DROP TABLE IF EXISTS usuarios;')
 
-cur.execute('CREATE TABLE books (id serial PRIMARY KEY,'
-                                 'title varchar (150) NOT NULL,'
-                                 'author varchar (50) NOT NULL,'
-                                 'pages_num integer NOT NULL,'
-                                 'review text,'
-                                 'date_added date DEFAULT CURRENT_TIMESTAMP);'
+cur.execute('CREATE TABLE usuarios (nome varchar(20) NOT NULL,'
+                                 'nickname varchar (8) NOT NULL PRIMARY KEY,'
+                                 'senha varchar (100) NOT NULL);'
                                  )
 
 # Insert data into the table
 
-cur.execute('INSERT INTO books (title, author, pages_num, review)'
-            'VALUES (%s, %s, %s, %s)',
-            ('A Tale of Two Cities',
-             'Charles Dickens',
-             489,
-             'A great classic!')
-            )
-
-
-cur.execute('INSERT INTO books (title, author, pages_num, review)'
-            'VALUES (%s, %s, %s, %s)',
-            ('Anna Karenina',
-             'Leo Tolstoy',
-             864,
-             'Another great classic!')
-            )
-
-cur.execute('SELECT title, author FROM books;')
+usuario_sql = 'INSERT INTO usuarios (nome, nickname, senha) VALUES (%s, %s, %s)'
+usuarios = [
+    ("ronald", "ralds", generate_password_hash("123").decode('utf-8')),
+    ("joão carlos", "jc", generate_password_hash("123").decode('utf-8')),
+    ("joão luiz", "jl", generate_password_hash("123").decode('utf-8'))
+]
+cur.executemany(usuario_sql, usuarios)
+#
+cur.execute('SELECT * FROM usuarios;')
 for user in cur.fetchall():
-    print(user)
+    print(user[1])
 conn.commit()
 cur.close()
 conn.close()

@@ -4,10 +4,11 @@ UPLOAD_PATH = join(dirname(abspath(__file__)), "uploads")
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SECRET_KEY = 'ruma'
 
+
 SQLALCHEMY_DATABASE_URI = \
     '{SGBD}://{usuario}:{senha}@{servidor}/{database}'.format(
-        SGBD='mysql+mysqlconnector',
-        usuario='root',
+        SGBD='postgresql',
+        usuario='ralds',
         senha='admin',
         servidor='localhost',
         database='eng'

@@ -1,7 +1,7 @@
 from flask import flash, request, redirect, render_template, session, url_for
 from os import path, remove
 from werkzeug.utils import secure_filename
-from lista_de_materiais import app, db
+from main import app, db
 from models import Usuarios
 from equipamento import Equipamento
 from helpers import FileForm, UsuariosForm
