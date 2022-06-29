@@ -11,9 +11,7 @@ from flask_bcrypt import check_password_hash, generate_password_hash
 
 @app.route('/')
 def index():
-    if 'usuario_logado' not in session or session['usuario_logado'] is None:
-        return redirect(url_for('login', proxima=url_for('index')))
-    return redirect(url_for('anexar'))
+    return render_template('index.html')
 
 
 @app.route('/novo_usuario')
