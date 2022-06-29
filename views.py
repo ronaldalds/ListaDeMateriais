@@ -11,13 +11,15 @@ from flask_bcrypt import check_password_hash, generate_password_hash
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    if 'usuario_logado' not in session or session['usuario_logado'] is None:
+        return redirect(url_for('login', proxima=url_for('index')))
+    return redirect(url_for('anexar'))
 
 
 @app.route('/novo_usuario')
 def novo_usuario():
     proxima = request.args.get('proxima')
-    if 'usuario_logado' not in session or session['usuario_logado'] is None:
+    if 'usuario_logado' not in session or session['usuario_logado'] == None:
         return redirect(url_for('login', proxima=url_for('novo')))
     form = UsuariosForm()
     return render_template('novo_usuario.html', proxima=proxima, form=form)
