@@ -13,7 +13,6 @@ cur = conn.cursor()
 
 # Execute a command: this creates a new table
 cur.execute('DROP TABLE IF EXISTS usuarios;')
-cur.execute('DROP TABLE IF EXISTS file;')
 
 cur.execute('CREATE TABLE usuarios (nome varchar(20) NOT NULL,'
                                  'nickname varchar (8) NOT NULL,'
@@ -34,11 +33,6 @@ cur.executemany(usuario_sql, usuarios)
 cur.execute('SELECT * FROM usuarios;')
 for user in cur.fetchall():
     print(user)
-
-cur.execute('CREATE TABLE file (id SERIAL PRIMARY KEY,'
-                                 'filename varchar (50) NOT NULL,'
-                                 'data BYTEA);'
-                                 )
 
 conn.commit()
 cur.close()
