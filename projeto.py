@@ -1,11 +1,12 @@
 import xml.etree.ElementTree as Et
 from math import sqrt
 
+
 c = 0
 e = 0
 
 
-class Projeto:
+class Projeto():
     def __init__(self, arquivo):
         doc = Et.parse(arquivo)
         self._root = doc.getroot()

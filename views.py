@@ -1,9 +1,11 @@
-from flask import flash, request, redirect, render_template, session, url_for
+import xml.etree.ElementTree as Et
+from io import BytesIO
+from flask import flash, request, redirect, render_template, session, url_for, send_file
 from os import path, remove
 from werkzeug.utils import secure_filename
 from app import app, db
-from models import Usuarios
-from equipamento import Equipamento
+from models import Usuarios, File
+from projeto import Projeto
 from helpers import FileForm, UsuariosForm
 from flask_bcrypt import check_password_hash, generate_password_hash
 
@@ -57,27 +59,23 @@ def anexar():
     return render_template('novo.html', form=form)
 
 
-@app.route('/trata', methods=['POST',])
+@app.route('/trata', methods=['GET','POST'])
 def upload_file():
     form = FileForm(request.files)
+
     if form.is_submitted():
         file = form.file.data
-        filename = secure_filename(file.filename)
-        local_file = app.config['UPLOAD_PATH']
-        file.save(path.join(local_file,filename))
-        session['arquivo'] = path.join(local_file,filename)
-        return redirect(url_for('lista_material'))
+        arquivo = form.load_file(file)
+        return render_template('lista.html', equipamento=arquivo)
     return redirect(url_for('index'))
 
 
-@app.route('/lista')
-def lista_material():
-    if 'usuario_logado' not in session or session['usuario_logado'] is None or not path.exists(session['arquivo']):
-        return redirect(url_for('anexar'))
-    arquivo = Equipamento(session['arquivo'])
-    if path.exists(session['arquivo']):
-        remove(session['arquivo'])
-    return render_template('lista.html', equipamento=arquivo)
+# @app.route('/lista')
+# def lista_material():
+#     if 'usuario_logado' not in session or session['usuario_logado'] is None or not path.exists(session['arquivo']):
+#         return redirect(url_for('anexar'))
+#     arquivo = Equipamento(session['arquivo'])
+#     return render_template('lista.html', equipamento=arquivo)
 
 
 @app.route('/logout')

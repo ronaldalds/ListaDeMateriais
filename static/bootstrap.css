@@ -2739,7 +2739,10 @@ textarea.form-control-lg {
 .input-group .btn:focus {
   z-index: 3;
 }
-
+.center1 {
+    height: 500px;
+    position: relative;
+}
 .input-group-text {
   display: flex;
   align-items: center;
