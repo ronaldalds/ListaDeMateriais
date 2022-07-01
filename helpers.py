@@ -3,12 +3,14 @@ from wtforms import SubmitField, validators, FileField, StringField, PasswordFie
 from math import sqrt
 from equipamento import Equipamento
 
+
 class FileForm(FlaskForm):
     file = FileField('Arquivo do Projeto ', [validators.DataRequired()])
     salvar = SubmitField('Salvar')
 
-    def load_file(self,file):
+    def load_file(self, file):
         return Equipamento(file)
+
 
 class UsuariosForm(FlaskForm):
     nickname = StringField('Nickname', [validators.DataRequired(), validators.Length(min=1, max=8)])

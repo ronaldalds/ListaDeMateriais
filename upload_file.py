@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as Et
 from abc import abstractmethod
 from fiber import Fiber
-from math import sqrt
+
 
 c = 0
 e = 0
