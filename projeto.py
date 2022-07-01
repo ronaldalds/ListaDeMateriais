@@ -7,8 +7,8 @@ e = 0
 
 
 class Projeto():
-    def __init__(self, arquivo):
-        doc = Et.parse(arquivo)
+    def __init__(self,file):
+        doc = Et.parse(file)
         self._root = doc.getroot()
         self._site = '{http://www.opengis.net/kml/2.2}'
 
@@ -26,8 +26,8 @@ class Projeto():
         self.style = {}
         self.pop = {}
 
-        self._ext_style()
-        self.lista_rede()
+        self.extractor_style()
+        self.extractor_line()
         self.RA()
         self.alimentador()
         self.cordoalha()
@@ -50,13 +50,13 @@ class Projeto():
             if 'REDE' in self._nome_fibra[i][3].upper():
                 self._ra[i] = self._nome_fibra[i]
 
-    def lista_rede(self):
+    def extractor_line(self):
         for ro in self._root.iter(f'{self._site}Folder'):
             if 'REDE FTTH' == ro[0].text.upper():
-                self.ext_cabo(ro)
-                self.ext_elemento(ro)
+                self.line(ro)
+                self.point(ro)
 
-    def ext_cabo(self, item, nome=None, tipo=None, coord=None):
+    def line(self, item, nome=None, tipo=None, coord=None):
         global c
         if nome is None:
             nome = []
@@ -64,10 +64,10 @@ class Projeto():
             coord = []
         for i in item:
             if 'Document' in i.tag:
-                self.ext_cabo(i, nome, tipo, coord)
+                self.line(i, nome, tipo, coord)
             elif 'Folder' in i.tag:
                 nome.append(f'{i[0].text}')
-                self.ext_cabo(i, nome, tipo, coord)
+                self.line(i, nome, tipo, coord)
                 nome.pop()
             elif 'Placemark' in i.tag:
                 for t in i.iter(f'{self._site}LineString'):
@@ -81,7 +81,7 @@ class Projeto():
                         pontos.append(linha.split(','))
                         self._coordenada_fibra[c] = pontos
 
-    def ext_elemento(self, item, nome=None, tipo=None, coord=None):
+    def point(self, item, nome=None, tipo=None, coord=None):
         global e
         if nome is None:
             nome = []
@@ -89,10 +89,10 @@ class Projeto():
             coord = []
         for i in item:
             if 'Document' in i.tag:
-                self.ext_elemento(i, nome, tipo, coord)
+                self.point(i, nome, tipo, coord)
             elif 'Folder' in i.tag:
                 nome.append(f'{i[0].text}')
-                self.ext_elemento(i, nome, tipo, coord)
+                self.point(i, nome, tipo, coord)
                 nome.pop()
             elif 'Placemark' in i.tag:
                 for t in i.iter(f'{self._site}Point'):
@@ -103,7 +103,7 @@ class Projeto():
                     self._tipo_elemento[e] = i.findtext(f'{self._site}styleUrl').replace('#', '')
                     self._coordenada_elemento[e] = t.findtext(f'{self._site}coordinates').split(',')
 
-    def _ext_style(self):
+    def extractor_style(self):
         for root in self._root.iter(f'{self._site}Style'):
             if 'Style' in root.tag:
                 self.style[root.attrib['id']] = ''
