@@ -19,7 +19,7 @@ class UploadFile:
         self._style = {}
         self.pole = {}
         self.fiber = {}
-        self.placemark = {}
+        self.element = {}
 
     def fiber_rede(self):
         for ro in self._root.iter(f'{self.site}Folder'):
@@ -30,11 +30,41 @@ class UploadFile:
     def placemark_rede(self):
         for ro in self._root.iter(f'{self.site}Folder'):
             if 'REDE FTTH' == ro[0].text.upper():
-                self._extractor_placemark(ro)
-                return self.placemark
+                self._extractor_element(ro)
+                return self.element
 
     def data_expansion(self, file):
         pass
+
+    def data_pole(self, file):
+        for root in self._root.iter(f'{self.site}Folder'):
+            if 'POSTE' in root.findtext(f'{self.site}name').upper():
+                for n, poste in enumerate(root.iter(f'{self.site}Placemark')):
+                    for coord in poste.iter(f'{self.site}Point'):
+                        self._coordenada_poste[n + 1] = coord.findtext(f'{self.site}coordinates').split(',')
+                    for data in poste.iter(f'{self.site}Data'):
+                        if '00' in data.attrib['name']:
+                            self._tipo_poste[n + 1] = data.findtext(f'{self.site}value')
+                        elif '01' in data.attrib['name']:
+                            self._altura_poste[n + 1] = data.findtext(f'{self.site}value')
+                        elif '02' in data.attrib['name']:
+                            self._esforco_poste[n + 1] = data.findtext(f'{self.site}value')
+                        elif '03' in data.attrib['name']:
+                            self._rede_eletrica[n + 1] = data.findtext(f'{self.site}value')
+                        elif '04' in data.attrib['name']:
+                            self._quantidade_casa[n + 1] = data.findtext(f'{self.site}value')
+                        elif '05' in data.attrib['name']:
+                            self._quantidade_comercio[n + 1] = data.findtext(f'{self.site}value')
+                        elif '06' in data.attrib['name']:
+                            self._quantidade_apartamento[n + 1] = data.findtext(f'{self.site}value')
+                        elif '07' in data.attrib['name']:
+                            self._tipo_equipamento[n + 1] = data.findtext(f'{self.site}value')
+                        elif '08' in data.attrib['name']:
+                            self._codigo_poste[n + 1] = data.findtext(f'{self.site}value')
+                        elif '09' in data.attrib['name']:
+                            self._ocupacao[n + 1] = data.findtext(f'{self.site}value')
+                        elif 'pictures' in data.attrib['name']:
+                            self._foto[n + 1] = data.findtext(f'{self.site}value')
 
     @abstractmethod
     def _extractor_line(self, item, name=None):
@@ -60,18 +90,16 @@ class UploadFile:
                     self.fiber[c] = fiber
 
     @abstractmethod
-    def _extractor_placemark(self, item, name=None, type=None, coordinates=None):
+    def _extractor_element(self, item, name=None):
         global e
         if name is None:
             name = []
-            type = []
-            coordinates = []
         for i in item:
             if 'Document' in i.tag:
-                self._extractor_placemark(i, name, type, coordinates)
+                self._extractor_element(i, name)
             elif 'Folder' in i.tag:
                 name.append(f'{i[0].text}')
-                self._extractor_placemark(i, name, type, coordinates)
+                self._extractor_element(i, name)
                 name.pop()
             elif 'Placemark' in i.tag:
                 for t in i.iter(f'{self.site}Point'):
