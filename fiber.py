@@ -1,10 +1,11 @@
 from helpers import meter
 
+
 class Fiber:
-    def __init__(self, stored=None, name=None, type=None, style=None, ):
+    def __init__(self, stored=None, name=None, style=None, ):
         self._stored = stored
         self._name = name
-        self._type = type
+        self._type = ''
         self._style = style
 
         self._length = 0.0
@@ -31,6 +32,10 @@ class Fiber:
     @property
     def type(self):
         return self._type
+
+    @type.setter
+    def type(self, value):
+        self._type = value
 
     @property
     def style(self):

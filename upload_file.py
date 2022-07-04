@@ -1,10 +1,10 @@
 import xml.etree.ElementTree as Et
-from abc import abstractmethod
 from fiber import Fiber
-
+from pole import Pole
 
 c = 0
 e = 0
+p = 0
 
 
 class UploadFile:
@@ -17,9 +17,15 @@ class UploadFile:
         self._coordinates_point = {}
 
         self._style = {}
-        self.pole = {}
+        self._pole = {}
         self.fiber = {}
         self.element = {}
+
+    def data_pole(self):
+        for ro in self._root.iter(f'{self.site}Folder'):
+            if 'POSTE' in ro[0].text.upper():
+                self._extractor_pole(ro)
+                return self._pole
 
     def fiber_rede(self):
         for ro in self._root.iter(f'{self.site}Folder'):
@@ -36,37 +42,52 @@ class UploadFile:
     def data_expansion(self, file):
         pass
 
-    def data_pole(self, file):
-        for root in self._root.iter(f'{self.site}Folder'):
-            if 'POSTE' in root.findtext(f'{self.site}name').upper():
-                for n, poste in enumerate(root.iter(f'{self.site}Placemark')):
-                    for coord in poste.iter(f'{self.site}Point'):
-                        self._coordenada_poste[n + 1] = coord.findtext(f'{self.site}coordinates').split(',')
-                    for data in poste.iter(f'{self.site}Data'):
+    def _extractor_pole(self, item, name=None):
+        global p
+        if name is None:
+            name = []
+        for i in item:
+            if 'Document' in i.tag:
+                self._extractor_pole(i, name)
+            elif 'Folder' in i.tag:
+                name.append(f'{i[0].text}')
+                self._extractor_pole(i, name)
+                name.pop()
+            elif 'Placemark' in i.tag:
+                for t in i.iter(f'{self.site}Point'):
+                    style = i.findtext(f'{self.site}styleUrl').replace('#', '')
+                    p += 1
+                    pole = Pole(stored=list(name))
+                    coordinates = t.findtext(f'{self.site}coordinates')
+                    pole.coordinates = coordinates
+                    pole.style = style
+                    for data in i.iter(f'{self.site}Data'):
                         if '00' in data.attrib['name']:
-                            self._tipo_poste[n + 1] = data.findtext(f'{self.site}value')
+                            pole.type = data.findtext(f'{self.site}value')
                         elif '01' in data.attrib['name']:
-                            self._altura_poste[n + 1] = data.findtext(f'{self.site}value')
+                            pole.height = data.findtext(f'{self.site}value')
                         elif '02' in data.attrib['name']:
-                            self._esforco_poste[n + 1] = data.findtext(f'{self.site}value')
+                            pole.effort = data.findtext(f'{self.site}value')
                         elif '03' in data.attrib['name']:
-                            self._rede_eletrica[n + 1] = data.findtext(f'{self.site}value')
+                            pole.electric = data.findtext(f'{self.site}value')
                         elif '04' in data.attrib['name']:
-                            self._quantidade_casa[n + 1] = data.findtext(f'{self.site}value')
+                            pole.house = data.findtext(f'{self.site}value')
                         elif '05' in data.attrib['name']:
-                            self._quantidade_comercio[n + 1] = data.findtext(f'{self.site}value')
+                            pole.business = data.findtext(f'{self.site}value')
                         elif '06' in data.attrib['name']:
-                            self._quantidade_apartamento[n + 1] = data.findtext(f'{self.site}value')
+                            pole.apartments = data.findtext(f'{self.site}value')
                         elif '07' in data.attrib['name']:
-                            self._tipo_equipamento[n + 1] = data.findtext(f'{self.site}value')
+                            pole.equipment = data.findtext(f'{self.site}value')
                         elif '08' in data.attrib['name']:
-                            self._codigo_poste[n + 1] = data.findtext(f'{self.site}value')
+                            pole.code = data.findtext(f'{self.site}value')
                         elif '09' in data.attrib['name']:
-                            self._ocupacao[n + 1] = data.findtext(f'{self.site}value')
+                            pole.occupation = data.findtext(f'{self.site}value')
                         elif 'pictures' in data.attrib['name']:
-                            self._foto[n + 1] = data.findtext(f'{self.site}value')
+                            pole.pictures = data.findtext(f'{self.site}value')
+                    name.append(f'{i[0].text}')
+                    name.pop()
+                    self._pole[p] = pole
 
-    @abstractmethod
     def _extractor_line(self, item, name=None):
         global c
         if name is None:
@@ -83,13 +104,13 @@ class UploadFile:
                     c += 1
                     style = i.findtext(f'{self.site}styleUrl').replace('#', '')
                     coordinates = t.findtext(f'{self.site}coordinates').strip()
-                    fiber = Fiber(stored=list(name), name=i[0].text, type=name[-1], style=style)
+                    fiber = Fiber(stored=list(name), name=i[0].text, style=style)
                     fiber.route_fiber = coordinates
+                    fiber.type = name[-1]
                     name.append(f'{i[0].text}')
                     name.pop()
                     self.fiber[c] = fiber
 
-    @abstractmethod
     def _extractor_element(self, item, name=None):
         global e
         if name is None:
@@ -104,13 +125,13 @@ class UploadFile:
             elif 'Placemark' in i.tag:
                 for t in i.iter(f'{self.site}Point'):
                     e += 1
+
                     name.append(f'{i[0].text}')
                     self._name_point[e] = list(name)
                     name.pop()
                     self._type_point[e] = i.findtext(f'{self.site}styleUrl').replace('#', '')
                     self._coordinates_point[e] = t.findtext(f'{self.site}coordinates').split(',')
 
-    @abstractmethod
     def _extractor_style(self):
         for root in self._root.iter(f'{self.site}Style'):
             if 'Style' in root.tag:
