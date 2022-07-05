@@ -1,6 +1,8 @@
 import xml.etree.ElementTree as Et
 from fiber import Fiber
 from pole import Pole
+from point import Point
+from style import Style
 
 c = 0
 e = 0
@@ -11,12 +13,12 @@ class UploadFile:
     def __init__(self, file):
         doc = Et.parse(file)
         self._root = doc.getroot()
-        self.site = '{http://www.opengis.net/kml/2.2}'
+        self.site = '{http://www.opengis.net/kml/2.2}' #'http://maps.google.com/mapfiles/kml/'
         self._name_point = {}
         self._type_point = {}
         self._coordinates_point = {}
 
-        self._style = {}
+        self._style = []
         self._pole = {}
         self.fiber = {}
         self.element = {}
@@ -57,10 +59,9 @@ class UploadFile:
                 for t in i.iter(f'{self.site}Point'):
                     style = i.findtext(f'{self.site}styleUrl').replace('#', '')
                     p += 1
-                    pole = Pole(stored=list(name))
+                    pole = Pole(stored=list(name), style=style)
                     coordinates = t.findtext(f'{self.site}coordinates')
                     pole.coordinates = coordinates
-                    pole.style = style
                     for data in i.iter(f'{self.site}Data'):
                         if '00' in data.attrib['name']:
                             pole.type = data.findtext(f'{self.site}value')
@@ -125,39 +126,62 @@ class UploadFile:
             elif 'Placemark' in i.tag:
                 for t in i.iter(f'{self.site}Point'):
                     e += 1
-
+                    style = i.findtext(f'{self.site}styleUrl').replace('#', '')
+                    coordinates = t.findtext(f'{self.site}coordinates')
+                    point = Point(stored=list(name), name=i[0].text, style=style)
+                    point.coordinates = coordinates
                     name.append(f'{i[0].text}')
-                    self._name_point[e] = list(name)
                     name.pop()
-                    self._type_point[e] = i.findtext(f'{self.site}styleUrl').replace('#', '')
-                    self._coordinates_point[e] = t.findtext(f'{self.site}coordinates').split(',')
+                    self.element[e] = point
 
-    def _extractor_style(self):
+    def extractor_style(self):
+
         for root in self._root.iter(f'{self.site}Style'):
-            if 'Style' in root.tag:
-                self._style[root.attrib['id']] = ''
-                for icon_style in root.iter(f'{self.site}IconStyle'):
-                    cor_icon = icon_style.findtext(f'{self.site}color')
-                    for icon in icon_style.iter(f'{self.site}Icon'):
-                        tipo_icon = icon.findtext(f'{self.site}href').replace('http://maps.google.com/mapfiles/kml/',
-                                                                              '')
-                        if cor_icon is None:
-                            for label in root.iter(f'{self.site}LabelStyle'):
-                                cor_icon = label.findtext(f'{self.site}color')
-                        self._style[root.attrib['id']] = f'{tipo_icon}{cor_icon}'
+            print(root.attrib['id'])
+            style = Style(identifier=root.attrib['id'])
+            for styles in root:
+                if 'IconStyle' in styles.tag:
+                    for icon_style in styles:
+                        if 'color' in icon_style.tag:
+                            print(icon_style.text)
+                            style.color = icon_style.text
+                        if f'{self.site}Icon' == icon_style.tag:
+                            print(icon_style.findtext(f'{self.site}href'))
+                            style.icon = icon_style.findtext(f'{self.site}href')
+                # if ''
+            self._style.append(style)
+            print('============')
+        return self._style
 
-                if self._style[root.attrib['id']] == '':
-                    for poly in root.iter(f'{self.site}PolyStyle'):
-                        cor_poly = poly.findtext(f'{self.site}color')
-                        self._style[root.attrib['id']] = cor_poly
 
-                if self._style[root.attrib['id']] == '':
-                    for line in root.iter(f'{self.site}LineStyle'):
-                        cor_line = line.findtext(f'{self.site}color')
-                        self._style[root.attrib['id']] = cor_line
 
-        for root2 in self._root.iter(f'{self.site}StyleMap'):
-            for pair in root2.iter(f'{self.site}Pair'):
-                if 'normal' in pair.findtext(f'{self.site}key'):
-                    trato_url = pair.findtext(f'{self.site}styleUrl').replace('#', '')
-                    self._style[root2.attrib['id']] = self._style[trato_url]
+        #     if 'Style' in root.tag:
+        #         self._style[root.attrib['id']] = ''
+        #
+        #
+        #         for icon_style in root.iter(f'{self.site}IconStyle'):
+        #
+        #             cor_icon = icon_style.findtext(f'{self.site}color')
+        #             for icon in icon_style.iter(f'{self.site}Icon'):
+        #                 tipo_icon = icon.findtext(f'{self.site}href').replace('http://maps.google.com/mapfiles/kml/',
+        #                                                                       '')
+        #                 if cor_icon is None:
+        #                     for label in root.iter(f'{self.site}LabelStyle'):
+        #                         cor_icon = label.findtext(f'{self.site}color')
+        #                 self._style[root.attrib['id']] = f'{tipo_icon}{cor_icon}'
+        #
+        #         if self._style[root.attrib['id']] == '':
+        #             for poly in root.iter(f'{self.site}PolyStyle'):
+        #                 cor_poly = poly.findtext(f'{self.site}color')
+        #                 self._style[root.attrib['id']] = cor_poly
+        #
+        #         if self._style[root.attrib['id']] == '':
+        #             for line in root.iter(f'{self.site}LineStyle'):
+        #                 cor_line = line.findtext(f'{self.site}color')
+        #                 self._style[root.attrib['id']] = cor_line
+        #
+        # for root2 in self._root.iter(f'{self.site}StyleMap'):
+        #     for pair in root2.iter(f'{self.site}Pair'):
+        #         if 'normal' in pair.findtext(f'{self.site}key'):
+        #             trato_url = pair.findtext(f'{self.site}styleUrl').replace('#', '')
+        #             self._style[root2.attrib['id']] = self._style[trato_url]

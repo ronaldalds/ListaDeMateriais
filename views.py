@@ -1,11 +1,11 @@
-import xml.etree.ElementTree as Et
-from io import BytesIO
+# import xml.etree.ElementTree as Et
+# from io import BytesIO
 from flask import flash, request, redirect, render_template, session, url_for, send_file
-from os import path, remove
-from werkzeug.utils import secure_filename
+# from os import path, remove
+# from werkzeug.utils import secure_filename
 from app import app, db
-from models import Usuarios, File
-from projeto import Projeto
+from models import Usuarios
+# from projeto import Projeto
 from helpers import FileForm, UsuariosForm
 from flask_bcrypt import check_password_hash, generate_password_hash
 

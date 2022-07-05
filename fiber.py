@@ -2,7 +2,7 @@ from helpers import meter
 
 
 class Fiber:
-    def __init__(self, stored=None, name=None, style=None, ):
+    def __init__(self, stored=None, name=None, style=None):
         self._stored = stored
         self._name = name
         self._type = ''

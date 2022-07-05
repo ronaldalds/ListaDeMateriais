@@ -1,10 +1,10 @@
 class Pole:
-    def __init__(self, stored=None):
+    def __init__(self, stored=None, style=None):
         self._stored = stored
         self._name = ''
         self._coordinates = []
         self._type = ''
-        self._style = ''
+        self._style = style
         self._height = 9
         self._effort = 300
         self._electric = ''
@@ -16,7 +16,6 @@ class Pole:
         self._occupation = ''
         self._pictures = ''
         self._client = 0
-
 
     @property
     def coordinates(self):
