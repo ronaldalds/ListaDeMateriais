@@ -1,3 +1,6 @@
+from helpers import meter
+
+
 class Point:
     def __init__(self, stored=None, name=None, style=None):
         self._stored = stored
@@ -5,6 +8,7 @@ class Point:
         self._type = ''
         self._style = style
         self._coordinates = []
+        self._pole = ''
 
     @property
     def coordinates(self):
@@ -21,3 +25,25 @@ class Point:
     @style.setter
     def style(self, value):
         self._style = value
+
+    @property
+    def name(self):
+        return self._name
+
+    def type(self, value):
+        if self._type == '':
+            for i in value:
+                if self._style == i.identifier:
+                    self._type = i.type
+                    return i.type
+        else:
+            return self._type
+
+    def pole(self, value):
+        if self._pole == '':
+            for i in value.values():
+                if meter(i.coordinates, self._coordinates) < 2:
+                    self._pole = i
+                    return i
+        else:
+            return self._pole

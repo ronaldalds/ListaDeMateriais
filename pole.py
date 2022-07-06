@@ -16,6 +16,7 @@ class Pole:
         self._occupation = ''
         self._pictures = ''
         self._client = 0
+        self._user = False
 
     @property
     def coordinates(self):

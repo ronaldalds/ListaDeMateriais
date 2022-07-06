@@ -1,25 +1,28 @@
 from upload_file import UploadFile
+import time
 
-project = UploadFile('FTT.kml') # open file project 3.203,76
+inicio = time.time()
+project = UploadFile('FTT.kml')  # open file project
+pole = project.data_pole()  # extractor pole
+style = project.data_style()  # extractor style
 
-style = project.extractor_style() # upload style all project
+fiber = project.element('REDE FTTH')  # extractor fiber
+print(len(fiber[0]))
+fiber_expansion = project.element('EXPANSION')  # extractor fiber
 
-data = project.fiber_rede() # extractor data file
-pole = project.data_pole() # extractor pole file
+print(len(fiber_expansion[0]))
 
-# print(style)
-for i in style:
-    print(i.type)
-# print(data)
-# print(pole)
+fim = time.time()
+print(fim - inicio)
 
-# for p in pole:
-#     print(p, pole[p].coordinates, pole[p].height)
+# inicio1 = time.time()
+# for i in fiber[1]:
+#     i.type(style), i.name, i.pole(pole)
+# fim1 = time.time()
+# print(fim1 - inicio1)
 
-
-# for i in data:
-
-    # print(i, data[i].route_fiber, data[i].length)
-    # print(i, data[i].stored, data[i].type, data[i].style)
-
-# print(data)
+# inicio2 = time.time()
+# for i in fiber[1]:
+#     i.type(style), i.name, i.pole(pole)
+# fim2 = time.time()
+# print(fim2 - inicio2)

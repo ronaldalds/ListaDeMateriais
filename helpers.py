@@ -28,7 +28,7 @@ def meter(x, y):
 
 
 def element(icon=None, color=None):
-    if 'shapes/donut.png'in icon and 'ff00ff00' in color:
+    if 'shapes/donut.png' in icon and 'ff00ff00' in color:
         return 'CEO'
     elif 'shapes/donut.png' in icon and 'ff00ffff' in color:
         return 'CEO-Futura'
@@ -48,6 +48,5 @@ def element(icon=None, color=None):
         return 'CTO-Futura'
     elif 'shapes/ranger_station.png' in icon:
         return 'POP'
-
     else:
         return 'non default'
