@@ -2,7 +2,7 @@ import xml.etree.ElementTree as Et
 from fiber import Fiber
 from pole import Pole
 from point import Point
-from style import Style
+from style import Style, Style_Map
 
 c = 0
 e = 0
@@ -13,7 +13,7 @@ class UploadFile:
     def __init__(self, file):
         doc = Et.parse(file)
         self._root = doc.getroot()
-        self.site = '{http://www.opengis.net/kml/2.2}' #'http://maps.google.com/mapfiles/kml/'
+        self.site = '{http://www.opengis.net/kml/2.2}'  # 'http://maps.google.com/mapfiles/kml/'
         self._name_point = {}
         self._type_point = {}
         self._coordinates_point = {}
@@ -135,53 +135,35 @@ class UploadFile:
                     self.element[e] = point
 
     def extractor_style(self):
-
         for root in self._root.iter(f'{self.site}Style'):
-            print(root.attrib['id'])
             style = Style(identifier=root.attrib['id'])
             for styles in root:
                 if 'IconStyle' in styles.tag:
                     for icon_style in styles:
                         if 'color' in icon_style.tag:
-                            print(icon_style.text)
                             style.color = icon_style.text
                         if f'{self.site}Icon' == icon_style.tag:
-                            print(icon_style.findtext(f'{self.site}href'))
                             style.icon = icon_style.findtext(f'{self.site}href')
-                # if ''
+                if 'LineStyle' in styles.tag:
+                    for line_style in styles:
+                        if 'color' in line_style.tag:
+                            style.color = line_style.text
+                        if 'width' in line_style.tag:
+                            style.width = line_style.text
+                if 'PolyStyle' in styles.tag:
+                    for poly_style in styles:
+                        if 'color' in poly_style.tag:
+                            style.color = poly_style.text
+            style.types()
             self._style.append(style)
-            print('============')
+        for root in self._root.iter(f'{self.site}StyleMap'):
+            style_map = Style_Map(identifier=root.attrib['id'])
+            for pair in root.iter(f'{self.site}Pair'):
+                if 'normal' in pair.findtext(f'{self.site}key'):
+                    style_map.pair = pair.findtext(f'{self.site}styleUrl')
+                    for i in self._style:
+                        if style_map.pair == i.identifier:
+                            style_map.type = i.type
+
+            self._style.append(style_map)
         return self._style
-
-
-
-        #     if 'Style' in root.tag:
-        #         self._style[root.attrib['id']] = ''
-        #
-        #
-        #         for icon_style in root.iter(f'{self.site}IconStyle'):
-        #
-        #             cor_icon = icon_style.findtext(f'{self.site}color')
-        #             for icon in icon_style.iter(f'{self.site}Icon'):
-        #                 tipo_icon = icon.findtext(f'{self.site}href').replace('http://maps.google.com/mapfiles/kml/',
-        #                                                                       '')
-        #                 if cor_icon is None:
-        #                     for label in root.iter(f'{self.site}LabelStyle'):
-        #                         cor_icon = label.findtext(f'{self.site}color')
-        #                 self._style[root.attrib['id']] = f'{tipo_icon}{cor_icon}'
-        #
-        #         if self._style[root.attrib['id']] == '':
-        #             for poly in root.iter(f'{self.site}PolyStyle'):
-        #                 cor_poly = poly.findtext(f'{self.site}color')
-        #                 self._style[root.attrib['id']] = cor_poly
-        #
-        #         if self._style[root.attrib['id']] == '':
-        #             for line in root.iter(f'{self.site}LineStyle'):
-        #                 cor_line = line.findtext(f'{self.site}color')
-        #                 self._style[root.attrib['id']] = cor_line
-        #
-        # for root2 in self._root.iter(f'{self.site}StyleMap'):
-        #     for pair in root2.iter(f'{self.site}Pair'):
-        #         if 'normal' in pair.findtext(f'{self.site}key'):
-        #             trato_url = pair.findtext(f'{self.site}styleUrl').replace('#', '')
-        #             self._style[root2.attrib['id']] = self._style[trato_url]

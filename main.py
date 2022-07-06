@@ -7,8 +7,9 @@ style = project.extractor_style() # upload style all project
 data = project.fiber_rede() # extractor data file
 pole = project.data_pole() # extractor pole file
 
-print(style)
-
+# print(style)
+for i in style:
+    print(i.type)
 # print(data)
 # print(pole)
 
