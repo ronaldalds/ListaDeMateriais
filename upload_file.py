@@ -131,9 +131,9 @@ class UploadFile:
                 for t in i.iter(f'{self.site}LineString'):
                     style = i.findtext(f'{self.site}styleUrl').replace('#', '')
                     coordinates = t.findtext(f'{self.site}coordinates').strip()
-                    fiber = Fiber(stored=list(name), name=i[0].text, style=style)
+                    fiber = Fiber(stored=list(name), description=i[0].text, style=style, tp=name[-1].upper())
                     fiber.route_fiber = coordinates
-                    fiber.type = name[-1]
+                    # fiber.type = name[-1].upper()
                     name.append(f'{i[0].text}')
                     name.pop()
                     self._fiber.append(fiber)

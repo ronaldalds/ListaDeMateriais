@@ -50,3 +50,13 @@ def element(icon=None, color=None):
         return 'POP'
     else:
         return 'non default'
+
+
+def list_fiber(value):
+    list = {}
+    for i in value:
+        if not i.name in list:
+            list[i.name] = i.length
+        else:
+            list[i.name] += i.length
+    return list
