@@ -17,6 +17,23 @@ class Pole:
         self._pictures = ''
         self._client = 0
         self._user = False
+        self._eq = []
+
+    @property
+    def user(self):
+        return self._user
+
+    @user.setter
+    def user(self, value):
+        self._user = value
+
+    @property
+    def eq(self):
+        return self._eq
+
+    @eq.setter
+    def eq(self, value):
+        self._eq.append(value)
 
     @property
     def coordinates(self):

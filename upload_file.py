@@ -4,15 +4,13 @@ from pole import Pole
 from point import Point
 from style import Style, Style_Map
 
-p = 0
-
 
 class UploadFile:
     def __init__(self, file):
         doc = Et.parse(file)
         self._root = doc.getroot()
         self.site = '{http://www.opengis.net/kml/2.2}'
-        self._pole = {}
+        self._pole = []
         self._style = []
         self._fiber = []
         self._element = []
@@ -65,7 +63,6 @@ class UploadFile:
         return self._fiber, self._element
 
     def _extractor_pole(self, item, name=None):
-        global p
         if name is None:
             name = []
         for i in item:
@@ -78,7 +75,6 @@ class UploadFile:
             elif 'Placemark' in i.tag:
                 for t in i.iter(f'{self.site}Point'):
                     style = i.findtext(f'{self.site}styleUrl').replace('#', '')
-                    p += 1
                     pole = Pole(stored=list(name), style=style)
                     coordinates = t.findtext(f'{self.site}coordinates')
                     pole.coordinates = coordinates
@@ -107,7 +103,7 @@ class UploadFile:
                             pole.pictures = data.findtext(f'{self.site}value')
                     name.append(f'{i[0].text}')
                     name.pop()
-                    self._pole[p] = pole
+                    self._pole.append(pole)
 
     def _extractor_element(self, item, name=None):
         if name is None:

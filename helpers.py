@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, validators, FileField, StringField, PasswordField
-from math import sqrt
+from math import sqrt, ceil
 from equipamento import Equipamento
 
 
@@ -24,7 +24,7 @@ def meter(x, y):
     cat1 = ((float(x[0])) - (float(y[0]))) * 1852 * 60
     cat2 = ((float(x[1])) - (float(y[1]))) * 1852 * 60
     h = sqrt((cat1 * cat1) + (cat2 * cat2))
-    return float(h)
+    return ceil(h)
 
 
 def element(icon=None, color=None):
@@ -52,11 +52,37 @@ def element(icon=None, color=None):
         return 'non default'
 
 
-def list_fiber(value):
-    list = {}
+def osnap(value, pole):
     for i in value:
-        if not i.name in list:
-            list[i.name] = i.length
+        i.pole = pole
+
+
+def tp(value, style):
+    for i in value:
+        i.type = style
+
+
+def list_fiber(value):
+    lines = {}
+    for i in value:
+        if i.name not in lines:
+            lines[i.name] = i.length
         else:
-            list[i.name] += i.length
-    return list
+            lines[i.name] += i.length
+    return lines
+
+
+def list_sco(value):
+    sco = []
+    for i in value:
+        for t in i.sco:
+            sco.append(t)
+    return set(sco)
+
+
+def pole_user(value):
+    c = 0
+    for i in value:
+        if i.user:
+            c += 1
+    return c

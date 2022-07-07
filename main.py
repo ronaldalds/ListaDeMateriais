@@ -1,35 +1,37 @@
 from upload_file import UploadFile
+from helpers import osnap, tp, list_fiber, list_sco, pole_user
 import time
-from helpers import list_fiber
 
 inicio = time.time()
+
 project = UploadFile('FTT.kml')  # open file project
 pole = project.data_pole()  # extractor pole
 style = project.data_style()  # extractor style
+element = project.element('REDE FTTH')  # extractor rede
+element_expansion = project.element('EXPANSION')  # extractor expansion
+osnap(value=element[0], pole=pole)
+osnap(value=element[1], pole=pole)
+tp(value=element[1], style=style)
 
-fiber = project.element('REDE FTTH')  # extractor fiber
-print(list_fiber(fiber[0]))
-fiber_expansion = project.element('EXPANSION')  # extractor fiber
+for i in element[1]:
+    print(i.length)
+# print(pole_user(pole))
+# for i in pole:
+#     print(i.user)
 
-for i in list_fiber(fiber[0]):
-    print(i)
-# print(len(fiber_expansion[0]))
+# print(len(list_sco(element[0])))
+# for i in element[0]:
+#     print(i.sco)
+# for i in pole:
+#     if i.eq:
+#         try:
+#             print('==================================== ',i.eq[0].name, i.eq[1].name)
+#         except:
+#             print(i.eq[0].name)
+#         print(i.eq, i.eq[0].name)
+
+# for i in element[1]:
+#     print(i.name, i.stored, i.type)
 
 fim = time.time()
 print(fim - inicio)
-
-inicio1 = time.time()
-
-# print(fiber[0][0].route_pole(pole))
-
-# for i in fiber[0]:
-#
-#     print(i.stored,i.type,i.description, i.name, i.length)
-# fim1 = time.time()
-# print(fim1 - inicio1)
-
-# inicio2 = time.time()
-# for i in fiber[1]:
-#     i.type(style), i.name, i.pole(pole)
-# fim2 = time.time()
-# print(fim2 - inicio2)
