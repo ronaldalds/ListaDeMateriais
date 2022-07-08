@@ -1,4 +1,4 @@
-from helpers import meter
+import processing
 
 
 class Fiber:
@@ -10,22 +10,22 @@ class Fiber:
         self._name = self.processing()
         self._route_fiber = []
         self._route_pole = []
-        self._length = 0.0
+        self._length = 0
         self._sco = []
 
     def processing(self):
-        if self._type.upper() == 'RA':
-            if '12F' in self._description.split('-')[1]:
+        if self.type == 'RA':
+            if '12F' in self.description.split('-')[1]:
                 return 'CFOA-SM-ASU80-S 12F MINI-RA'
-            if '06F' in self._description.split('-')[1]:
+            if '06F' in self.description.split('-')[1]:
                 return 'CFOA-SM-ASU80-S 06F MINI-RA'
             return 'CFOA-SM-ASU80-S 12F MINI-RA'
-        elif self._type == 'AP' or self._type == 'AS':
-            return self._description.split('|')[2].strip()
-        elif 'CORDOALHA' in self._type:
+        elif self.type == 'AP' or self.type == 'AS':
+            return self.description.split('|')[2].strip()
+        elif 'CORDOALHA' in self.type:
             return 'CORDOALHA'
         else:
-            return f'Folder {self._stored[-2]} {self._stored[-3]} non default'
+            return f'Folder {self.stored[-1]} {self.stored[-2]} {self.stored[-3]} {self.stored[-4]} non default'
 
     @property
     def route_fiber(self):
@@ -40,7 +40,7 @@ class Fiber:
             if p == 0:
                 p = i
                 continue
-            self._length += meter(i, p)
+            self.length = processing.meter(i, p)
             p = i
 
     @property
@@ -73,7 +73,7 @@ class Fiber:
 
     @length.setter
     def length(self, value):
-        self._length += value
+        self._length += int(value * 1.08)
 
     @property
     def pole(self):
@@ -83,13 +83,33 @@ class Fiber:
     def pole(self, value):
         if not self._route_pole:
             p0 = 0
-            for i in self._route_fiber:
+            for i in self.route_fiber:
                 self._route_pole.append(i)
                 for t in value:
-                    if meter(t.coordinates, i) < 2:
+                    if processing.meter(t.coordinates, i) < 2:
                         self._route_pole.pop()
                         self._route_pole.append(t)
                         t.user = True
+                        if t.eq:
+                            for e in t.eq:
+                                if self.type == 'AP' or self.type == 'AS':
+                                    if self.stored[0] == e.stored[0] and \
+                                            self.stored[1] == e.stored[1]:
+                                        if self._route_fiber[-1] == i or \
+                                                self._route_fiber[0] == i or \
+                                                e.type == 'Reserva':
+                                            self.length = e.length
+                                        else:
+                                            self.length = e.length * 2
+                                elif self.stored[0] == e.stored[0] and \
+                                        self.stored[1] == e.stored[1] and \
+                                        self.stored[2] == e.stored[2]:
+                                    if self._route_fiber[-1] == i or \
+                                            self._route_fiber[0] == i or \
+                                            e.type == 'Reserva':
+                                        self.length = e.length
+                                    else:
+                                        self.length = e.length * 2
             for c, p in enumerate(self._route_pole):
                 try:
                     p1 = p.coordinates

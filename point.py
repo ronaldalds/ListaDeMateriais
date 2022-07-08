@@ -1,4 +1,4 @@
-from helpers import meter
+import processing
 import re
 
 class Point:
@@ -84,6 +84,6 @@ class Point:
     def pole(self, value):
         if self._pole == '':
             for i in value:
-                if meter(i.coordinates, self._coordinates) < 2:
+                if processing.meter(i.coordinates, self._coordinates) < 2:
                     i.eq = self
                     self._pole = i

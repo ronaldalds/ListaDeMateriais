@@ -1,5 +1,5 @@
 from upload_file import UploadFile
-from helpers import osnap, tp, list_fiber, list_sco, pole_user
+from processing import osnap, tp, list_fiber, list_sco, pole_user
 import time
 
 inicio = time.time()
@@ -9,17 +9,20 @@ pole = project.data_pole()  # extractor pole
 style = project.data_style()  # extractor style
 element = project.element('REDE FTTH')  # extractor rede
 element_expansion = project.element('EXPANSION')  # extractor expansion
-osnap(value=element[0], pole=pole)
 osnap(value=element[1], pole=pole)
 tp(value=element[1], style=style)
+osnap(value=element[0], pole=pole)
 
-for i in element[1]:
-    print(i.length)
+
+for i in list_fiber(element[0]):
+    print(i, list_fiber(element[0])[i])
+# for i in element[1]:
+#     print(i.length)
 # print(pole_user(pole))
 # for i in pole:
 #     print(i.user)
 
-# print(len(list_sco(element[0])))
+
 # for i in element[0]:
 #     print(i.sco)
 # for i in pole:

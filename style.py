@@ -1,4 +1,4 @@
-from helpers import element
+import processing
 class Style:
     def __init__(self, identifier):
         self._identifier = identifier
@@ -40,7 +40,7 @@ class Style:
         return self._type
 
     def types(self):
-        self._type = element(icon=self.icon, color=self.color)
+        self._type = processing.element(icon=self.icon, color=self.color)
 
 
 class Style_Map:
