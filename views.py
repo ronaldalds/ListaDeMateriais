@@ -2,7 +2,7 @@ from flask import flash, request, redirect, render_template, session, url_for
 from app import app, db
 from models import Usuarios
 from helpers import FileForm, UsuariosForm
-from processing import load_file, osnap, tp, list_fiber
+from processing import load_file, osnap, tp, list_fiber, list_strap, list_tie
 from flask_bcrypt import check_password_hash, generate_password_hash
 # from werkzeug.utils import secure_filename
 import time
@@ -63,17 +63,22 @@ def upload_file():
     if form.is_submitted():
         file = form.file.data
         a = time.time()
-        project = load_file(file)
-        pole = project.data_pole()
-        style = project.data_style()
-        element = project.element('REDE FTTH')
-        osnap(value=element[1], pole=pole)
-        tp(value=element[1], style=style)
-        osnap(value=element[0], pole=pole)
-        fiber = list_fiber(element[0])
+        project = load_file(file)  # load project
+        pole = project.data_pole()  # load pole
+        style = project.data_style()  # load style
+        element = project.element('REDE FTTH')  # list Main project
+        osnap(value=element[1], pole=pole)  # osnap point
+        tp(value=element[1], style=style)  # type point
+        osnap(value=element[0], pole=pole)  # osnap fiber
+        fiber = list_fiber(element[0])  # fiber counter
+        strap = list_strap(element[0])  # strap counter
+        tie = list_tie(element[0])  # tie counter
+
         b = time.time()
-        print(b - a)
-        return render_template('lista.html', equipamento=fiber)
+        return render_template('lista.html',
+                               fiber=fiber,
+                               strap=strap,
+                               tie=tie)
     return redirect(url_for('index'))
 
 

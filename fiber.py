@@ -12,6 +12,24 @@ class Fiber:
         self._route_pole = []
         self._length = 0
         self._sco = []
+        self._strap = 0
+        self._tie = 0
+
+    @property
+    def strap(self):
+        return self._strap
+
+    @strap.setter
+    def strap(self, value):
+        self._strap = int(value * 0.9)
+
+    @property
+    def tie(self):
+        return self._tie
+
+    @tie.setter
+    def tie(self, value):
+        self._tie = int(value * 0.17)
 
     def processing(self):
         if self.type == 'RA':
@@ -36,6 +54,8 @@ class Fiber:
         p = 0
         for i in route.split(' '):
             self._route_fiber.append(i.split(','))
+        self.strap = len(self.route_fiber)
+        self.tie = len(self.route_fiber)
         for i in self.route_fiber:
             if p == 0:
                 p = i

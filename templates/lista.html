@@ -16,11 +16,27 @@
                 </tr>
             </thead>
             <tbody>
-            {% for cabo in equipamento %}
+            {% for cabo in fiber %}
                 <tr>
                     <td>{{ cabo }}</td>
                     <td>M</td>
-                    <td>{{  equipamento[cabo]  }}</td>
+                    <td>{{ fiber[cabo] }}</td>
+                </tr>
+            {% endfor %}
+
+            {% for alca in strap %}
+                <tr>
+                    <td>Alça {{ alca }}</td>
+                    <td>und</td>
+                    <td>{{ strap[alca] }}</td>
+                </tr>
+            {% endfor %}
+
+            {% for laco in tie %}
+                <tr>
+                    <td>Laço {{ laco }}</td>
+                    <td>und</td>
+                    <td>{{ tie[laco] }}</td>
                 </tr>
             {% endfor %}
             </tbody>
