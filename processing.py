@@ -47,11 +47,35 @@ def tp(value, style):
 def list_fiber(value):
     lines = {}
     for i in value:
-        if i.name not in lines:
-            lines[i.name] = i.length
-        else:
-            lines[i.name] += i.length
+        if i.length != 0:
+            if i.name not in lines:
+                lines[i.name] = i.length
+            else:
+                lines[i.name] += i.length
     return lines
+
+
+def list_strap(value):
+    strap = {}
+    for i in value:
+        print(i.strap)
+        if i.strap != 0:
+            if i.name not in strap:
+                strap[i.name] = i.strap
+            else:
+                strap[i.name] += i.strap
+    return strap
+
+
+def list_tie(value):
+    tie = {}
+    for i in value:
+        if i.tie != 0:
+            if i.name not in tie:
+                tie[i.name] = i.tie
+            else:
+                tie[i.name] += i.tie
+    return tie
 
 
 def list_sco(value):
