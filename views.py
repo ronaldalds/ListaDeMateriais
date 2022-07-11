@@ -1,11 +1,14 @@
-from flask import flash, request, redirect, render_template, session, url_for
-from app import app, db
-from models import Usuarios
-from helpers import FileForm, UsuariosForm
-from processing import load_file, osnap, tp, list_fiber, list_strap, list_tie
-from flask_bcrypt import check_password_hash, generate_password_hash
 # from werkzeug.utils import secure_filename
 import time
+
+from flask import flash, request, redirect, render_template, session, url_for
+from flask_bcrypt import check_password_hash, generate_password_hash
+
+from app import app, db
+from helpers import FileForm, UsuariosForm
+from models import Usuarios
+from processing import load_file, osnap, tp, list_fiber, list_strap, list_tie, list_sco, pole_user, platelet_launch, \
+    wire_la
 
 
 @app.route('/')
@@ -70,15 +73,18 @@ def upload_file():
         osnap(value=element[1], pole=pole)  # osnap point
         tp(value=element[1], style=style)  # type point
         osnap(value=element[0], pole=pole)  # osnap fiber
-        fiber = list_fiber(element[0])  # fiber counter
-        strap = list_strap(element[0])  # strap counter
-        tie = list_tie(element[0])  # tie counter
+
+
 
         b = time.time()
         return render_template('lista.html',
-                               fiber=fiber,
-                               strap=strap,
-                               tie=tie)
+                               fiber=list_fiber(element[0]),
+                               strap=list_strap(element[0]),
+                               tie=list_tie(element[0]),
+                               user_fusion=pole_user(pole),
+                               sco=len(list_sco(element[0])),
+                               platelet_launch=platelet_launch(element[0]),
+                               wire_launch=wire_la(element[0]))
     return redirect(url_for('index'))
 
 

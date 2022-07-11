@@ -14,6 +14,10 @@ class Fiber:
         self._sco = []
         self._strap = 0
         self._tie = 0
+        self._platelet_fusion = 0
+        self._platelet_launch = 0
+        self._wire_fusion = 0
+        self._wire_launch = 0
 
     @property
     def strap(self):
@@ -22,6 +26,22 @@ class Fiber:
     @strap.setter
     def strap(self, value):
         self._strap = int(value * 0.9)
+
+    @property
+    def wire_fusion(self):
+        return self._wire_fusion
+
+    @wire_fusion.setter
+    def wire_fusion(self, value):
+        self._wire_fusion += value
+
+    @property
+    def wire_launch(self):
+        return self._wire_launch
+
+    @wire_launch.setter
+    def wire_launch(self, value):
+        self._wire_launch += value
 
     @property
     def tie(self):
@@ -56,12 +76,16 @@ class Fiber:
             self._route_fiber.append(i.split(','))
         self.strap = len(self.route_fiber)
         self.tie = len(self.route_fiber)
+        self.platelet_launch = len(self.route_fiber)
+        self.wire_launch = len(self.route_fiber) * 0.3
         for i in self.route_fiber:
             if p == 0:
                 p = i
                 continue
             self.length = processing.meter(i, p)
             p = i
+        if 'CORDOALHA' in self.type:
+            self.wire_launch = self.length * 0.1
 
     @property
     def stored(self):
@@ -96,6 +120,22 @@ class Fiber:
         self._length += int(value * 1.08)
 
     @property
+    def platelet_fusion(self):
+        return self._platelet_fusion
+
+    @platelet_fusion.setter
+    def platelet_fusion(self, value):
+        self._platelet_fusion += value
+
+    @property
+    def platelet_launch(self):
+        return self._platelet_launch
+
+    @platelet_launch.setter
+    def platelet_launch(self, value):
+        self._platelet_launch += value
+
+    @property
     def pole(self):
         return self._route_pole
 
@@ -113,8 +153,14 @@ class Fiber:
                         if t.eq:
                             for e in t.eq:
                                 if self.type == 'AP' or self.type == 'AS':
-                                    if self.stored[0] == e.stored[0] and \
-                                            self.stored[1] == e.stored[1]:
+                                    if (self.stored[0] == e.stored[0] and self.stored[1] == e.stored[1] and self.stored[2] == e.stored[2]) or \
+                                            (self.stored[0] == e.stored[0] and self.stored[1] == e.stored[1] and e.stored[3] == 'HUBs'):
+                                        self.platelet_launch = e.platelet_la
+                                        self.wire_launch = e.platelet_la * 0.3
+                                        self.platelet_fusion = e.platelet_fus
+                                        self.wire_fusion = e.platelet_fus * 0.3
+                                        self.wire_launch = e.wire_la
+                                        self.wire_fusion = e.wire_fus
                                         if self._route_fiber[-1] == i or \
                                                 self._route_fiber[0] == i or \
                                                 e.type == 'Reserva':
@@ -124,6 +170,12 @@ class Fiber:
                                 elif self.stored[0] == e.stored[0] and \
                                         self.stored[1] == e.stored[1] and \
                                         self.stored[2] == e.stored[2]:
+                                    self.platelet_launch = e.platelet_la
+                                    self.wire_launch = e.platelet_la * 0.3
+                                    self.platelet_fusion = e.platelet_fus
+                                    self.wire_fusion = e.platelet_fus * 0.3
+                                    self.wire_launch = e.wire_la
+                                    self.wire_fusion = e.wire_fus
                                     if self._route_fiber[-1] == i or \
                                             self._route_fiber[0] == i or \
                                             e.type == 'Reserva':

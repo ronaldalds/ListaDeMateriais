@@ -58,7 +58,6 @@ def list_fiber(value):
 def list_strap(value):
     strap = {}
     for i in value:
-        print(i.strap)
         if i.strap != 0:
             if i.name not in strap:
                 strap[i.name] = i.strap
@@ -92,6 +91,34 @@ def pole_user(value):
         if i.user:
             c += 1
     return c
+
+
+def platelet_fusion(value):
+    c = 0
+    for i in value:
+        c += i.platelet_fusion
+    return c
+
+
+def platelet_launch(value):
+    c = 0
+    for i in value:
+        c += i.platelet_launch
+    return c
+
+
+def wire_la(value):
+    c = 0
+    for i in value:
+        c += i.wire_launch
+    return ceil(c / 130)
+
+
+def wire_fus(value):
+    c = 0
+    for i in value:
+        c += i.wire_fusion
+    return ceil(c / 130)
 
 
 def load_file(file):
