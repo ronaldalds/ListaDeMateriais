@@ -63,6 +63,8 @@ class Fiber:
         elif 'CORDOALHA' in self.type:
             return 'CORDOALHA'
         else:
+            if 'SETOR' in self.stored[2].upper():
+                self.type = 'RA'
             return f'Folder {self.stored[-1]} {self.stored[-2]} {self.stored[-3]} {self.stored[-4]} non default'
 
     @property

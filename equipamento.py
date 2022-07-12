@@ -23,6 +23,7 @@ class Equipamento(Cabo):
                 rede = padrao_rede.findall(busca[0])
                 for f in self._ra:
                     for s in rede:
+
                         t1 = self._poste_elemento[i]
                         t2 = self._percuso[f]
                         t3 = s.split("'")[0]

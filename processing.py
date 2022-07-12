@@ -1,5 +1,7 @@
 from math import sqrt, ceil
 from upload_file import UploadFile
+import re
+from rede import Rede
 
 
 def meter(x, y):
@@ -123,3 +125,63 @@ def wire_fus(value):
 
 def load_file(file):
     return UploadFile(file)
+
+
+def rt(value):
+    c = 0
+    for i in value:
+        if 'Reserva' in i.type:
+            c += 1
+    return c
+
+
+def box(value):
+    c = 0
+    for i in value:
+        if 'CEO' == i.type or 'HUB-DPR' == i.type:
+            c += 1
+    return c
+
+
+def presley(value):
+    c = 0
+    for i in value:
+        if 'CTO-HUB' == i.type:
+            c += 1
+    return c
+
+
+def rede_activate(point):
+    list_hub = [i for i in point if i.type == 'CTO-HUB' or i.type == 'HUB-DPR']
+    list_cto = [i for i in point if i.type == 'CTO' or i.type == 'CTO-Futura' or i.type == 'CTO-Indoor']
+    list_rede = []
+    hub = re.compile("([A-Z]{2})"
+                     "[.]"
+                     "([0-9]{1,2})"
+                     "[']?"
+                     "[1-2]?"
+                     "[-]?"
+                     "([0-9]{1,2})?"
+                     "[']?"
+                     "[1-2]?"
+                     "[-]?"
+                     "([0-9]{1,2})?"
+                     "[']?"
+                     "[1-2]?"
+                     "([0-9]{1,2})?"
+                     "[']?"
+                     "[1-2]?"
+                     )
+    for i in list_hub:
+        search = hub.search(i.name).groups()
+        for p in search[1:-1]:
+            if None != p:
+                name = f'{search[0]}-{p}'
+                rede = Rede(name=name)
+                for cto in list_cto:
+                    sector = cto.name.split('.')[0]
+                    pon = cto.name.split('.')[1]
+                    if search[0] == sector and p == pon:
+                        rede.cto = cto
+                list_rede.append(rede)
+    return list_rede
