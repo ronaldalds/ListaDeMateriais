@@ -99,6 +99,34 @@
                     <td>{{ presley }}</td>
                 </tr>
 
+                <tr>
+                    <td>BANDEJA PARA CAIXA DE EMENDA ÓPTICA DPR</td>
+                    <td>und</td>
+                    <td>{{ box * 2 }}</td>
+                </tr>
+
+                <tr>
+                    <td>BANDEJA INFERIOR PARA CTO PRESLEY</td>
+                    <td>und</td>
+                    <td>{{ bandeja_presley }}</td>
+                </tr>
+
+                {% for cto in rede_cto %}
+                    <tr>
+                        <td>{{ cto }}</td>
+                        <td>und</td>
+                        <td>{{ rede_cto[cto] }}</td>
+                    </tr>
+                {% endfor %}
+
+                {% for spl in spliter %}
+                    <tr>
+                        <td>{{ spl }}</td>
+                        <td>und</td>
+                        <td>{{ spliter[spl] }}</td>
+                    </tr>
+                {% endfor %}
+
             </tbody>
         </table>
     </div>

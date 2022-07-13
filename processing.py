@@ -151,7 +151,7 @@ def presley(value):
     return c
 
 
-def rede_activate(point):
+def rede_project(point):
     list_hub = [i for i in point if i.type == 'CTO-HUB' or i.type == 'HUB-DPR']
     list_cto = [i for i in point if i.type == 'CTO' or i.type == 'CTO-Futura' or i.type == 'CTO-Indoor']
     list_rede = []
@@ -175,7 +175,7 @@ def rede_activate(point):
     for i in list_hub:
         search = hub.search(i.name).groups()
         for p in search[1:-1]:
-            if None != p:
+            if p is not None:
                 name = f'{search[0]}-{p}'
                 rede = Rede(name=name)
                 for cto in list_cto:
@@ -185,3 +185,36 @@ def rede_activate(point):
                         rede.cto = cto
                 list_rede.append(rede)
     return list_rede
+
+
+def rede_activated(point):
+    redes = rede_project(point)
+    c = 0
+    for i in redes:
+        if i.activated:
+            c += 1
+    return c
+
+
+def rede_cto(point):
+    cto_project = {}
+    list_cto = [i for i in point if i.type == 'CTO' or i.type == 'CTO-Indoor']
+    for i in list_cto:
+        if i.description not in cto_project:
+            cto_project[i.description] = 1
+        else:
+            cto_project[i.description] += 1
+    return cto_project
+
+
+def spliter(point):
+    redes = rede_project(point)
+    cont = {}
+    for i in redes:
+        for sp in i.spl_rede:
+            if sp not in cont:
+                cont[sp] = 1
+            else:
+                cont[sp] += 1
+    return cont
+    # list_spl = [i for i in point if i.type == 'CTO' or i.type == 'CTO-HUB' or i.type == 'HUB-DPR']

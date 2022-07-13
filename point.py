@@ -15,6 +15,11 @@ class Point:
         self._platelet_launch = 0
         self._wire_fusion = 0
         self._wire_launch = 0
+        self._description = ''
+
+    @property
+    def description(self):
+        return self._description
 
     @property
     def wire_fus(self):
@@ -67,15 +72,18 @@ class Point:
             self._platelet_fusion = 1
             self._platelet_launch = 1
             self._length = 15
+            self._description = 'CAIXA DE EMENDA ÓPTICA AÉREA 24F C/ SUPORTE RESERVA DPR'
         elif 'CEO-Futura' == value:
             self._platelet_fusion = 1
             self._platelet_launch = 1
             self._length = 15
+            self._description = 'CAIXA DE EMENDA ÓPTICA AÉREA 24F C/ SUPORTE RESERVA DPR'
         elif 'HUB-DPR' == value:
             self._wire_launch = 2
             self._platelet_fusion = 1
             self._platelet_launch = 1
             self._length = 15
+            self._description = 'CAIXA DE EMENDA ÓPTICA AÉREA 24F C/ SUPORTE RESERVA DPR'
         elif 'Reserva' == value:
             rt = re.compile("[0-9]{2,3}")
             search = rt.search(self.name)
@@ -86,19 +94,24 @@ class Point:
             self._platelet_fusion = 1
             self._platelet_launch = 1
             self._length = 10
+            self._description = 'CAIXA DE DISTRIBUIÇÃO ÓPTICA CTO PRESLEY'
         elif 'CTO-HUB-Futura' == value:
             self._platelet_fusion = 1
             self._platelet_launch = 1
             self._length = 10
+            self._description = 'CAIXA DE DISTRIBUIÇÃO ÓPTICA CTO PRESLEY'
         elif 'CTO' == value:
             self._wire_fusion = 1
             self._platelet_fusion = 1
             self._length = 10
+            self._description = 'CAIXA DE DISTRIBUIÇÃO OPTICA CTO MINI PRESLEY'
         elif 'CTO-Indoor' == value:
             self._length = 50
+            self._description = 'CAIXA TERMINAL ÓPTICA INDOOR CONECTORIZADA C/ SPLITTER 1X8 SMAP'
         elif 'CTO-Futura' == value:
             self._platelet_fusion = 1
             self._length = 10
+            self._description = 'CAIXA DE DISTRIBUIÇÃO OPTICA CTO MINI PRESLEY'
         elif 'POP' == value:
             self._length = 80
 

@@ -7,7 +7,7 @@ class Fiber:
         self._description = description
         self._type = tp
         self._style = style
-        self._name = self.processing()
+        self._name = self._processing
         self._route_fiber = []
         self._route_pole = []
         self._length = 0
@@ -51,7 +51,8 @@ class Fiber:
     def tie(self, value):
         self._tie = int(value * 0.17)
 
-    def processing(self):
+    @property
+    def _processing(self):
         if self.type == 'RA':
             if '12F' in self.description.split('-')[1]:
                 return 'CFOA-SM-ASU80-S 12F MINI-RA'
@@ -59,13 +60,17 @@ class Fiber:
                 return 'CFOA-SM-ASU80-S 06F MINI-RA'
             return 'CFOA-SM-ASU80-S 12F MINI-RA'
         elif self.type == 'AP' or self.type == 'AS':
-            return self.description.split('|')[2].strip()
+            try:
+                return self.description.split('|')[2].strip()
+            except:
+                return f'Folder {self.stored[-1]}/{self.stored[-2]}/{self.stored[-3]} Fiber {self._description} non default'
+
         elif 'CORDOALHA' in self.type:
             return 'CORDOALHA'
         else:
             if 'SETOR' in self.stored[2].upper():
                 self.type = 'RA'
-            return f'Folder {self.stored[-1]} {self.stored[-2]} {self.stored[-3]} {self.stored[-4]} non default'
+            return f'Folder {self.stored[-1]}/{self.stored[-2]}/{self.stored[-3]}/{self.stored[-4]} non default'
 
     @property
     def route_fiber(self):
@@ -155,8 +160,10 @@ class Fiber:
                         if t.eq:
                             for e in t.eq:
                                 if self.type == 'AP' or self.type == 'AS':
-                                    if (self.stored[0] == e.stored[0] and self.stored[1] == e.stored[1] and self.stored[2] == e.stored[2]) or \
-                                            (self.stored[0] == e.stored[0] and self.stored[1] == e.stored[1] and e.stored[3] == 'HUBs'):
+                                    if (self.stored[0] == e.stored[0] and self.stored[1] == e.stored[1] and self.stored[
+                                        2] == e.stored[2]) or \
+                                            (self.stored[0] == e.stored[0] and self.stored[1] == e.stored[1] and
+                                             e.stored[3] == 'HUBs'):
                                         self.platelet_launch = e.platelet_la
                                         self.wire_launch = e.platelet_la * 0.3
                                         self.platelet_fusion = e.platelet_fus

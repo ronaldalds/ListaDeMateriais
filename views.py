@@ -8,7 +8,7 @@ from app import app, db
 from helpers import FileForm, UsuariosForm
 from models import Usuarios
 from processing import load_file, osnap, tp, list_fiber, list_strap, list_tie, list_sco, pole_user, platelet_launch, \
-    wire_la, rt, box, presley, rede_activate
+    wire_la, rt, box, presley, rede_activated, rede_cto, spliter
 
 
 @app.route('/')
@@ -72,7 +72,6 @@ def upload_file():
         osnap(value=element[1], pole=pole)  # osnap point
         tp(value=element[1], style=style)  # type point
         osnap(value=element[0], pole=pole)  # osnap fiber
-        print(rede_activate(point=element[1]))
 
         return render_template('lista.html',
                                # list Launch
@@ -87,6 +86,9 @@ def upload_file():
                                # list Fusion
                                box=box(element[1]),
                                presley=presley(element[1]),
+                               bandeja_presley=rede_activated(element[1]),
+                               rede_cto=rede_cto(element[1]),
+                               spliter=spliter(element[1]),
                                )
     return redirect(url_for('index'))
 
