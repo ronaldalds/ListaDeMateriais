@@ -217,4 +217,15 @@ def spliter(point):
             else:
                 cont[sp] += 1
     return cont
-    # list_spl = [i for i in point if i.type == 'CTO' or i.type == 'CTO-HUB' or i.type == 'HUB-DPR']
+
+
+def bap_fusion(point):
+    bap = [i for i in point if i.type == 'CTO' or i.type == 'CTO-HUB']
+    return len(bap) * 2
+
+
+def prensa_fiber(point):
+    prensa = [i for i in point if i.type == 'Reserva' or i.type == 'CEO' or i.type == 'HUB-DPR']
+    return len(prensa) * 2
+
+

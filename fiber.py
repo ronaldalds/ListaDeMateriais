@@ -1,3 +1,4 @@
+import re
 import processing
 
 
@@ -18,6 +19,11 @@ class Fiber:
         self._platelet_launch = 0
         self._wire_fusion = 0
         self._wire_launch = 0
+        self._qnt_fiber = 0
+
+    @property
+    def qnt_fiber(self):
+        return self._qnt_fiber
 
     @property
     def strap(self):
@@ -55,11 +61,17 @@ class Fiber:
     def _processing(self):
         if self.type == 'RA':
             if '12F' in self.description.split('-')[1]:
+                self._qnt_fiber = 12
                 return 'CFOA-SM-ASU80-S 12F MINI-RA'
-            if '06F' in self.description.split('-')[1]:
+            elif '6F' in self.description.split('-')[1]:
+                self._qnt_fiber = 6
                 return 'CFOA-SM-ASU80-S 06F MINI-RA'
-            return 'CFOA-SM-ASU80-S 12F MINI-RA'
+            else:
+                self._qnt_fiber = 12
+                return 'CFOA-SM-ASU80-S 12F MINI-RA'
         elif self.type == 'AP' or self.type == 'AS':
+            fiber = re.compile("([0-9]{1,2}?)([fF])")
+            self._qnt_fiber = fiber.search(self.description).groups()[0]
             try:
                 return self.description.split('|')[2].strip()
             except:
