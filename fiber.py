@@ -175,7 +175,7 @@ class Fiber:
                                     if (self.stored[0] == e.stored[0] and self.stored[1] == e.stored[1] and self.stored[
                                         2] == e.stored[2]) or \
                                             (self.stored[0] == e.stored[0] and self.stored[1] == e.stored[1] and
-                                             e.stored[3] == 'HUBs'):
+                                             'HUB' in e.stored[3].upper()):
                                         self.platelet_launch = e.platelet_la
                                         self.wire_launch = e.platelet_la * 0.3
                                         self.platelet_fusion = e.platelet_fus

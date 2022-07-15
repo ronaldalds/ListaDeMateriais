@@ -72,6 +72,7 @@ def upload_file():
         processing.osnap(value=element[0], pole=pole)  # osnap fiber
 
         return render_template('lista.html',
+                               project=project.name,
                                # list Launch
                                fiber=processing.list_fiber(element[0]),
                                strap=processing.list_strap(element[0]),
@@ -84,7 +85,7 @@ def upload_file():
                                # list Fusion
                                box=processing.box(element[1]),
                                presley=processing.presley(element[1]),
-                               bandeja_presley=processing.rede_activated(element[1]),
+                               bandeja_presley=processing.tray_presley(element[1]),
                                rede_cto=processing.rede_cto(element[1]),
                                spliter=processing.spliter(element[1]),
                                bap_fusion=processing.bap_fusion(element[1]),

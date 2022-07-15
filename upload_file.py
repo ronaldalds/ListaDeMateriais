@@ -15,6 +15,12 @@ class UploadFile:
         self._fiber = []
         self._element = []
 
+
+    @property
+    def name(self):
+        return self._root[0][0].text.split('.')[0]
+
+
     def data_style(self):
         for root in self._root.iter(f'{self.site}Style'):
             style = Style(identifier=root.attrib['id'])

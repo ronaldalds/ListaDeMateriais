@@ -176,7 +176,7 @@ def rede_project(point):
         search = hub.search(i.name).groups()
         for p in search[1:-1]:
             if p is not None:
-                name = f'{search[0]}-{p}'
+                name = f'{i.type};{search[0]}-{p}'
                 rede = Rede(name=name)
                 for cto in list_cto:
                     sector = cto.name.split('.')[0]
@@ -187,11 +187,11 @@ def rede_project(point):
     return list_rede
 
 
-def rede_activated(point):
+def tray_presley(point):
     redes = rede_project(point)
     c = 0
     for i in redes:
-        if i.activated:
+        if i.activated and "CTO-HUB" in i.name:
             c += 1
     return c
 
