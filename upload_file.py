@@ -9,6 +9,7 @@ class UploadFile:
     def __init__(self, file):
         doc = Et.parse(file)
         self._root = doc.getroot()
+        t = ('foo',)
         self.site = '{http://www.opengis.net/kml/2.2}'
         self._pole = []
         self._style = []

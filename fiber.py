@@ -55,7 +55,10 @@ class Fiber:
 
     @tie.setter
     def tie(self, value):
-        self._tie = int(value * 0.17)
+        if 'CORDOALHA' in self.type:
+            self._tie = 0
+        else:
+            self._tie = int(value * 0.17)
 
     @property
     def _processing(self):
@@ -93,7 +96,7 @@ class Fiber:
         p = 0
         for i in route.split(' '):
             self._route_fiber.append(i.split(','))
-        self.strap = len(self.route_fiber)
+        self.strap = len(self.route_fiber) * 2
         self.tie = len(self.route_fiber)
         self.platelet_launch = len(self.route_fiber)
         self.wire_launch = len(self.route_fiber) * 0.3
@@ -165,15 +168,16 @@ class Fiber:
             for i in self.route_fiber:
                 self._route_pole.append(i)
                 for t in value:
-                    if processing.meter(t.coordinates, i) < 2:
+                    if processing.meter(t.coordinates, i) < 4:
                         self._route_pole.pop()
                         self._route_pole.append(t)
                         t.user = True
                         if t.eq:
                             for e in t.eq:
                                 if self.type == 'AP' or self.type == 'AS':
-                                    if (self.stored[0] == e.stored[0] and self.stored[1] == e.stored[1] and self.stored[
-                                        2] == e.stored[2]) or \
+                                    if (self.stored[0] == e.stored[0] and
+                                        self.stored[1] == e.stored[1] and
+                                        self.stored[2] == e.stored[2]) or \
                                             (self.stored[0] == e.stored[0] and self.stored[1] == e.stored[1] and
                                              'HUB' in e.stored[3].upper()):
                                         self.platelet_launch = e.platelet_la
@@ -202,7 +206,7 @@ class Fiber:
                                             e.type == 'Reserva':
                                         self.length = e.length
                                     else:
-                                        self.length = e.length * 2
+                                        self.length = int(e.length) * 2
             for c, p in enumerate(self._route_pole):
                 try:
                     p1 = p.coordinates
