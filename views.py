@@ -63,6 +63,7 @@ def upload_file():
     form = FileForm(request.files)
     if form.is_submitted():
         file = form.file.data
+        list_ex = request.form.get('project')
         project = processing.load_file(file)  # load project
         pole = project.data_pole()  # load pole
         style = project.data_style()  # load style
@@ -70,7 +71,13 @@ def upload_file():
         processing.osnap(value=element[1], pole=pole)  # osnap point
         processing.tp(value=element[1], style=style)  # type point
         processing.osnap(value=element[0], pole=pole)  # osnap fiber
-        print(processing.tube_60(element))
+        if list_ex:
+            print(list_ex)
+
+        # element_ex = project.element('REDE FTTH')  # list Expansion project
+        # processing.osnap(value=element_ex[1], pole=pole)  # osnap point
+        # processing.tp(value=element_ex[1], style=style)  # type point
+        # processing.osnap(value=element_ex[0], pole=pole)  # osnap fiber
 
         return render_template('lista.html',
                                project=project.name,
@@ -92,7 +99,9 @@ def upload_file():
                                bap_fusion=processing.bap_fusion(element[1]),
                                platelet_fusion=processing.platelet_fusion(element[0]),
                                wire_fusion=processing.wire_fus(element[0]),
-                               prensa_fiber=processing.prensa_fiber(element[1])
+                               prensa_fiber=processing.prensa_fiber(element[1]),
+                               tube_45=processing.tube_45(element),
+                               tube_60=processing.tube_60(element)
                                )
     return redirect(url_for('index'))
 

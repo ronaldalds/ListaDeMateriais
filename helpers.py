@@ -5,7 +5,7 @@ from wtforms import SubmitField, validators, FileField, StringField, PasswordFie
 
 class FileForm(FlaskForm):
     file = FileField('Arquivo do Projeto ', [validators.DataRequired()])
-    salvar = SubmitField('Salvar')
+    salvar = SubmitField('Enviar')
 
 
 class UsuariosForm(FlaskForm):
@@ -14,5 +14,3 @@ class UsuariosForm(FlaskForm):
     senha = PasswordField('Senha', [validators.DataRequired(), validators.Length(min=1, max=100)])
     login = SubmitField('Login')
     criar = SubmitField('Criar')
-
-

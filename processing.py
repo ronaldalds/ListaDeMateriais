@@ -249,5 +249,17 @@ def tube_60(elemento):
     tube += nc_1x8[0]
     tube += len([i for i in redes if i.activated is True])
     tube += len([i for i in elemento[1] if i.type == 'CTO'])
+    return tube
 
+
+def tube_45(elemento):
+    feeder = [i for i in elemento[0] if i.type == 'AP' or i.type == 'AS']
+    tube = 0
+    for i in feeder:
+        if type(i.pole[0]) == pole.Pole:
+            if i.pole[0].eq[0].type == 'HUB-DPR' or i.pole[0].eq[0].type == 'CEO':
+                tube += i.qnt_fiber
+        if type(i.pole[-1]) == pole.Pole:
+            if i.pole[-1].eq[0].type == 'HUB-DPR' or i.pole[-1].eq[0].type == 'CEO':
+                tube += i.qnt_fiber
     return tube
