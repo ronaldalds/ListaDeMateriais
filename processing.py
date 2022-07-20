@@ -1,4 +1,7 @@
 from math import sqrt, ceil
+from functools import reduce
+
+import pole
 from upload_file import UploadFile
 import re
 from rede import Rede
@@ -229,3 +232,22 @@ def prensa_fiber(point):
     return len(prensa) * 2
 
 
+def tube_60(elemento):
+    redes = rede_project(elemento[1])
+    spl = spliter(elemento[1])
+    feeder = [i for i in elemento[0] if i.type == 'AP' or i.type == 'AS']
+    tube = 0
+    for i in feeder:
+        if type(i.pole[0]) == pole.Pole:
+            if i.pole[0].eq[0].type == 'CTO-HUB':
+                tube += i.qnt_fiber
+        if type(i.pole[-1]) == pole.Pole:
+            if i.pole[-1].eq[0].type == 'CTO-HUB':
+                tube += i.qnt_fiber
+    nc_1x8 = [spl[i] * 8 for i in spl if '1X8 G.657A NC-NC 250UM 2M/2M' in i]
+    tube += reduce(lambda x, y: x + y, spl.values())
+    tube += nc_1x8[0]
+    tube += len([i for i in redes if i.activated is True])
+    tube += len([i for i in elemento[1] if i.type == 'CTO'])
+
+    return tube

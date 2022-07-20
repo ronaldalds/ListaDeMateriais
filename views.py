@@ -70,6 +70,7 @@ def upload_file():
         processing.osnap(value=element[1], pole=pole)  # osnap point
         processing.tp(value=element[1], style=style)  # type point
         processing.osnap(value=element[0], pole=pole)  # osnap fiber
+        print(processing.tube_60(element))
 
         return render_template('lista.html',
                                project=project.name,

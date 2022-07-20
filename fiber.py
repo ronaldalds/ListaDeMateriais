@@ -23,7 +23,9 @@ class Fiber:
 
     @property
     def qnt_fiber(self):
-        return self._qnt_fiber
+        fiber = re.compile("([0-9]{1,2}?)([fF])")
+        self._qnt_fiber = fiber.search(self.description).groups()[0]
+        return int(self._qnt_fiber)
 
     @property
     def strap(self):
@@ -73,8 +75,7 @@ class Fiber:
                 self._qnt_fiber = 12
                 return 'CFOA-SM-ASU80-S 12F MINI-RA'
         elif self.type == 'AP' or self.type == 'AS':
-            fiber = re.compile("([0-9]{1,2}?)([fF])")
-            self._qnt_fiber = fiber.search(self.description).groups()[0]
+
             try:
                 return self.description.split('|')[2].strip()
             except:
