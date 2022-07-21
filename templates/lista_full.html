@@ -156,4 +156,157 @@
             </tbody>
         </table>
     </div>
+
+<h3 style="text-align:center">Expansion {{ project }}</h3>
+    <div id="Lançamento_ex" class="container">
+        <div class="page-header" style="text-align:center">
+            <h5>RELAÇÃO DE MATERIAIS - LANÇAMENTO DE CABOS DE FIBRAS ÓPTICAS</h5>
+        </div>
+        <table class="table table-striped table-responsive table-bordered">
+            <thead class="thead-default">
+                <tr>
+                    <th>Nome</th>
+                    <th>UND</th>
+                    <th>quantidade</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for cabo in fiber_ex %}
+                <tr>
+                    <td>{{ cabo }}</td>
+                    <td>M</td>
+                    <td>{{ fiber_ex[cabo] }}</td>
+                </tr>
+            {% endfor %}
+
+            {% for alca in strap_ex %}
+                <tr>
+                    <td>Alça {{ alca }}</td>
+                    <td>und</td>
+                    <td>{{ strap_ex[alca] }}</td>
+                </tr>
+            {% endfor %}
+
+            {% for laco in tie_ex %}
+                <tr>
+                    <td>Laço {{ laco }}</td>
+                    <td>und</td>
+                    <td>{{ tie_ex[laco] }}</td>
+                </tr>
+            {% endfor %}
+
+                <tr>
+                    <td>BRAÇADEIRA AJUSTÁVEL BAP4 (1000MM) C/ PARAFUSO</td>
+                    <td>und</td>
+                    <td>{{ user_fusion_ex }}</td>
+                </tr>
+
+                <tr>
+                    <td>SUPORTE PARA CABOS ÓPTICOS SCO1</td>
+                    <td>und</td>
+                    <td>{{ sco_ex }}</td>
+                </tr>
+
+                <tr>
+                    <td>PLAQUETA DE IDENTIFICAÇÃO DE CABO ÓPTICO ONLINE TELECOM</td>
+                    <td>und</td>
+                    <td>{{ platelet_launch_ex }}</td>
+                </tr>
+
+                <tr>
+                    <td>FIO DE ESPINAR ISOLADO FEI-125</td>
+                    <td>RL</td>
+                    <td>{{ wire_launch_ex }}</td>
+                </tr>
+
+                <tr>
+                    <td>RESERVA TÉCNICA OPTILOOP TIPO GOTA C/ KIT FIXACAO</td>
+                    <td>CX</td>
+                    <td>{{ rt_ex }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="Fusão_ex" class="container">
+        <div class="page-header" style="text-align:center">
+            <h5>RELAÇÃO DE MATERIAIS - LANÇAMENTO DE CABOS DE FIBRAS ÓPTICAS</h5>
+        </div>
+        <table class="table table-striped table-responsive table-bordered">
+            <thead class="thead-default">
+                <tr>
+                    <th>Nome</th>
+                    <th>UND</th>
+                    <th>quantidade</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {% for boxes in box_ex %}
+                    <tr>
+                        <td>{{ boxes }}</td>
+                        <td>und</td>
+                        <td>{{ box_ex[boxes] }}</td>
+                    </tr>
+                {% endfor %}
+
+                <tr>
+                    <td>BANDEJA PARA CAIXA DE EMENDA ÓPTICA DPR</td>
+                    <td>und</td>
+                    <td>{{ 1 * 2 }}</td>
+                </tr>
+
+                <tr>
+                    <td>BANDEJA INFERIOR PARA CTO PRESLEY</td>
+                    <td>und</td>
+                    <td>{{ bandeja_presley_ex }}</td>
+                </tr>
+
+                {% for spl in spliter_ex %}
+                    <tr>
+                        <td>{{ spl }}</td>
+                        <td>und</td>
+                        <td>{{ spliter_ex[spl] }}</td>
+                    </tr>
+                {% endfor %}
+
+                <tr>
+                    <td>BRAÇADEIRA AJUSTÁVEL BAP4 (1000MM) C/ PARAFUSO DPR</td>
+                    <td>und</td>
+                    <td>{{ bap_fusion_ex }}</td>
+                </tr>
+
+                <tr>
+                    <td>PLAQUETA DE IDENTIFICAÇÃO DE CABO ÓPTICO ONLINE TELECOM</td>
+                    <td>und</td>
+                    <td>{{ platelet_fusion_ex }}</td>
+                </tr>
+
+                <tr>
+                    <td>FIO DE ESPINAR ISOLADO FEI-125</td>
+                    <td>RL</td>
+                    <td>{{ wire_fusion_ex }}</td>
+                </tr>
+
+                <tr>
+                    <td>PRENSA CABO POLIMERICO P/ CORDOALHA DIELÉTRICA</td>
+                    <td>und</td>
+                    <td>{{ prensa_fiber_ex }}</td>
+                </tr>
+
+                <tr>
+                    <td>PROTETOR DE EMENDA PE-04 45MM 3,4MM</td>
+                    <td>und</td>
+                    <td>{{ tube_45_ex }}</td>
+                </tr>
+
+                <tr>
+                    <td>PROTETOR DE EMENDA PE-05 60MM 3,4MM</td>
+                    <td>und</td>
+                    <td>{{ tube_60_ex }}</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

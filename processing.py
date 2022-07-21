@@ -138,22 +138,6 @@ def rt(value):
     return c
 
 
-def box(value):
-    c = 0
-    for i in value:
-        if 'CEO' == i.type or 'HUB-DPR' == i.type:
-            c += 1
-    return c
-
-
-def presley(value):
-    c = 0
-    for i in value:
-        if 'CTO-HUB' == i.type:
-            c += 1
-    return c
-
-
 def rede_project(point):
     list_hub = [i for i in point if i.type == 'CTO-HUB' or i.type == 'HUB-DPR']
     list_cto = [i for i in point if i.type == 'CTO' or i.type == 'CTO-Futura' or i.type == 'CTO-Indoor']
@@ -188,26 +172,6 @@ def rede_project(point):
                         rede.cto = cto
                 list_rede.append(rede)
     return list_rede
-
-
-def tray_presley(point):
-    redes = rede_project(point)
-    c = 0
-    for i in redes:
-        if i.activated and "CTO-HUB" in i.name:
-            c += 1
-    return c
-
-
-def rede_cto(point):
-    cto_project = {}
-    list_cto = [i for i in point if i.type == 'CTO' or i.type == 'CTO-Indoor']
-    for i in list_cto:
-        if i.description not in cto_project:
-            cto_project[i.description] = 1
-        else:
-            cto_project[i.description] += 1
-    return cto_project
 
 
 def spliter(point):
@@ -263,3 +227,33 @@ def tube_45(elemento):
             if i.pole[-1].eq[0].type == 'HUB-DPR' or i.pole[-1].eq[0].type == 'CEO':
                 tube += i.qnt_fiber
     return tube
+
+
+def box(value):
+    b = {}
+    boxes = list(map(lambda x: x,
+                     list(filter(lambda x: x.type == 'CEO' or
+                                           x.type == 'HUB-DPR' or
+                                           x.type == 'CTO-HUB' or
+                                           x.type == 'CTO' or
+                                           x.type == 'CTO-Indoor', value
+                                 )
+                          )
+                     )
+                 )
+
+    for i in boxes:
+        if i.description not in b:
+            b[i.description] = 1
+        else:
+            b[i.description] += 1
+    return b
+
+
+def tray_presley(point):
+    redes = rede_project(point)
+    c = 0
+    for i in redes:
+        if i.activated and "CTO-HUB" in i.name:
+            c += 1
+    return c
